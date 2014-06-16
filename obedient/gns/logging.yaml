@@ -1,0 +1,47 @@
+# See for details:
+#   http://docs.python.org/3.2/library/logging.config.html#dictionary-schema-details
+
+disable_existing_loggers: false
+formatters:
+    standard:
+        format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+handlers:
+    console:
+        level: INFO
+        class: logging.StreamHandler
+        formatter: standard
+    elasticsearch:
+        level: DEBUG
+        class: elog.handlers.ElasticHandler
+        time_field: "@timestamp"
+        time_format: "%Y-%m-%dT%H:%M:%S.%f"
+        url: "http://localhost:9200"
+        index: "log-{@timestamp:%Y}-{@timestamp:%m}-{@timestamp:%d}"
+        doctype: gns
+        fields:
+            logger:    name
+            level:     levelname
+            level_no:  levelno
+            msg:       msg
+            args:      args
+            file:      pathname
+            line:      lineno
+            func:      funcName
+            pid:       process
+            process:   processName
+            thread:    threadName
+            thread_id: thread
+            exc_text:  exc_text
+            extra:     extra
+            fqdn:      fqdn
+            node:      node
+
+root:
+    level: DEBUG
+    handlers:
+        - console
+        - elasticsearch
+
+loggers:
+    kazoo:
+        level: WARNING
