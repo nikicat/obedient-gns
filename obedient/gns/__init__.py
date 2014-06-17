@@ -81,8 +81,7 @@ def gns_builder(
         return Container(
             name='gns-'+name,
             ship=ship,
-            repository=gns_repo,
-            tag=get_image(gns_repo),
+            image=Image(gns_repo),
             memory=memory,
             volumes=volumes+[config_volume],
             env={'GNS_MODULE': name},
@@ -120,7 +119,7 @@ def gns_builder(
 
         @staticmethod
         def gitapi(ship):
-            image = get_image(gitapi_repo)
+            image = Image(gitapi_repo)
             rulesgit = DataVolume(
                 dest='/var/lib/gns/rules.git',
                 path='/var/lib/gns/rules.git',
@@ -129,11 +128,10 @@ def gns_builder(
             return Container(
                 name='gitapi',
                 ship=ship,
-                repository=gitapi_repo,
-                tag=image,
+                image=image,
                 memory=128*1024*1024,
                 volumes=[rulesgit, rules],
-                ports={'ssh': image_ports(image)[0]},
+                ports={'ssh': image.ports[0]},
                 extports={'ssh': gitapi_port},
                 env={'KEY': open(os.path.expanduser('~/.ssh/id_rsa.pub')).read()}
             )
