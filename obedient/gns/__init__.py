@@ -1,3 +1,4 @@
+import os
 import yaml
 from pkg_resources import resource_stream
 from dominator import *
@@ -134,6 +135,7 @@ def gns_builder(
                 volumes=[rulesgit, rules],
                 ports={'ssh': image_ports(image)[0]},
                 extports={'ssh': gitapi_port},
+                env={'KEY': open(os.path.expanduser('~/.ssh/id_rsa.pub')).read()}
             )
 
         @staticmethod
