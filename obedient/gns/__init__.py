@@ -22,8 +22,8 @@ def find_nearest(containers, ship):
 def gns_builder(
         zookeepers,
         mtas=None,
-        gns_repo='yandex/gns',
-        gitapi_repo='yandex/gitsplit',
+        gns_repo='gns',
+        gitapi_repo='gitsplit',
         golem_sms_url='https://golem.yandex-team.ru/api/sms/send.sbml',
         threads=10,
         elasticsearch_url='http://elasticlog.yandex.net:9200',
@@ -140,36 +140,54 @@ def gns_builder(
         def reinit(ship):
             return container(ship, 'reinit', make_config())
 
+
+        @classmethod
+        @aslist
+        def build(cls, ships):
+            for ship in ships:
+                yield cls.worker(ship)
+                yield cls.splitter(ship)
+                yield cls.collector(ship)
+                yield cls.restapi(ship)
+                yield cls.gitapi(ship)
+
     return Builder
-
-
-@aslist
-def make_containers(ships, builder):
-    for ship in ships:
-        yield builder.worker(ship)
-        yield builder.splitter(ship)
-        yield builder.collector(ship)
-        yield builder.restapi(ship)
-        yield builder.gitapi(ship)
-
 
 def development():
     ships = [LocalShip()]
     zookeepers = zookeeper.make_containers(ships)
     mtas = exim.make_containers(ships)
     builder = gns_builder(
-        gns_repo='gns',
-        gitapi_repo='gitsplit',
-        golem_sms_url='https://golem.yandex-team.ru/api/sms/send.sbml',
         zookeepers=zookeepers,
         mtas=mtas,
         threads=1,
-        restapi_port=7887,
-        gitapi_port=10022,
     )
-    gns = make_containers(ships, builder)
+    gns = builder.build(ships)
 
     return zookeepers + mtas + gns
+
+
+def testing_ships():
+    return ships_from_conductor('raava-testing')
+
+
+def testing():
+    ships = testing_ships()
+    zookeepers = zookeeper.make_containers(ships)
+    mtas = exim.make_containers(ships, port=2525)
+    builder = gns_builder(
+        zookeepers=zookeepers,
+        mtas=mtas,
+        threads=10,
+    )
+    gns = builder.build(ships)
+
+    return zookeepers + mtas + gns
+
+
+def ambassadors_testing():
+    ships = testing_ships()
+    return ambassadors(ships)
 
 
 def reinit_development():
