@@ -185,11 +185,6 @@ def testing():
     return zookeepers + mtas + gns
 
 
-def ambassadors_testing():
-    ships = testing_ships()
-    return ambassadors(ships)
-
-
 def reinit_development():
     ship = LocalShip()
     zookeepers = zookeeper.make_containers([ship])
