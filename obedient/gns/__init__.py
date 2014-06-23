@@ -39,6 +39,9 @@ def gns_builder(
         path='/var/lib/gns/rules',
     )
 
+    gnsimage = Image(gns_repo)
+    gitapiimage = Image(gitapi_repo)
+
     def make_config():
         return {
             'core': {'zoo-nodes': ['{}:{}'.format(z.ship.fqdn, z.ports['client']) for z in zookeepers]},
@@ -81,7 +84,7 @@ def gns_builder(
         return Container(
             name='gns-'+name,
             ship=ship,
-            image=Image(gns_repo),
+            image=gnsimage,
             memory=memory,
             volumes=volumes+[config_volume],
             env={'GNS_MODULE': name},
@@ -119,7 +122,6 @@ def gns_builder(
 
         @staticmethod
         def gitapi(ship):
-            image = Image(gitapi_repo)
             rulesgit = DataVolume(
                 dest='/var/lib/gns/rules.git',
                 path='/var/lib/gns/rules.git',
@@ -128,10 +130,10 @@ def gns_builder(
             return Container(
                 name='gitapi',
                 ship=ship,
-                image=image,
+                image=gitapiimage,
                 memory=128*1024*1024,
                 volumes=[rulesgit, rules],
-                ports={'ssh': image.ports[0]},
+                ports={'ssh': gitapiimage.ports[0]},
                 extports={'ssh': gitapi_port},
                 env={'KEY': open(os.path.expanduser('~/.ssh/id_rsa.pub')).read()}
             )
@@ -183,11 +185,6 @@ def testing():
     gns = builder.build(ships)
 
     return zookeepers + mtas + gns
-
-
-def ambassadors_testing():
-    ships = testing_ships()
-    return ambassadors(ships)
 
 
 def reinit_development():

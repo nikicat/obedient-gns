@@ -16,5 +16,6 @@ if __name__ == '__main__':
         install_requires=[
             'dominator==0.3',
             'obedient.zookeeper',
+            'obedient.exim',
         ],
     )
