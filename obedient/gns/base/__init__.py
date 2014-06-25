@@ -2,8 +2,7 @@ import os
 import yaml
 from pkg_resources import resource_stream
 from dominator import *
-from obedient import exim
-from obedient import zookeeper
+from dominator.settings import settings
 
 
 def find_nearest(containers, ship):
@@ -19,11 +18,16 @@ def find_nearest(containers, ship):
             return containers[0]
 
 
-def gns_builder(
+def namespace():
+    return os.environ.get('OBEDIENT_GNS_NAMESPACE', 'yandex')
+
+
+def builder(
         zookeepers,
         mtas=None,
-        gns_repo='gns',
-        gitapi_repo='gitsplit',
+        gns_repo=namespace()+'/gns',
+        gns_cpython_repo=namespace()+'/gns-cpython',
+        gitapi_repo=namespace()+'/gitsplit',
         golem_sms_url='https://golem.yandex-team.ru/api/sms/send.sbml',
         threads=10,
         elasticsearch_url='http://elasticlog.yandex.net:9200',
@@ -40,6 +44,7 @@ def gns_builder(
     )
 
     gnsimage = Image(gns_repo)
+    gnsapiimage = Image(gns_cpython_repo)
     gitapiimage = Image(gitapi_repo)
 
     def make_config():
@@ -71,7 +76,7 @@ def gns_builder(
     def add_cherry(config):
         config['cherry'] = {'global': {'server.socket_port': restapi_port}}
 
-    def container(ship, name, config, backdoor=None, ports={}, volumes=[], memory=1024**3):
+    def container(ship, name, config, backdoor=None, ports={}, volumes=[], memory=1024**3, image=gnsimage):
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
             ports['backdoor'] = backdoor
@@ -84,7 +89,7 @@ def gns_builder(
         return Container(
             name='gns-'+name,
             ship=ship,
-            image=gnsimage,
+            image=image,
             memory=memory,
             volumes=volumes+[config_volume],
             env={'GNS_MODULE': name},
@@ -112,7 +117,7 @@ def gns_builder(
             config = make_config()
             add_service(config, 'api')
             add_cherry(config)
-            return container(ship, 'api', config, backdoor=11004, ports={'http': restapi_port})
+            return container(ship, 'api', config, backdoor=11004, ports={'http': restapi_port}, image=gnsapiimage)
 
         @staticmethod
         def collector(ship):
@@ -154,41 +159,3 @@ def gns_builder(
                 yield cls.gitapi(ship)
 
     return Builder
-
-def development():
-    ships = [LocalShip()]
-    zookeepers = zookeeper.make_containers(ships)
-    mtas = exim.make_containers(ships)
-    builder = gns_builder(
-        zookeepers=zookeepers,
-        mtas=mtas,
-        threads=1,
-    )
-    gns = builder.build(ships)
-
-    return zookeepers + mtas + gns
-
-
-def testing_ships():
-    return ships_from_conductor('raava-testing')
-
-
-def testing():
-    ships = testing_ships()
-    zookeepers = zookeeper.make_containers(ships)
-    mtas = exim.make_containers(ships, port=2525)
-    builder = gns_builder(
-        zookeepers=zookeepers,
-        mtas=mtas,
-        threads=10,
-    )
-    gns = builder.build(ships)
-
-    return zookeepers + mtas + gns
-
-
-def reinit_development():
-    ship = LocalShip()
-    zookeepers = zookeeper.make_containers([ship])
-    reinit = gns_builder(gns_repo='gns', zookeepers=zookeepers).reinit(ship)
-    return zookeepers + [reinit]
