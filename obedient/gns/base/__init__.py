@@ -1,8 +1,8 @@
 import os
 import yaml
 from pkg_resources import resource_stream
-from dominator import *
-from dominator.settings import settings
+from dominator.utils import settings, aslist
+from dominator.entities import *
 
 
 def find_nearest(containers, ship):
