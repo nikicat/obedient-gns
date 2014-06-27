@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# Split last $REV_LIMIT commits to separated dirs
+set -e
+
+work_tree="/var/lib/gns/rules.git"
+rules_path="/var/lib/gns/rules"
+module_prefix='git_'
+
+[ -z "$REV_LIMIT" ] && REV_LIMIT=10
+
+cd $work_tree
+
+commits=`git log -n $REV_LIMIT --pretty=format:%H`
+
+(
+flock -x 200 || exit 1
+
+for commit in $commits; do
+    module_name="$module_prefix$commit";
+    module_path="$rules_path/$module_name";
+    
+    if [ -d $module_path ]; then
+       echo "Module $module_name already exist"
+       continue
+    fi
+    
+    tmp_path="$rules_path/.$module_name"
+    
+    if [ -d $tmp_path ]; then
+        echo "remove $tmp_path"
+        rm -rf $tmp_path
+    fi
+    
+    mkdir $tmp_path
+    echo "Checkout $commit --> $tmp_path"
+    git clone $work_tree $tmp_path
+    cd $tmp_path
+    unset GIT_DIR
+    git checkout -b version-$commit $commit
+    echo "Submodule init"
+    git submodule init
+    echo "Submodule update"
+    git submodule update
+    
+    cd $rules_path
+    mv $tmp_path $module_path
+done
+
+# Clean up
+if [ `ls | wc -l` -gt $REV_LIMIT ]; then
+    echo "Clean Up"
+    (ls -t|head -n $REV_LIMIT;ls)|sort|uniq -u|xargs rm -r
+fi
+) 200>/var/lock/post-recive-hook.lock

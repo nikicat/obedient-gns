@@ -25,9 +25,6 @@ def namespace():
 def builder(
         zookeepers,
         mtas=None,
-        gns_repo=namespace()+'/gns',
-        gns_cpython_repo=namespace()+'/gns-cpython',
-        gitapi_repo=namespace()+'/gitsplit',
         golem_sms_url='https://golem.yandex-team.ru/api/sms/send.sbml',
         threads=10,
         elasticsearch_url='http://elasticlog.yandex.net:9200',
@@ -43,9 +40,60 @@ def builder(
         path='/var/lib/gns/rules',
     )
 
-    gnsimage = Image(gns_repo)
-    gnsapiimage = Image(gns_cpython_repo)
-    gitapiimage = Image(gitapi_repo)
+    def stoppable(cmd):
+        return 'trap exit TERM; {} & wait'.format(cmd)
+
+    parent = Image('yandex/trusty')
+
+    gnsimage = SourceImage(
+        name='gns',
+        parent=parent,
+        env={
+            'PATH': '$PATH:/opt/pypy3/bin',
+            'LANG': 'C.UTF-8',
+        },
+        scripts=[
+            'curl http://buildbot.pypy.org/nightly/py3k/pypy-c-jit-latest-linux64.tar.bz2 2>/dev/null | tar -jxf -',
+            'mv pypy* /opt/pypy3',
+            'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy',
+            'easy_install pip==1.4.1',
+            'pip install gns',
+        ],
+        volumes=['/etc/gns', '/var/lib/gns/rules', '/var/log/gns'],
+        command=stoppable('gns $GNS_MODULE -c /etc/gns/gns.yaml'),
+    )
+    gnsapiimage = SourceImage(
+        name='gns-cpython',
+        parent=parent,
+        env={'LANG': 'C.UTF-8'},
+        scripts=[
+            'apt-add-repository ppa:fkrull/deadsnakes -y',
+            'apt-get update',
+            'apt-get install python3-pip -yy',
+            'pip3 install gns',
+        ],
+        volumes=['/etc/gns', '/var/lib/gns/rules', '/var/log/gns'],
+        command=stoppable('gns $GNS_MODULE -c /etc/gns/gns.yaml'),
+    )
+
+    gitapiimage = SourceImage(
+        name='gitsplit',
+        parent=parent,
+        files={
+            '/post-receive': resource_stream(__name__, 'post-receive'),
+            '/etc/ssh/sshd_config': resource_stream(__name__, 'sshd_config'),
+            '/root/run.sh': resource_stream(__name__, 'run.sh'),
+        },
+        ports=[22],
+        volumes=['/var/lib/gns/rules', '/var/lib/gns/rules.git'],
+        command='/root/run.sh',
+        scripts=[
+            'apt-get install -y openssh-server',
+            'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell git',
+            'mkdir /run/sshd',
+            'chmod 0755 /run/sshd',
+        ],
+    )
 
     def make_config():
         return {
@@ -138,7 +186,7 @@ def builder(
                 image=gitapiimage,
                 memory=128*1024*1024,
                 volumes=[rulesgit, rules],
-                ports={'ssh': gitapiimage.ports[0]},
+                ports={'ssh': gitapiimage.getports()[0]},
                 extports={'ssh': gitapi_port},
                 env={'KEY': open(os.path.expanduser('~/.ssh/id_rsa.pub')).read()}
             )

@@ -3,7 +3,7 @@ import setuptools
 if __name__ == '__main__':
     setuptools.setup(
         name='obedient.gns',
-        version='0.1',
+        version='1.0',
         url='https://github.com/nikicat/obedient-gns',
         license='GPLv3',
         author='Nikolay Bryskin',
