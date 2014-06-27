@@ -1,6 +1,6 @@
 from .. import base
 
-from dominator import *
+from dominator.entities import *
 from obedient import exim
 from obedient import zookeeper
 
