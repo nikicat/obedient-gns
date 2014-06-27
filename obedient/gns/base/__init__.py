@@ -57,7 +57,7 @@ def builder(
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy',
             'easy_install pip==1.4.1',
-            'pip install gns',
+            'pip install git+https://github.com/yandex-sysmon/gns',
         ],
         volumes=['/etc/gns', '/var/lib/gns/rules', '/var/log/gns'],
         command=stoppable('gns $GNS_MODULE -c /etc/gns/gns.yaml'),
