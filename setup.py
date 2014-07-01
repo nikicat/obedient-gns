@@ -14,7 +14,7 @@ if __name__ == '__main__':
         namespace_packages=['obedient', 'obedient.gns'],
         package_data={'obedient.gns.base': ['logging.yaml']},
         install_requires=[
-            'dominator >=1, <2',
+            'dominator >=2, <3',
             'obedient.zookeeper',
             'obedient.exim',
         ],
