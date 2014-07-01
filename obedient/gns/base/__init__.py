@@ -57,9 +57,13 @@ def builder(
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy',
             'easy_install pip==1.4.1',
-            'pip install git+https://github.com/yandex-sysmon/gns',
+            'pip install gns==0.2',
         ],
-        volumes=['/etc/gns', '/var/lib/gns/rules', '/var/log/gns'],
+        volumes={
+            'config': '/etc/gns',
+            'rules': '/var/lib/gns/rules',
+            'logs': '/var/log/gns',
+        },
         command=stoppable('gns $GNS_MODULE -c /etc/gns/gns.yaml'),
     )
     gnsapiimage = SourceImage(
@@ -70,9 +74,13 @@ def builder(
             'apt-add-repository ppa:fkrull/deadsnakes -y',
             'apt-get update',
             'apt-get install python3-pip -yy',
-            'pip3 install gns',
+            'pip3 install gns==0.2',
         ],
-        volumes=['/etc/gns', '/var/lib/gns/rules', '/var/log/gns'],
+        volumes={
+            'config': '/etc/gns',
+            'rules': '/var/lib/gns/rules',
+            'logs': '/var/log/gns',
+        },
         command=stoppable('gns $GNS_MODULE -c /etc/gns/gns.yaml'),
     )
 
@@ -84,8 +92,11 @@ def builder(
             '/etc/ssh/sshd_config': resource_stream(__name__, 'sshd_config'),
             '/root/run.sh': resource_stream(__name__, 'run.sh'),
         },
-        ports=[22],
-        volumes=['/var/lib/gns/rules', '/var/lib/gns/rules.git'],
+        ports={'ssh': 22},
+        volumes={
+            'rules': '/var/lib/gns/rules',
+            'rules.git': '/var/lib/gns/rules.git',
+        },
         command='/root/run.sh',
         scripts=[
             'apt-get install -y openssh-server',
@@ -124,22 +135,24 @@ def builder(
     def add_cherry(config):
         config['cherry'] = {'global': {'server.socket_port': restapi_port}}
 
-    def container(ship, name, config, backdoor=None, ports={}, volumes=[], memory=1024**3, image=gnsimage):
+    def container(ship, name, config, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage):
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
             ports['backdoor'] = backdoor
 
-        config_volume = ConfigVolume(
+        _volumes = {'config': ConfigVolume(
             dest='/etc/gns',
             files=[YamlFile('gns.yaml', config)]
-        )
+        )}
+
+        _volumes.update(volumes)
 
         return Container(
             name='gns-'+name,
             ship=ship,
             image=image,
             memory=memory,
-            volumes=volumes+[config_volume],
+            volumes=_volumes,
             env={'GNS_MODULE': name},
             ports=ports,
         )
@@ -150,7 +163,7 @@ def builder(
             config = make_config()
             add_service(config, 'splitter')
             add_rules(config)
-            return container(ship, 'splitter', config, volumes=[rules], backdoor=11002, ports={})
+            return container(ship, 'splitter', config, volumes={'rules': rules}, backdoor=11002, ports={})
 
         @staticmethod
         def worker(ship):
@@ -158,7 +171,7 @@ def builder(
             add_service(config, 'worker')
             add_rules(config)
             add_output(config, 'gns@'+ship.fqdn, find_nearest(mtas, ship))
-            return container(ship, 'worker', config, volumes=[rules], backdoor=11001, ports={})
+            return container(ship, 'worker', config, volumes={'rules': rules}, backdoor=11001, ports={})
 
         @staticmethod
         def restapi(ship):
@@ -185,8 +198,8 @@ def builder(
                 ship=ship,
                 image=gitapiimage,
                 memory=128*1024*1024,
-                volumes=[rulesgit, rules],
-                ports={'ssh': gitapiimage.getports()[0]},
+                volumes={'rules.git': rulesgit, 'rules': rules},
+                ports=gitapiimage.ports,
                 extports={'ssh': gitapi_port},
                 env={'KEY': open(os.path.expanduser('~/.ssh/id_rsa.pub')).read()}
             )
