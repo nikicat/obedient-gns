@@ -75,13 +75,14 @@ def builder(
             'apt-get update',
             'apt-get install python3-pip -yy',
             'pip3 install gns==0.2',
+            'pip3 install uwsgi',
         ],
         volumes={
             'config': '/etc/gns',
             'rules': '/var/lib/gns/rules',
             'logs': '/var/log/gns',
         },
-        command=stoppable('gns $GNS_MODULE -c /etc/gns/gns.yaml'),
+        command=stoppable('uwsgi --ini uwsgi.ini'),
     )
 
     gitapiimage = SourceImage(
@@ -178,7 +179,8 @@ def builder(
             config = make_config()
             add_service(config, 'api')
             add_cherry(config)
-            return container(ship, 'api', config, backdoor=11004, ports={'http': restapi_port}, image=gnsapiimage)
+            uwsgi_volume =  ConfigVolume(dest="/etc/uwsgi", files=[TemplateFile(TextFile('uwsgi.ini'))])
+            return container(ship, 'api', config, volumes={'uwsgi-config': uwsgi_volume}, backdoor=11004, ports={'http': restapi_port}, image=gnsapiimage)
 
         @staticmethod
         def collector(ship):
