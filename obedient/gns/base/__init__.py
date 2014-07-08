@@ -195,6 +195,14 @@ def builder(
                 path='/var/lib/gns/rules.git',
             )
 
+            key_path = None
+            for key_name in 'id_dsa.pub', 'id_rsa.pub':
+                path = os.path.expanduser(os.path.join('~/.ssh', key_name))
+                if os.path.isfile(path):
+                    key_path = path
+                    break
+            assert key_path is not None, "No dsa/rsa keys in your ~/.ssh"
+
             return Container(
                 name='gitapi',
                 ship=ship,
@@ -203,7 +211,7 @@ def builder(
                 volumes={'rules.git': rulesgit, 'rules': rules},
                 ports=gitapiimage.ports,
                 extports={'ssh': gitapi_port},
-                env={'KEY': open(os.path.expanduser('~/.ssh/id_rsa.pub')).read()}
+                env={'KEY': open(key_path).read()}
             )
 
         @staticmethod
