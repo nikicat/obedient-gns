@@ -142,7 +142,7 @@ def builder(
 
         _volumes = {'config': ConfigVolume(
             dest='/etc/gns',
-            files=[YamlFile('gns.yaml', config)]
+            files={'gns.yaml': YamlFile(config)},
         )}
 
         _volumes.update(volumes)
