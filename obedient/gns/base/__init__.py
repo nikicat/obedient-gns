@@ -82,7 +82,7 @@ def builder(
             'rules': '/var/lib/gns/rules',
             'logs': '/var/log/gns',
         },
-        command=stoppable('uwsgi --ini uwsgi.ini'),
+        command=stoppable('uwsgi --ini /etc/uwsgi/uwsgi.ini'),
     )
 
     gitapiimage = SourceImage(
