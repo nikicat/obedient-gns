@@ -30,6 +30,7 @@ def builder(
         elasticsearch_url='http://elasticlog.yandex.net:9200',
         restapi_port=7887,
         gitapi_port=2022,
+        ssh_key='~/.ssh/id_rsa.pub',
     ):
 
     logging_config = yaml.load(resource_stream(__name__, 'logging.yaml'))
@@ -82,7 +83,7 @@ def builder(
             'rules': '/var/lib/gns/rules',
             'logs': '/var/log/gns',
         },
-        command=stoppable('uwsgi --ini /etc/uwsgi/uwsgi.ini'),
+        command=stoppable('uwsgi --ini /etc/uwsgi/uwsgi.ini --logto /var/log/gns-uwsgi/uwsgi.log'),
     )
 
     gitapiimage = SourceImage(
@@ -101,7 +102,7 @@ def builder(
         command='/root/run.sh',
         scripts=[
             'apt-get install -y openssh-server',
-            'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell git',
+            'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell --base-dir /home --create-home git',
             'mkdir /run/sshd',
             'chmod 0755 /run/sshd',
         ],
@@ -133,9 +134,6 @@ def builder(
             },
         }
 
-    def add_cherry(config):
-        config['cherry'] = {'global': {'server.socket_port': restapi_port}}
-
     def container(ship, name, config, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage):
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
@@ -143,7 +141,7 @@ def builder(
 
         _volumes = {'config': ConfigVolume(
             dest='/etc/gns',
-            files={'gns.yaml': YamlFile(config)},
+            files={'gns.yaml': YamlFile(data=config)},
         )}
 
         _volumes.update(volumes)
@@ -177,10 +175,9 @@ def builder(
         @staticmethod
         def restapi(ship):
             config = make_config()
-            add_service(config, 'api')
-            add_cherry(config)
-            uwsgi_volume =  ConfigVolume(dest="/etc/uwsgi", files=[TemplateFile(TextFile('uwsgi.ini'))])
-            return container(ship, 'api', config, volumes={'uwsgi-config': uwsgi_volume}, backdoor=11004, ports={'http': restapi_port}, image=gnsapiimage)
+            uwsgi_conf = ConfigVolume(dest='/etc/uwsgi', files={'uwsgi.ini': TemplateFile(TextFile('uwsgi.ini'))})
+            uwsgi_logs = DataVolume(dest='/var/log/gns-uwsgi', path='/var/log/gns-uwsgi')
+            return container(ship, 'api', config, volumes={'uwsgi-config': uwsgi_conf, 'uwsgi-logs': uwsgi_logs}, backdoor=None, ports={'http': restapi_port}, image=gnsapiimage)
 
         @staticmethod
         def collector(ship):
@@ -195,14 +192,6 @@ def builder(
                 path='/var/lib/gns/rules.git',
             )
 
-            key_path = None
-            for key_name in 'id_dsa.pub', 'id_rsa.pub':
-                path = os.path.expanduser(os.path.join('~/.ssh', key_name))
-                if os.path.isfile(path):
-                    key_path = path
-                    break
-            assert key_path is not None, "No dsa/rsa keys in your ~/.ssh"
-
             return Container(
                 name='gitapi',
                 ship=ship,
@@ -211,7 +200,7 @@ def builder(
                 volumes={'rules.git': rulesgit, 'rules': rules},
                 ports=gitapiimage.ports,
                 extports={'ssh': gitapi_port},
-                env={'KEY': open(key_path).read()}
+                env={'KEY': open(ssh_key).read()}
             )
 
         @staticmethod

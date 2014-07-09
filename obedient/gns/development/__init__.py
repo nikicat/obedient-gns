@@ -1,3 +1,5 @@
+import os
+
 from .. import base
 
 from dominator.entities import *
@@ -13,6 +15,7 @@ def create():
         zookeepers=zookeepers,
         mtas=mtas,
         threads=1,
+        ssh_key=os.getenv("SSH_KEY", "~/.ssh/id_rsa.pub"),
     )
     gns = builder.build(ships)
 
