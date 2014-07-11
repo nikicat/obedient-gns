@@ -24,8 +24,10 @@ def namespace():
 
 def builder(
         zookeepers,
-        mtas=None,
-        golem_sms_url='https://golem.yandex-team.ru/api/sms/send.sbml',
+        mtas=None,  # Containers
+        mta_server=None,  # External server
+        golem_url_ro="http://example.com",
+        golem_url_rw="http://example.com",
         threads=10,
         elasticsearch_url='http://elasticlog.yandex.net:9200',
         restapi_port=7887,
@@ -83,7 +85,7 @@ def builder(
             'rules': '/var/lib/gns/rules',
             'logs': '/var/log/gns',
         },
-        command=stoppable('uwsgi --ini /etc/uwsgi/uwsgi.ini --logto /var/log/gns-uwsgi/uwsgi.log'),
+        command=stoppable('uwsgi --ini /etc/uwsgi/uwsgi.ini'),
     )
 
     gitapiimage = SourceImage(
@@ -102,7 +104,7 @@ def builder(
         command='/root/run.sh',
         scripts=[
             'apt-get install -y openssh-server',
-            'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell --base-dir /home --create-home git',
+            'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell -d / git',
             'mkdir /run/sshd',
             'chmod 0755 /run/sshd',
         ],
@@ -125,12 +127,13 @@ def builder(
         config['core']['rules-dir'] = rules.dest
 
     def add_output(config, email_from, mta):
+        mta_host, mta_port = mta if isinstance(mta, tuple) else (mta.ship.fqdn, mta.ports['smtp'])
+        config['golem'] = {'url-ro': golem_url_ro, 'url-rw': golem_url_rw}
         config['output'] = {
-            'sms': {'send-url': golem_sms_url},
             'email': {
                 'from': email_from,
-                'server': mta.ship.fqdn,
-                'port': mta.ports['smtp'],
+                'server': mta_host,
+                'port': mta_port,
             },
         }
 
@@ -141,7 +144,7 @@ def builder(
 
         _volumes = {'config': ConfigVolume(
             dest='/etc/gns',
-            files={'gns.yaml': YamlFile(data=config)},
+            files={'gns.yaml': YamlFile(config)},
         )}
 
         _volumes.update(volumes)
@@ -169,15 +172,20 @@ def builder(
             config = make_config()
             add_service(config, 'worker')
             add_rules(config)
-            add_output(config, 'gns@'+ship.fqdn, find_nearest(mtas, ship))
+            if mta_server is not None:
+                add_output(config, 'gns@'+ship.fqdn, mta_server)
+            elif mtas is not None:
+                add_output(config, 'gns@'+ship.fqdn, find_nearest(mtas, ship))
+            else:
+                raise RuntimeError('Required MTA')
             return container(ship, 'worker', config, volumes={'rules': rules}, backdoor=11001, ports={})
 
         @staticmethod
         def restapi(ship):
             config = make_config()
             uwsgi_conf = ConfigVolume(dest='/etc/uwsgi', files={'uwsgi.ini': TemplateFile(TextFile('uwsgi.ini'))})
-            uwsgi_logs = DataVolume(dest='/var/log/gns-uwsgi', path='/var/log/gns-uwsgi')
-            return container(ship, 'api', config, volumes={'uwsgi-config': uwsgi_conf, 'uwsgi-logs': uwsgi_logs}, backdoor=None, ports={'http': restapi_port}, image=gnsapiimage)
+            return container(ship, 'api', config, volumes={'uwsgi-conf': uwsgi_conf},
+                             backdoor=None, ports={'http': restapi_port}, image=gnsapiimage)
 
         @staticmethod
         def collector(ship):
