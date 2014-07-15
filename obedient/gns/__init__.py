@@ -1,4 +1,5 @@
 import os
+import os.path
 import yaml
 from pkg_resources import resource_stream
 from dominator.utils import aslist
@@ -14,6 +15,7 @@ def namespace():
 
 def getbuilder(
         zookeepers,
+        ssh_key=os.getenv('SSH_KEY', os.path.expanduser('~/.ssh/id_rsa.pub')),
         smtp_host='smtp.example.co',
         smtp_port=25,
         golem_url_ro='http://ro.admin.yandex-team.ru',
@@ -21,7 +23,6 @@ def getbuilder(
         threads=10,
         restapi_port=7887,
         gitapi_port=2022,
-        ssh_key='~/.ssh/id_rsa.pub',
         ):
 
     logging_config = yaml.load(resource_stream(__name__, 'logging.yaml'))
@@ -73,7 +74,7 @@ def getbuilder(
             'rules': '/var/lib/gns/rules',
             'logs': '/var/log/gns',
         },
-        command=stoppable('uwsgi --ini /etc/uwsgi/uwsgi.ini'),
+        command=stoppable('uwsgi --ini /etc/gns/uwsgi.ini'),
     )
 
     gitapiimage = SourceImage(
@@ -97,6 +98,8 @@ def getbuilder(
             'chmod 0755 /run/sshd',
         ],
     )
+
+    uwsgi_ini = TemplateFile(TextFile('uwsgi.ini'))
 
     def make_config():
         return {
@@ -124,12 +127,15 @@ def getbuilder(
             },
         }
 
-    def container(ship, name, config, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage, files=None):
+    def container(ship, name, config=None, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage,
+                  files={}):
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
             ports['backdoor'] = backdoor
-        if files is None:
-            files = {'gns.yaml': YamlFile(config)}
+
+        files = files.copy()
+        if config is not None:
+            files['gns.yaml'] = YamlFile(config)
 
         _volumes = {'config': ConfigVolume(dest='/etc/gns', files=files)}
         _volumes.update(volumes)
@@ -163,8 +169,7 @@ def getbuilder(
         @staticmethod
         def restapi(ship):
             config = make_config()
-            uwsgi_conf = ConfigVolume(dest='/etc/uwsgi', files={'uwsgi.ini': TemplateFile(TextFile('uwsgi.ini'))})
-            return container(ship, 'api', config, volumes={'uwsgi-conf': uwsgi_conf},
+            return container(ship, 'api', config, files={'uwsgi.ini': uwsgi_ini},
                              backdoor=None, ports={'http': restapi_port}, image=gnsapiimage)
 
         @staticmethod
@@ -215,7 +220,6 @@ def development():
     builder = getbuilder(
         zookeepers=zookeepers,
         threads=1,
-        ssh_key=os.getenv('SSH_KEY', '~/.ssh/id_rsa.pub'),
         smtp_host=mta.ship.fqdn,
         smtp_port=mta.getport('smtp'),
     )
