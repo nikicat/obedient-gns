@@ -5,31 +5,21 @@ from dominator.utils import settings, aslist
 from dominator.entities import *
 
 
-def find_nearest(containers, ship):
-    """Return container that is nearest to ship"""
-    for container in containers:
-        if container.ship == ship:
-            return container
-    else:
-        for container in containers:
-            if container.ship.datacenter == ship.datacenter:
-                return container
-        else:
-            return containers[0]
-
-
 def namespace():
     return os.environ.get('OBEDIENT_GNS_NAMESPACE', 'yandex')
 
 
 def builder(
         zookeepers,
-        mtas=None,
-        golem_sms_url='https://golem.yandex-team.ru/api/sms/send.sbml',
+        smtp_server="smtp.example.com",
+        smtp_port=25,
+        golem_url_ro="http://example.com",
+        golem_url_rw="http://example.com",
         threads=10,
         elasticsearch_url='http://elasticlog.yandex.net:9200',
         restapi_port=7887,
         gitapi_port=2022,
+        ssh_key='~/.ssh/id_rsa.pub',
     ):
 
     logging_config = yaml.load(resource_stream(__name__, 'logging.yaml'))
@@ -75,13 +65,14 @@ def builder(
             'apt-get update',
             'apt-get install python3-pip -yy',
             'pip3 install gns==0.2',
+            'pip3 install uwsgi',
         ],
         volumes={
             'config': '/etc/gns',
             'rules': '/var/lib/gns/rules',
             'logs': '/var/log/gns',
         },
-        command=stoppable('gns $GNS_MODULE -c /etc/gns/gns.yaml'),
+        command=stoppable('uwsgi --ini /etc/uwsgi/uwsgi.ini'),
     )
 
     gitapiimage = SourceImage(
@@ -100,7 +91,7 @@ def builder(
         command='/root/run.sh',
         scripts=[
             'apt-get install -y openssh-server',
-            'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell git',
+            'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell -d / git',
             'mkdir /run/sshd',
             'chmod 0755 /run/sshd',
         ],
@@ -122,29 +113,24 @@ def builder(
         config['core']['import-alias'] = 'rules'
         config['core']['rules-dir'] = rules.dest
 
-    def add_output(config, email_from, mta):
+    def add_output(config, email_from):
+        config['golem'] = {'url-ro': golem_url_ro, 'url-rw': golem_url_rw}
         config['output'] = {
-            'sms': {'send-url': golem_sms_url},
             'email': {
                 'from': email_from,
-                'server': mta.ship.fqdn,
-                'port': mta.ports['smtp'],
+                'server': smtp_server,
+                'port': smtp_port,
             },
         }
 
-    def add_cherry(config):
-        config['cherry'] = {'global': {'server.socket_port': restapi_port}}
-
-    def container(ship, name, config, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage):
+    def container(ship, name, config, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage, files=None):
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
             ports['backdoor'] = backdoor
+        if files is None:
+            files = {'gns.yaml': YamlFile(config)}
 
-        _volumes = {'config': ConfigVolume(
-            dest='/etc/gns',
-            files={'gns.yaml': YamlFile(config)},
-        )}
-
+        _volumes = {'config': ConfigVolume(dest='/etc/gns', files=files)}
         _volumes.update(volumes)
 
         return Container(
@@ -170,15 +156,15 @@ def builder(
             config = make_config()
             add_service(config, 'worker')
             add_rules(config)
-            add_output(config, 'gns@'+ship.fqdn, find_nearest(mtas, ship))
+            add_output(config, 'gns@'+ship.fqdn)
             return container(ship, 'worker', config, volumes={'rules': rules}, backdoor=11001, ports={})
 
         @staticmethod
         def restapi(ship):
             config = make_config()
-            add_service(config, 'api')
-            add_cherry(config)
-            return container(ship, 'api', config, backdoor=11004, ports={'http': restapi_port}, image=gnsapiimage)
+            uwsgi_conf = ConfigVolume(dest='/etc/uwsgi', files={'uwsgi.ini': TemplateFile(TextFile('uwsgi.ini'))})
+            return container(ship, 'api', config, volumes={'uwsgi-conf': uwsgi_conf},
+                             backdoor=None, ports={'http': restapi_port}, image=gnsapiimage)
 
         @staticmethod
         def collector(ship):
@@ -201,7 +187,7 @@ def builder(
                 volumes={'rules.git': rulesgit, 'rules': rules},
                 ports=gitapiimage.ports,
                 extports={'ssh': gitapi_port},
-                env={'KEY': open(os.path.expanduser('~/.ssh/id_rsa.pub')).read()}
+                env={'KEY': open(ssh_key).read()}
             )
 
         @staticmethod
