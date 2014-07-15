@@ -1,29 +1,30 @@
 import os
 import yaml
 from pkg_resources import resource_stream
-from dominator.utils import settings, aslist
-from dominator.entities import *
+from dominator.utils import aslist
+from dominator.entities import (Image, SourceImage, Container, DataVolume, ConfigVolume, TemplateFile,
+                                YamlFile, TextFile, LocalShip)
+from obedient import exim
+from obedient import zookeeper
 
 
 def namespace():
     return os.environ.get('OBEDIENT_GNS_NAMESPACE', 'yandex')
 
 
-def builder(
+def getbuilder(
         zookeepers,
-        smtp_server="smtp.example.com",
+        smtp_host='smtp.example.co',
         smtp_port=25,
-        golem_url_ro="http://example.com",
-        golem_url_rw="http://example.com",
+        golem_url_ro='http://ro.admin.yandex-team.ru',
+        golem_url_rw='https://golem.yandex-team.ru',
         threads=10,
-        elasticsearch_url='http://elasticlog.yandex.net:9200',
         restapi_port=7887,
         gitapi_port=2022,
         ssh_key='~/.ssh/id_rsa.pub',
-    ):
+        ):
 
     logging_config = yaml.load(resource_stream(__name__, 'logging.yaml'))
-    logging_config['handlers']['elasticsearch']['url'] = elasticsearch_url
 
     rules = DataVolume(
         dest='/var/lib/gns/rules',
@@ -118,7 +119,7 @@ def builder(
         config['output'] = {
             'email': {
                 'from': email_from,
-                'server': smtp_server,
+                'server': smtp_host,
                 'port': smtp_port,
             },
         }
@@ -194,7 +195,6 @@ def builder(
         def reinit(ship):
             return container(ship, 'reinit', make_config())
 
-
         @classmethod
         @aslist
         def build(cls, ships):
@@ -206,3 +206,26 @@ def builder(
                 yield cls.gitapi(ship)
 
     return Builder
+
+
+def development():
+    ships = [LocalShip()]
+    zookeepers = zookeeper.create(ships)
+    mta = exim.create(ships)[0]
+    builder = getbuilder(
+        zookeepers=zookeepers,
+        threads=1,
+        ssh_key=os.getenv('SSH_KEY', '~/.ssh/id_rsa.pub'),
+        smtp_host=mta.ship.fqdn,
+        smtp_port=mta.getport('smtp'),
+    )
+    gns = builder.build(ships)
+
+    return zookeepers + gns + [mta]
+
+
+def development_reinit():
+    ship = LocalShip()
+    zookeepers = zookeeper.create([ship])
+    reinit = getbuilder(zookeepers=zookeepers).reinit(ship)
+    return zookeepers + [reinit]
