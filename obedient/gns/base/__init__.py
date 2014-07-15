@@ -5,27 +5,14 @@ from dominator.utils import settings, aslist
 from dominator.entities import *
 
 
-def find_nearest(containers, ship):
-    """Return container that is nearest to ship"""
-    for container in containers:
-        if container.ship == ship:
-            return container
-    else:
-        for container in containers:
-            if container.ship.datacenter == ship.datacenter:
-                return container
-        else:
-            return containers[0]
-
-
 def namespace():
     return os.environ.get('OBEDIENT_GNS_NAMESPACE', 'yandex')
 
 
 def builder(
         zookeepers,
-        mtas=None,  # Containers
-        mta_server=None,  # External server
+        smtp_server="smtp.example.com",
+        smtp_port=25,
         golem_url_ro="http://example.com",
         golem_url_rw="http://example.com",
         threads=10,
@@ -126,27 +113,24 @@ def builder(
         config['core']['import-alias'] = 'rules'
         config['core']['rules-dir'] = rules.dest
 
-    def add_output(config, email_from, mta):
-        mta_host, mta_port = mta if isinstance(mta, tuple) else (mta.ship.fqdn, mta.ports['smtp'])
+    def add_output(config, email_from):
         config['golem'] = {'url-ro': golem_url_ro, 'url-rw': golem_url_rw}
         config['output'] = {
             'email': {
                 'from': email_from,
-                'server': mta_host,
-                'port': mta_port,
+                'server': smtp_server,
+                'port': smtp_port,
             },
         }
 
-    def container(ship, name, config, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage):
+    def container(ship, name, config, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage, files=None):
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
             ports['backdoor'] = backdoor
+        if files is None:
+            files = {'gns.yaml': YamlFile(config)}
 
-        _volumes = {'config': ConfigVolume(
-            dest='/etc/gns',
-            files={'gns.yaml': YamlFile(config)},
-        )}
-
+        _volumes = {'config': ConfigVolume(dest='/etc/gns', files=files)}
         _volumes.update(volumes)
 
         return Container(
@@ -172,12 +156,7 @@ def builder(
             config = make_config()
             add_service(config, 'worker')
             add_rules(config)
-            if mta_server is not None:
-                add_output(config, 'gns@'+ship.fqdn, mta_server)
-            elif mtas is not None:
-                add_output(config, 'gns@'+ship.fqdn, find_nearest(mtas, ship))
-            else:
-                raise RuntimeError('Required MTA')
+            add_output(config, 'gns@'+ship.fqdn)
             return container(ship, 'worker', config, volumes={'rules': rules}, backdoor=11001, ports={})
 
         @staticmethod
