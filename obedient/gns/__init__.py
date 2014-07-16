@@ -1,29 +1,31 @@
 import os
+import os.path
 import yaml
 from pkg_resources import resource_stream
-from dominator.utils import settings, aslist
-from dominator.entities import *
+from dominator.utils import aslist
+from dominator.entities import (Image, SourceImage, Container, DataVolume, ConfigVolume, TemplateFile,
+                                YamlFile, TextFile, LocalShip)
+from obedient import exim
+from obedient import zookeeper
 
 
 def namespace():
     return os.environ.get('OBEDIENT_GNS_NAMESPACE', 'yandex')
 
 
-def builder(
+def getbuilder(
         zookeepers,
-        smtp_server="smtp.example.com",
+        ssh_key=os.getenv('SSH_KEY', os.path.expanduser('~/.ssh/id_rsa.pub')),
+        smtp_host='smtp.example.co',
         smtp_port=25,
-        golem_url_ro="http://example.com",
-        golem_url_rw="http://example.com",
+        golem_url_ro='http://ro.admin.yandex-team.ru',
+        golem_url_rw='https://golem.yandex-team.ru',
         threads=10,
-        elasticsearch_url='http://elasticlog.yandex.net:9200',
         restapi_port=7887,
         gitapi_port=2022,
-        ssh_key='~/.ssh/id_rsa.pub',
-    ):
+        ):
 
     logging_config = yaml.load(resource_stream(__name__, 'logging.yaml'))
-    logging_config['handlers']['elasticsearch']['url'] = elasticsearch_url
 
     rules = DataVolume(
         dest='/var/lib/gns/rules',
@@ -72,7 +74,7 @@ def builder(
             'rules': '/var/lib/gns/rules',
             'logs': '/var/log/gns',
         },
-        command=stoppable('uwsgi --ini /etc/uwsgi/uwsgi.ini'),
+        command=stoppable('uwsgi --ini /etc/gns/uwsgi.ini'),
     )
 
     gitapiimage = SourceImage(
@@ -97,6 +99,8 @@ def builder(
         ],
     )
 
+    uwsgi_ini = TemplateFile(TextFile('uwsgi.ini'))
+
     def make_config():
         return {
             'core': {'zoo-nodes': ['{}:{}'.format(z.ship.fqdn, z.ports['client']) for z in zookeepers]},
@@ -118,17 +122,20 @@ def builder(
         config['output'] = {
             'email': {
                 'from': email_from,
-                'server': smtp_server,
+                'server': smtp_host,
                 'port': smtp_port,
             },
         }
 
-    def container(ship, name, config, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage, files=None):
+    def container(ship, name, config=None, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage,
+                  files={}):
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
             ports['backdoor'] = backdoor
-        if files is None:
-            files = {'gns.yaml': YamlFile(config)}
+
+        files = files.copy()
+        if config is not None:
+            files['gns.yaml'] = YamlFile(config)
 
         _volumes = {'config': ConfigVolume(dest='/etc/gns', files=files)}
         _volumes.update(volumes)
@@ -162,8 +169,7 @@ def builder(
         @staticmethod
         def restapi(ship):
             config = make_config()
-            uwsgi_conf = ConfigVolume(dest='/etc/uwsgi', files={'uwsgi.ini': TemplateFile(TextFile('uwsgi.ini'))})
-            return container(ship, 'api', config, volumes={'uwsgi-conf': uwsgi_conf},
+            return container(ship, 'api', config, files={'uwsgi.ini': uwsgi_ini},
                              backdoor=None, ports={'http': restapi_port}, image=gnsapiimage)
 
         @staticmethod
@@ -194,7 +200,6 @@ def builder(
         def reinit(ship):
             return container(ship, 'reinit', make_config())
 
-
         @classmethod
         @aslist
         def build(cls, ships):
@@ -206,3 +211,25 @@ def builder(
                 yield cls.gitapi(ship)
 
     return Builder
+
+
+def development():
+    ships = [LocalShip()]
+    zookeepers = zookeeper.create(ships)
+    mta = exim.create(ships)[0]
+    builder = getbuilder(
+        zookeepers=zookeepers,
+        threads=1,
+        smtp_host=mta.ship.fqdn,
+        smtp_port=mta.getport('smtp'),
+    )
+    gns = builder.build(ships)
+
+    return zookeepers + gns + [mta]
+
+
+def development_reinit():
+    ship = LocalShip()
+    zookeepers = zookeeper.create([ship])
+    reinit = getbuilder(zookeepers=zookeepers).reinit(ship)
+    return zookeepers + [reinit]
