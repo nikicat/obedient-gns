@@ -66,7 +66,7 @@ def getbuilder(
             'apt-add-repository ppa:fkrull/deadsnakes -y',
             'apt-get update',
             'apt-get install python3-pip -yy',
-            'pip3 install gns==0.2',
+            'pip3 install gns==0.3',
             'pip3 install uwsgi',
         ],
         volumes={
