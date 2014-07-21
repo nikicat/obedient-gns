@@ -15,8 +15,8 @@ def namespace():
 
 def getbuilder(
         zookeepers,
-        ssh_key=os.getenv('SSH_KEY', os.path.expanduser('~/.ssh/id_rsa.pub')),
-        smtp_host='smtp.example.co',
+        ssh_keys,
+        smtp_host='smtp.example.com',
         smtp_port=25,
         golem_url_ro='http://ro.admin.yandex-team.ru',
         golem_url_rw='https://golem.yandex-team.ru',
@@ -99,6 +99,7 @@ def getbuilder(
         ],
     )
 
+    keys = ConfigVolume(dest='/var/lib/keys', files={'authorized_keys': TextFile(text='\n'.join(ssh_keys))})
     uwsgi_ini = TemplateFile(TextFile('uwsgi.ini'))
 
     def make_config():
@@ -190,10 +191,13 @@ def getbuilder(
                 ship=ship,
                 image=gitapiimage,
                 memory=128*1024*1024,
-                volumes={'rules.git': rulesgit, 'rules': rules},
+                volumes={
+                    'rules.git': rulesgit,
+                    'rules': rules,
+                    'keys': keys
+                },
                 ports=gitapiimage.ports,
                 extports={'ssh': gitapi_port},
-                env={'KEY': open(ssh_key).read()}
             )
 
         @staticmethod
@@ -213,11 +217,19 @@ def getbuilder(
     return Builder
 
 
+def _get_local_key():
+    key_path = os.getenv('SSH_KEY', os.path.expanduser('~/.ssh/id_rsa.pub'))
+    with open(key_path) as key_file:
+        data = key_file.read()
+    return data
+
+
 def development():
     ships = [LocalShip()]
     zookeepers = zookeeper.create(ships)
     mta = exim.create(ships)[0]
     builder = getbuilder(
+        ssh_keys=[_get_local_key()],
         zookeepers=zookeepers,
         threads=1,
         smtp_host=mta.ship.fqdn,
@@ -231,5 +243,5 @@ def development():
 def development_reinit():
     ship = LocalShip()
     zookeepers = zookeeper.create([ship])
-    reinit = getbuilder(zookeepers=zookeepers).reinit(ship)
+    reinit = getbuilder(zookeepers=zookeepers, ssh_keys=[_get_local_key()]).reinit(ship)
     return zookeepers + [reinit]
