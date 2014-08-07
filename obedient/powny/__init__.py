@@ -28,8 +28,8 @@ def getbuilder(
     logging_config = yaml.load(resource_stream(__name__, 'logging.yaml'))
 
     rules = DataVolume(
-        dest='/var/lib/gns/rules',
-        path='/var/lib/gns/rules',
+        dest='/var/lib/powny/rules',
+        path='/var/lib/powny/rules',
     )
 
     def stoppable(cmd):
@@ -37,8 +37,8 @@ def getbuilder(
 
     parent = Image('yandex/trusty')
 
-    gnsimage = SourceImage(
-        name='gns',
+    pownyimage = SourceImage(
+        name='powny',
         parent=parent,
         env={
             'PATH': '$PATH:/opt/pypy3/bin',
@@ -52,14 +52,14 @@ def getbuilder(
             'pip install gns==0.2',
         ],
         volumes={
-            'config': '/etc/gns',
-            'rules': '/var/lib/gns/rules',
-            'logs': '/var/log/gns',
+            'config': '/etc/powny',
+            'rules': '/var/lib/powny/rules',
+            'logs': '/var/log/powny',
         },
-        command=stoppable('gns $GNS_MODULE -c /etc/gns/gns.yaml'),
+        command=stoppable('gns $POWNY_MODULE -c /etc/powny/powny.yaml'),
     )
-    gnsapiimage = SourceImage(
-        name='gns-cpython',
+    pownyapiimage = SourceImage(
+        name='powny-cpython',
         parent=parent,
         env={'LANG': 'C.UTF-8'},
         scripts=[
@@ -70,11 +70,11 @@ def getbuilder(
             'pip3 install uwsgi',
         ],
         volumes={
-            'config': '/etc/gns',
-            'rules': '/var/lib/gns/rules',
-            'logs': '/var/log/gns',
+            'config': '/etc/powny',
+            'rules': '/var/lib/powny/rules',
+            'logs': '/var/log/powny',
         },
-        command=stoppable('uwsgi --ini /etc/gns/uwsgi.ini'),
+        command=stoppable('uwsgi --ini /etc/powny/uwsgi.ini'),
     )
 
     gitapiimage = SourceImage(
@@ -87,8 +87,8 @@ def getbuilder(
         },
         ports={'ssh': 22},
         volumes={
-            'rules': '/var/lib/gns/rules',
-            'rules.git': '/var/lib/gns/rules.git',
+            'rules': '/var/lib/powny/rules',
+            'rules.git': '/var/lib/powny/rules.git',
         },
         command='/root/run.sh',
         scripts=[
@@ -128,7 +128,7 @@ def getbuilder(
             },
         }
 
-    def container(ship, name, config=None, backdoor=None, ports={}, volumes={}, memory=1024**3, image=gnsimage,
+    def container(ship, name, config=None, backdoor=None, ports={}, volumes={}, memory=1024**3, image=pownyimage,
                   files={}):
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
@@ -136,18 +136,18 @@ def getbuilder(
 
         files = files.copy()
         if config is not None:
-            files['gns.yaml'] = YamlFile(config)
+            files['powny.yaml'] = YamlFile(config)
 
-        _volumes = {'config': ConfigVolume(dest='/etc/gns', files=files)}
+        _volumes = {'config': ConfigVolume(dest='/etc/powny', files=files)}
         _volumes.update(volumes)
 
         return Container(
-            name='gns-'+name,
+            name=name,
             ship=ship,
             image=image,
             memory=memory,
             volumes=_volumes,
-            env={'GNS_MODULE': name},
+            env={'POWNY_MODULE': name},
             ports=ports,
         )
 
@@ -164,14 +164,14 @@ def getbuilder(
             config = make_config()
             add_service(config, 'worker')
             add_rules(config)
-            add_output(config, 'gns@'+ship.fqdn)
+            add_output(config, 'powny@'+ship.fqdn)
             return container(ship, 'worker', config, volumes={'rules': rules}, backdoor=11001, ports={})
 
         @staticmethod
         def restapi(ship):
             config = make_config()
             return container(ship, 'api', config, files={'uwsgi.ini': uwsgi_ini},
-                             backdoor=None, ports={'http': restapi_port}, image=gnsapiimage)
+                             backdoor=None, ports={'http': restapi_port}, image=pownyapiimage)
 
         @staticmethod
         def collector(ship):
@@ -182,8 +182,8 @@ def getbuilder(
         @staticmethod
         def gitapi(ship):
             rulesgit = DataVolume(
-                dest='/var/lib/gns/rules.git',
-                path='/var/lib/gns/rules.git',
+                dest='/var/lib/powny/rules.git',
+                path='/var/lib/powny/rules.git',
             )
 
             return Container(
@@ -235,9 +235,9 @@ def development():
         smtp_host=mta.ship.fqdn,
         smtp_port=mta.getport('smtp'),
     )
-    gns = builder.build(ships)
+    powny = builder.build(ships)
 
-    return zookeepers + gns + [mta]
+    return zookeepers + powny + [mta]
 
 
 def development_reinit():
