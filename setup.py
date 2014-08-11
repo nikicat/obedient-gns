@@ -12,10 +12,16 @@ if __name__ == '__main__':
         platforms='linux',
         packages=['obedient.powny'],
         namespace_packages=['obedient'],
-        package_data={'obedient.powny': ['logging.yaml', 'post-receive', 'run.sh', 'sshd_config']},
+        package_data={'obedient.powny': [
+            'logging.yaml',
+            'logging.elog.yaml',
+            'post-receive',
+            'run.sh',
+            'sshd_config',
+        ]},
         install_requires=[
-            'dominator >=4, <5',
+            'dominator[full] >=5',
             'obedient.zookeeper',
-            'obedient.exim',
+            'obedient.elk',
         ],
     )

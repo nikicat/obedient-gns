@@ -4,7 +4,12 @@
 disable_existing_loggers: false
 formatters:
     standard:
-        format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+        (): contextlog.make_mixed_formatter
+        formatters:
+            - contextlog.PartialFormatter
+            - contextlog.ExceptionLocalsFormatter
+        style: "{"
+        format: "{yellow}{asctime} {log_color}{levelname:>7} {purple}{name:20.20}{reset} {message}"
 handlers:
     console:
         level: INFO

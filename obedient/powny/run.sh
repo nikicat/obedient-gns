@@ -2,11 +2,11 @@
 
 
 # Init bare repo
-cd /var/lib/gns/rules.git
+cd $rules_git_path
 git init --bare
 
 # Copy hook
-ln -fs /post-receive /var/lib/gns/rules.git/hooks/
+ln -fs /post-receive $rules_git_path/hooks/
 
 # Run sshd daemon
 /usr/sbin/sshd -D -e
