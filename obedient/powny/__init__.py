@@ -127,7 +127,10 @@ def getbuilder(
 
     def make_config(ship):
         config = {
-            'core': {'zoo-nodes': ['{}:{}'.format(z.ship.fqdn, z.getport('client')) for z in zookeepers]},
+            'core': {
+                'zoo-nodes': ['{}:{}'.format(z.ship.fqdn, z.getport('client')) for z in zookeepers],
+                'max-input-queue-size': 5000,
+            },
             'logging': logging_config,
         }
         return config
