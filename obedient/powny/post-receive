@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 #
 # Split last $REV_LIMIT commits to separated dirs
-set -e
 
-work_tree="/var/lib/gns/rules.git"
-rules_path="/var/lib/gns/rules"
 module_prefix='git_'
 
 [ -z "$REV_LIMIT" ] && REV_LIMIT=10
 
-cd $work_tree
+cd $rules_git_path
 
 commits=`git log -n $REV_LIMIT --pretty=format:%H`
 
@@ -34,7 +31,7 @@ for commit in $commits; do
     
     mkdir $tmp_path
     echo "Checkout $commit --> $tmp_path"
-    git clone $work_tree $tmp_path
+    git clone $rules_git_path $tmp_path
     cd $tmp_path
     unset GIT_DIR
     git checkout -b version-$commit $commit
@@ -52,4 +49,4 @@ if [ `ls | wc -l` -gt $REV_LIMIT ]; then
     echo "Clean Up"
     (ls -t|head -n $REV_LIMIT;ls)|sort|uniq -u|xargs rm -r
 fi
-) 200>/var/lock/post-recive-hook.lock
+) 200>/run/lock/post-recive-hook.lock
