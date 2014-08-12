@@ -14,7 +14,7 @@ def namespace():
 
 def getbuilder(
         zookeepers,
-        ssh_keys=[],
+        ssh_keys=(),
         smtp_host='smtp.example.com',
         smtp_port=25,
         golem_url_ro='http://ro.admin.yandex-team.ru',
@@ -22,7 +22,7 @@ def getbuilder(
         threads=10,
         restapi_port=7887,
         gitapi_port=2022,
-        elasticsearch_urls=[],
+        elasticsearch_urls=(),
         pownyversion='0.3',
         ):
 
