@@ -56,7 +56,6 @@ def getbuilder(
         'uwsgi.ini': TemplateFile(TextFile('uwsgi.ini')),
     })
 
-
     def stoppable(cmd):
         return 'trap exit TERM; {} & wait'.format(cmd)
 
