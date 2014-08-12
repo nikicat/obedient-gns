@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #
 # Split last $REV_LIMIT commits to separated dirs
-set -e
 
 module_prefix='git_'
 

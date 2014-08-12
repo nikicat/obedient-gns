@@ -215,7 +215,7 @@ def getbuilder(
                 volumes={
                     'rules.git': rulesgit,
                     'rules': rules,
-                    'keys': keys
+                    'keys': keys,
                 },
                 ports=gitimage.ports,
                 extports={'ssh': gitapi_port},
