@@ -154,8 +154,12 @@ def getbuilder(
             },
         }
 
-    def container(ship, name, config, ports={}, backdoor=None, volumes={}, memory=1024**3, image=pownyimage,
-                  files={}):
+    def container(ship, name, config, ports=None, backdoor=None, volumes=None, memory=1024**3, image=pownyimage,
+                  files=None):
+        ports = ports or {}
+        volumes = volumes or {}
+        files = files or {}
+
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
             ports['backdoor'] = backdoor
