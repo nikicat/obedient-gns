@@ -31,8 +31,7 @@ def getbuilder(
     if elasticsearch_urls:
         elog_config = yaml.load(resource_stream(__name__, 'logging.elog.yaml'))
         logging_config['handlers']['elog'] = elog_config
-        # FIXME: use all urls instead of only first
-        elog_config['url'] = elasticsearch_urls[0]
+        elog_config['urls'] = elasticsearch_urls
         logging_config['root']['handlers'].append('elog')
 
     rules = DataVolume(
@@ -155,8 +154,12 @@ def getbuilder(
             },
         }
 
-    def container(ship, name, config, ports={}, backdoor=None, volumes={}, memory=1024**3, image=pownyimage,
-                  files={}):
+    def container(ship, name, config, ports=None, backdoor=None, volumes=None, memory=1024**3, image=pownyimage,
+                  files=None):
+        ports = ports or {}
+        volumes = volumes or {}
+        files = files or {}
+
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
             ports['backdoor'] = backdoor
