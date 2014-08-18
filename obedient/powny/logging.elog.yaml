@@ -21,3 +21,4 @@ fields:
     extra: extra
     fqdn: fqdn
     node: node
+    job_id: job_id
