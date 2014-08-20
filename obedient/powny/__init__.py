@@ -23,7 +23,7 @@ def getbuilder(
         restapi_port=7887,
         gitapi_port=2022,
         elasticsearch_urls=(),
-        pownyversion='0.3',
+        pownyversion='0.4',
         ):
 
     logging_config = yaml.load(resource_stream(__name__, 'logging.yaml'))

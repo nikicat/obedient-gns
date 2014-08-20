@@ -4,21 +4,4 @@ time_field: "@timestamp"
 time_format: "%Y-%m-%dT%H:%M:%S.%f"
 index: "log-{@timestamp:%Y}-{@timestamp:%m}-{@timestamp:%d}"
 doctype: powny
-fields:
-    logger: name
-    level: levelname
-    level_no: levelno
-    msg: msg
-    args: args
-    file: pathname
-    line: lineno
-    func: funcName
-    pid: process
-    process: processName
-    thread: threadName
-    thread_id: thread
-    exc_text: exc_text
-    extra: extra
-    fqdn: fqdn
-    node: node
-    job_id: job_id
+fields: null
