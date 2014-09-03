@@ -20,7 +20,7 @@ if __name__ == '__main__':
             'sshd_config',
         ]},
         install_requires=[
-            'dominator[full] >=5',
+            'dominator[full] >=7',
             'obedient.zookeeper',
             'obedient.elk',
         ],

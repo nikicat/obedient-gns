@@ -58,7 +58,7 @@ def getbuilder(
     def stoppable(cmd):
         return 'trap exit TERM; {} & wait'.format(cmd)
 
-    parent = Image('yandex/trusty')
+    parent = Image(namespace='yandex', repository='trusty')
 
     pownyimage = SourceImage(
         name='powny',
