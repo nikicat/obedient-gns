@@ -13,4 +13,5 @@ echo "rules_path=$rules_path" >> ~git/.ssh/environment
 echo "rules_git_path=$rules_git_path" >> ~git/.ssh/environment
 
 # Run sshd daemon
-/usr/sbin/sshd -D -e
+echo "starting sshd"
+/usr/sbin/sshd -D -e >/var/log/powny/gitapi.log 2>&1
