@@ -3,22 +3,35 @@
 
 disable_existing_loggers: false
 formatters:
-    standard:
+    console:
         (): contextlog.make_mixed_formatter
         formatters:
             - contextlog.PartialFormatter
             - contextlog.ExceptionLocalsFormatter
         style: "{"
-        format: "{yellow}{asctime} {log_color}{levelname:>7} {purple}{name:20.20}{reset} {message}"
+        format: "{yellow}{asctime} {log_color}{levelname:>7} {purple}{name:20.20}{reset} {message} {_extra}"
+    file:
+        (): contextlog.make_mixed_formatter
+        formatters:
+            - contextlog.PartialFormatter
+            - contextlog.ExceptionLocalsFormatter
+        style: "{"
+        format: "{asctime} {levelname:>7} {name:20.20} {message} {_extra}"
 handlers:
     console:
-        level: INFO
+        level: WARN
         class: logging.StreamHandler
-        formatter: standard
+        formatter: console
+    file:
+        level: INFO
+        class: logging.handlers.RotatingFileHandler
+        filename: /var/log/powny/powny.log
+        formatter: file
 root:
     level: DEBUG
     handlers:
         - console
+        - file
 
 loggers:
     kazoo:

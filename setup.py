@@ -3,7 +3,7 @@ import setuptools
 if __name__ == '__main__':
     setuptools.setup(
         name='obedient.powny',
-        version='2.0',
+        version='2.0.0',
         url='https://github.com/yandex-sysmon/obedient.powny',
         license='GPLv3',
         author='Nikolay Bryskin',
@@ -19,8 +19,11 @@ if __name__ == '__main__':
             'run.sh',
             'sshd_config',
         ]},
+        entry_points={'obedient': [
+            'local = obedient.powny:make_local'
+        ]},
         install_requires=[
-            'dominator[full] >=7',
+            'dominator[full] >=8.1',
             'obedient.zookeeper',
             'obedient.elk',
         ],
