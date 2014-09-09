@@ -1,10 +1,9 @@
 import os
 import os.path
 import yaml
-from pkg_resources import resource_stream
-from dominator.utils import aslist
-from dominator.entities import (Image, SourceImage, Container, DataVolume, ConfigVolume, TemplateFile,
-                                YamlFile, TextFile, LocalShip)
+from dominator.utils import aslist, resource_string
+from dominator.entities import (Image, SourceImage, Container, DataVolume, ConfigVolume, LogVolume, TemplateFile,
+                                YamlFile, TextFile, LogFile, LocalShip, Shipment, Task)
 from obedient import zookeeper
 
 
@@ -24,12 +23,13 @@ def getbuilder(
         gitapi_port=2022,
         elasticsearch_urls=(),
         pownyversion='0.4',
+        memory=1024**3,
         ):
 
-    logging_config = yaml.load(resource_stream(__name__, 'logging.yaml'))
+    logging_config = yaml.load(resource_string('logging.yaml'))
 
     if elasticsearch_urls:
-        elog_config = yaml.load(resource_stream(__name__, 'logging.elog.yaml'))
+        elog_config = yaml.load(resource_string('logging.elog.yaml'))
         logging_config['handlers']['elog'] = elog_config
         elog_config['urls'] = elasticsearch_urls
         logging_config['root']['handlers'].append('elog')
@@ -44,9 +44,23 @@ def getbuilder(
         path='/var/lib/powny/rules.git',
     )
 
-    logs = DataVolume(
+    restapilogs = LogVolume(
         dest='/var/log/powny',
-        path='/var/log/powny',
+        logs={
+            'uwsgi.log': LogFile('%Y%m%d-%H%M%S'),
+        },
+    )
+    pownylogs = LogVolume(
+        dest='/var/log/powny',
+        logs={
+            'powny.log': LogFile(''),
+        },
+    )
+    gitapilogs = LogVolume(
+        dest='/var/log/powny',
+        logs={
+            'gitapi.log': LogFile(''),
+        },
     )
 
     # Temporary stub (config volume will differ between containers)
@@ -77,7 +91,7 @@ def getbuilder(
         volumes={
             'config': configvolume.dest,
             'rules': rules.dest,
-            'logs': logs.dest,
+            'logs': pownylogs.dest,
         },
         command=stoppable('gns $POWNY_MODULE -c {}'.format(configvolume.getfilepath('powny.yaml'))),
     )
@@ -94,7 +108,7 @@ def getbuilder(
         volumes={
             'config': configvolume.dest,
             'rules': rules.dest,
-            'logs': logs.dest,
+            'logs': restapilogs.dest,
         },
         command=stoppable('uwsgi --ini {}'.format(configvolume.getfilepath('uwsgi.ini'))),
     )
@@ -103,17 +117,17 @@ def getbuilder(
         name='gitsplit',
         parent=parent,
         files={
-            '/post-receive': resource_stream(__name__, 'post-receive'),
-            '/etc/ssh/sshd_config': resource_stream(__name__, 'sshd_config'),
-            '/root/run.sh': resource_stream(__name__, 'run.sh'),
+            '/post-receive': resource_string('post-receive'),
+            '/etc/ssh/sshd_config': resource_string('sshd_config'),
+            '/root/run.sh': resource_string('run.sh'),
         },
         ports={'ssh': 22},
         volumes={
             'rules': rules.dest,
             'rules.git': rulesgit.dest,
-            'logs': logs.dest,
+            'logs': pownylogs.dest,
         },
-        command='/root/run.sh',
+        command='bash /root/run.sh',
         scripts=[
             'apt-get install -y openssh-server',
             'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell -d / git',
@@ -154,8 +168,8 @@ def getbuilder(
             },
         }
 
-    def container(ship, name, config, ports=None, backdoor=None, volumes=None, memory=1024**3, image=pownyimage,
-                  files=None):
+    def container(ship, name, config, ports=None, backdoor=None, volumes=None, memory=memory, image=pownyimage,
+                  files=None, logs=pownylogs):
         ports = ports or {}
         volumes = volumes or {}
         files = files or {}
@@ -200,10 +214,10 @@ def getbuilder(
             return container(ship, 'worker', config, volumes={'rules': rules}, backdoor=11001, ports={})
 
         @staticmethod
-        def restapi(ship):
+        def restapi(ship, name='api', port=restapi_port):
             config = make_config(ship)
-            return container(ship, 'api', config, files={'uwsgi.ini': configvolume.files['uwsgi.ini']},
-                             backdoor=None, ports={'http': restapi_port}, image=apiimage)
+            return container(ship, name, config, files={'uwsgi.ini': configvolume.files['uwsgi.ini']},
+                             backdoor=None, ports={'http': port}, image=apiimage, logs=restapilogs)
 
         @staticmethod
         def collector(ship):
@@ -222,6 +236,7 @@ def getbuilder(
                     'rules.git': rulesgit,
                     'rules': rules,
                     'keys': keys,
+                    'logs': gitapilogs,
                 },
                 ports=gitimage.ports,
                 extports={'ssh': gitapi_port},
@@ -234,7 +249,7 @@ def getbuilder(
         @staticmethod
         def reinit(ship):
             config = make_config(ship)
-            return container(ship, 'reinit', config)
+            return Task(container(ship, 'reinit', config))
 
         @classmethod
         @aslist
@@ -256,7 +271,7 @@ def _get_local_key():
     return data
 
 
-def development():
+def make_local():
     from obedient import exim
     ships = [LocalShip()]
     zookeepers = zookeeper.create(ships)
@@ -269,12 +284,6 @@ def development():
         smtp_port=mta.getport('smtp'),
     )
     powny = builder.build(ships)
+    reinit = getbuilder(zookeepers=zookeepers, ssh_keys=[_get_local_key()]).reinit(ships[0])
 
-    return zookeepers + powny + [mta]
-
-
-def development_reinit():
-    ship = LocalShip()
-    zookeepers = zookeeper.create([ship])
-    reinit = getbuilder(zookeepers=zookeepers, ssh_keys=[_get_local_key()]).reinit(ship)
-    return zookeepers + [reinit]
+    return Shipment('local', containers=zookeepers+powny+[mta], tasks=[reinit])
