@@ -2,16 +2,15 @@
 
 
 # Init bare repo
-cd $rules_git_path
+cd $RULES_GIT_PATH
 git init --bare
 
 # Copy hook
-ln -fs /post-receive $rules_git_path/hooks/
+ln -fs /post-receive $RULES_GIT_PATH/hooks/
+chmod +x /post-receive
 
-mkdir ~git/.ssh
-echo "rules_path=$rules_path" >> ~git/.ssh/environment
-echo "rules_git_path=$rules_git_path" >> ~git/.ssh/environment
+cat /etc/pam.d/sshd
 
 # Run sshd daemon
-echo "starting sshd"
+echo "Starting sshd"
 /usr/sbin/sshd -D -e >/var/log/powny/gitapi.log 2>&1

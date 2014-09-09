@@ -1,26 +1,60 @@
 import os
-import os.path
+import textwrap
+
 import yaml
-from dominator.utils import aslist, resource_string
-from dominator.entities import (Image, SourceImage, Container, DataVolume, ConfigVolume, LogVolume, TemplateFile,
-                                YamlFile, TextFile, LogFile, LocalShip, Shipment, Task, Door)
+
+from dominator.utils import aslist, resource_string, stoppable
+from dominator.entities import (Image, SourceImage, Container, Shipment, LocalShip,
+                                Door, DataVolume, ConfigVolume, LogVolume, LogFile, YamlFile, TextFile)
+
 from obedient import zookeeper
 
 
-def getbuilder(
-        zookeepers,
-        ssh_keys=(),
-        smtp_host='smtp.example.com',
-        smtp_port=25,
-        golem_url_ro='http://ro.admin.yandex-team.ru',
-        golem_url_rw='https://golem.yandex-team.ru',
-        threads=10,
-        restapi_port=7887,
-        gitapi_port=2022,
-        elasticsearch_urls=(),
-        pownyversion='0.4',
-        memory=1024**3,
-        ):
+# =====
+def namespace():
+    return os.environ.get('OBEDIENT_GNS_NAMESPACE', 'yandex')
+
+
+def make_local():
+    ships = [LocalShip()]
+    zookeepers = zookeeper.create(ships)
+    builder = make_builder(
+        ssh_keys=get_ssh_keys(),
+        zookeepers=zookeepers,
+        helpers={
+            'configure': ['powny.helpers.email'],
+            'email': {
+                'noop': True,
+            },
+        },
+    )
+    pownies = builder.build(ships)
+    return Shipment('local', containers=(zookeepers + pownies))
+
+
+# =====
+def get_ssh_keys():
+    keys = []
+    for key_path in ('~/.ssh/id_dsa.pub', '~/.ssh/id_rsa.pub', os.getenv('SSH_KEY')):
+        if key_path is not None:
+            key_path = os.path.expanduser(key_path)
+            if os.path.exists(key_path):
+                with open(key_path) as key_file:
+                    keys.append(key_file.read())
+    assert len(keys) > 0, "No SSH keys found"
+    return keys
+
+
+def make_builder(
+    zookeepers,
+    ssh_keys=(),
+    gitapi_port=2022,
+    userapi_port=7887,
+    dataapi_port=7888,
+    elasticsearch_urls=(),
+    helpers=None,
+    pownyversion='1.0',
+):
 
     logging_config = yaml.load(resource_string('logging.yaml'))
 
@@ -34,36 +68,35 @@ def getbuilder(
         dest='/var/lib/powny/rules',
         path='/var/lib/powny/rules',
     )
-
     rulesgit = DataVolume(
         dest='/var/lib/powny/rules.git',
         path='/var/lib/powny/rules.git',
     )
 
-    restapilogs = LogVolume(
-        dest='/var/log/powny',
-        files={
-            'uwsgi.log': LogFile('%Y%m%d-%H%M%S'),
-        },
-    )
-    pownylogs = LogVolume(
-        dest='/var/log/powny',
-        files={
-            'powny.log': LogFile(''),
-        },
-    )
-    gitapilogs = LogVolume(
-        dest='/var/log/powny',
-        files={
-            'gitapi.log': LogFile(''),
-        },
-    )
+    def make_logs(file_name):
+        return LogVolume(dest='/var/log/powny', files={file_name: LogFile()})
 
-    configdest = '/etc/powny'
-    uwsgi_ini_file = TemplateFile(TextFile('uwsgi.ini'))
+    gitapi_logs = make_logs('gitapi.log')
+    userapi_logs = make_logs('userapi.log')
+    dataapi_logs = make_logs('dataapi.log')
+    powny_logs = make_logs('powny.log')
 
-    def stoppable(cmd):
-        return 'trap exit TERM; {} & wait'.format(cmd)
+    # Temporary stub (config volume will differ between containers)
+    config_volume = ConfigVolume(dest='/etc/powny', files={
+        'powny.yaml': None,
+    })
+
+    gitconfig_volume = ConfigVolume(dest='/etc/gitsplit', files={
+        'gitsplit.conf': TextFile(text=textwrap.dedent('''
+            RULES_GIT_PATH={rulesgit_dest}
+            RULES_PATH={rules_dest}
+            MODULE_NAME=rules
+            REV_LIMIT=10
+        ''').strip().format(
+            rulesgit_dest=rulesgit.dest,
+            rules_dest=rules.dest,
+        )),
+    })
 
     parent = Image(namespace='yandex', repository='trusty')
 
@@ -79,31 +112,14 @@ def getbuilder(
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy',
             'easy_install pip==1.4.1',
-            'pip install contextlog elog gns=={}'.format(pownyversion),
+            'pip install elog powny=={}'.format(pownyversion),
         ],
         volumes={
-            'config': configdest,
+            'config': config_volume.dest,
             'rules': rules.dest,
-            'logs': pownylogs.dest,
+            'logs': powny_logs.dest,
         },
-        command=stoppable('gns $POWNY_MODULE -c /etc/powny/powny.yaml'),
-    )
-    apiimage = SourceImage(
-        name='powny-cpython',
-        parent=parent,
-        env={'LANG': 'C.UTF-8'},
-        scripts=[
-            'apt-add-repository ppa:fkrull/deadsnakes -y',
-            'apt-get update',
-            'apt-get install python3-pip -yy',
-            'pip3 install contextlog elog uwsgi gns=={}'.format(pownyversion),
-        ],
-        volumes={
-            'config': configdest,
-            'rules': rules.dest,
-            'logs': restapilogs.dest,
-        },
-        command=stoppable('uwsgi --ini uwsgi.ini'),
+        command=stoppable('powny-$POWNY_APP -c {}'.format(os.path.join(config_volume.dest, 'powny.yaml'))),
     )
 
     gitimage = SourceImage(
@@ -118,7 +134,7 @@ def getbuilder(
         volumes={
             'rules': rules.dest,
             'rules.git': rulesgit.dest,
-            'logs': pownylogs.dest,
+            'logs': powny_logs.dest,
         },
         command='bash /root/run.sh',
         scripts=[
@@ -126,98 +142,69 @@ def getbuilder(
             'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell -d / git',
             'mkdir /run/sshd',
             'chmod 0755 /run/sshd',
+            'sed -i -e "s/session    required     pam_loginuid.so//g" /etc/pam.d/sshd'
         ],
     )
 
-    keys = ConfigVolume(dest='/var/lib/keys', files={'authorized_keys': TextFile(text='\n'.join(ssh_keys))})
+    keys_volume = ConfigVolume(dest='/var/lib/keys', files={
+        'authorized_keys': TextFile(text='\n'.join(ssh_keys)),
+    })
 
     def make_config(ship):
         config = {
             'core': {
-                'zoo-nodes': ['{}:{}'.format(z.ship.fqdn, z.getport('client')) for z in zookeepers],
-                'max-input-queue-size': 5000,
+                'rules-dir': rules.dest,
+            },
+            'backend': {
+                'nodes': ['{}:{}'.format(z.ship.fqdn, z.getport('client')) for z in zookeepers],
+            },
+            'api': {
+                'input-limit': 5000,
+                'run': {
+                    'host': '0.0.0.0',
+                },
             },
             'logging': logging_config,
         }
+        if helpers is not None:
+            config['helpers'] = helpers
         return config
 
-    def add_service(config, name):
-        config[name] = {
-            'workers': threads,
-            'die-after': None,
-        }
-
-    def add_rules(config):
-        config['core']['import-alias'] = 'rules'
-        config['core']['rules-dir'] = rules.dest
-
-    def add_output(config, email_from):
-        config['golem'] = {'url-ro': golem_url_ro, 'url-rw': golem_url_rw}
-        config['output'] = {
-            'email': {
-                'from': email_from,
-                'server': smtp_host,
-                'port': smtp_port,
-            },
-        }
-
-    def container(ship, name, config, doors=None, backdoor=None, volumes=None, memory=memory, image=pownyimage,
-                  files=None, logs=pownylogs):
+    def make_powny_container(
+        ship,
+        name,
+        logs,
+        app=None,
+        memory=1024**3,
+        doors=None,
+        files=None,
+        with_rules=True,
+    ):
+        app = app or name
         doors = doors or {}
-        volumes = volumes or {}
         files = files or {}
 
-        if backdoor is not None:
-            config['backdoor'] = {'enabled': True, 'port': backdoor}
-            doors['backdoor'] = Door(schema='http', port=backdoor, externalport=backdoor)
-
         files = files.copy()
-        files['powny.yaml'] = YamlFile(config)
+        files['powny.yaml'] = YamlFile(make_config(ship))
 
-        _volumes = {
-            'config': ConfigVolume(dest=configdest, files=files),
+        volumes = {
+            'config': ConfigVolume(dest=config_volume.dest, files=files),
             'logs': logs,
         }
-        _volumes.update(volumes)
+        if with_rules:
+            volumes.update({'rules': rules})
 
         return Container(
             name=name,
             ship=ship,
-            image=image,
+            image=pownyimage,
             memory=memory,
-            volumes=_volumes,
-            env={'POWNY_MODULE': name},
+            volumes=volumes,
+            env={'POWNY_APP': app},
             doors=doors,
         )
 
     class Builder:
-        @staticmethod
-        def splitter(ship):
-            config = make_config(ship)
-            add_service(config, 'splitter')
-            add_rules(config)
-            return container(ship, 'splitter', config, volumes={'rules': rules}, backdoor=11002, doors={})
-
-        @staticmethod
-        def worker(ship):
-            config = make_config(ship)
-            add_service(config, 'worker')
-            add_rules(config)
-            add_output(config, 'powny@'+ship.fqdn)
-            return container(ship, 'worker', config, volumes={'rules': rules}, backdoor=11001, doors={})
-
-        @staticmethod
-        def restapi(ship, name='api', port=restapi_port):
-            config = make_config(ship)
-            return container(ship, name, config, files={'uwsgi.ini': uwsgi_ini_file},
-                             backdoor=None, doors={'http': port}, image=apiimage, logs=restapilogs)
-
-        @staticmethod
-        def collector(ship):
-            config = make_config(ship)
-            add_service(config, 'collector')
-            return container(ship, 'collector', config, backdoor=11003, doors={})
-
         @staticmethod
         def gitapi(ship):
             return Container(
@@ -228,54 +215,34 @@ def getbuilder(
                 volumes={
                     'rules.git': rulesgit,
                     'rules': rules,
-                    'keys': keys,
-                    'logs': gitapilogs,
+                    'keys': keys_volume,
+                    'logs': gitapi_logs,
+                    'gitconfig': gitconfig_volume,
                 },
                 doors={'ssh': Door(schema='ssh', port=gitimage.ports['ssh'], externalport=gitapi_port)},
-                env={
-                    'rules_git_path': rulesgit.dest,
-                    'rules_path': rules.dest,
-                },
             )
 
         @staticmethod
-        def reinit(ship):
-            config = make_config(ship)
-            return Task(container(ship, 'reinit', config))
+        def api(ship, name, logs, port):
+            return make_powny_container(ship, name, app='api', logs=logs,
+                                        doors={'http': Door(schema='http', port=port, externalport=port)})
+
+        @staticmethod
+        def worker(ship):
+            return make_powny_container(ship, 'worker', logs=powny_logs)
+
+        @staticmethod
+        def collector(ship):
+            return make_powny_container(ship, 'collector', logs=powny_logs, with_rules=False)
 
         @classmethod
         @aslist
         def build(cls, ships):
             for ship in ships:
-                yield cls.worker(ship)
-                yield cls.splitter(ship)
-                yield cls.collector(ship)
-                yield cls.restapi(ship)
                 yield cls.gitapi(ship)
+                yield cls.api(ship, 'userapi', userapi_logs, userapi_port)
+                yield cls.api(ship, 'dataapi', dataapi_logs, dataapi_port)
+                yield cls.worker(ship)
+                yield cls.collector(ship)
 
     return Builder
-
-
-def _get_local_key():
-    key_path = os.getenv('SSH_KEY', os.path.expanduser('~/.ssh/id_rsa.pub'))
-    with open(key_path) as key_file:
-        data = key_file.read()
-    return data
-
-
-def make_local():
-    from obedient import exim
-    ships = [LocalShip()]
-    zookeepers = zookeeper.create(ships)
-    mta = exim.create(ships)[0]
-    builder = getbuilder(
-        ssh_keys=[_get_local_key()],
-        zookeepers=zookeepers,
-        threads=1,
-        smtp_host=mta.ship.fqdn,
-        smtp_port=mta.getport('smtp'),
-    )
-    powny = builder.build(ships)
-    reinit = getbuilder(zookeepers=zookeepers, ssh_keys=[_get_local_key()]).reinit(ships[0])
-
-    return Shipment('local', containers=zookeepers+powny+[mta], tasks=[reinit])

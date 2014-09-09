@@ -2,36 +2,31 @@
 #
 # Split last $REV_LIMIT commits to separated dirs
 
-module_prefix='git_'
+. /etc/gitsplit/gitsplit.conf
 
-[ -z "$REV_LIMIT" ] && REV_LIMIT=10
-
-cd $rules_git_path
-
+cd $RULES_GIT_PATH
 commits=`git log -n $REV_LIMIT --pretty=format:%H`
+cd $RULES_PATH
 
 (
 flock -x 200 || exit 1
 
 for commit in $commits; do
-    module_name="$module_prefix$commit";
-    module_path="$rules_path/$module_name";
-    
-    if [ -d $module_path ]; then
-       echo "Module $module_name already exist"
-       continue
+    commit_path="$RULES_PATH/$commit"
+    if [ -d $commit_path ]; then
+        echo "Version $commit_path already exist"
+        continue
     fi
-    
-    tmp_path="$rules_path/.$module_name"
-    
+
+    tmp_path="$RULES_PATH/.$commit/$MODULE_NAME"
     if [ -d $tmp_path ]; then
-        echo "remove $tmp_path"
+        echo "Remove $tmp_path"
         rm -rf $tmp_path
     fi
-    
-    mkdir $tmp_path
+
+    mkdir -p $tmp_path
     echo "Checkout $commit --> $tmp_path"
-    git clone $rules_git_path $tmp_path
+    git clone $RULES_GIT_PATH $tmp_path
     cd $tmp_path
     unset GIT_DIR
     git checkout -b version-$commit $commit
@@ -39,14 +34,13 @@ for commit in $commits; do
     git submodule init
     echo "Submodule update"
     git submodule update
-    
-    cd $rules_path
-    mv $tmp_path $module_path
+    cd $RULES_PATH
+    mv $tmp_path $commit_path
 done
 
 # Clean up
 if [ `ls | wc -l` -gt $REV_LIMIT ]; then
-    echo "Clean Up"
+    echo "Cleanup..."
     (ls -t|head -n $REV_LIMIT;ls)|sort|uniq -u|xargs rm -r
 fi
 ) 200>/run/lock/post-recive-hook.lock

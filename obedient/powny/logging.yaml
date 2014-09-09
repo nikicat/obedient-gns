@@ -1,22 +1,27 @@
 # See for details:
 #   http://docs.python.org/3.2/library/logging.config.html#dictionary-schema-details
 
+version: 1
+
 disable_existing_loggers: false
+
 formatters:
     console:
         (): contextlog.make_mixed_formatter
         formatters:
+            - colorlog.ColoredFormatter
             - contextlog.PartialFormatter
             - contextlog.ExceptionLocalsFormatter
         style: "{"
-        format: "{yellow}{asctime} {log_color}{levelname:>7} {purple}{name:20.20}{reset} {message} {_extra}"
+        format: "{asctime} {fg_bold_blue}{app:9.9} {purple}{name:35.35} {log_color}{levelname:>7} {yellow}{job_id:36.36}{reset} {message} -- {cyan}{_extra}{reset}"
     file:
         (): contextlog.make_mixed_formatter
         formatters:
             - contextlog.PartialFormatter
             - contextlog.ExceptionLocalsFormatter
         style: "{"
-        format: "{asctime} {levelname:>7} {name:20.20} {message} {_extra}"
+        format: "{asctime} {app:9.9} {name:35.35} {levelname:>7} {job_id:36.36} {message} -- {_extra}"
+
 handlers:
     console:
         level: WARN
@@ -27,6 +32,7 @@ handlers:
         class: logging.handlers.RotatingFileHandler
         filename: /var/log/powny/powny.log
         formatter: file
+
 root:
     level: DEBUG
     handlers:
