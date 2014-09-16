@@ -13,6 +13,7 @@ if __name__ == '__main__':
         packages=['obedient.powny'],
         namespace_packages=['obedient'],
         package_data={'obedient.powny': [
+            'uwsgi.ini',
             'logging.yaml',
             'logging.elog.yaml',
             'post-receive',
