@@ -27,5 +27,6 @@ if __name__ == '__main__':
             'dominator[full] >=8.1',
             'obedient.zookeeper',
             'obedient.elk',
+            'obedient.exim',
         ],
     )
