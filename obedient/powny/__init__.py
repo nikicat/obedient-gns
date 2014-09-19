@@ -3,12 +3,8 @@ import os.path
 import yaml
 from dominator.utils import aslist, resource_string
 from dominator.entities import (Image, SourceImage, Container, DataVolume, ConfigVolume, LogVolume, TemplateFile,
-                                YamlFile, TextFile, LogFile, LocalShip, Shipment, Task)
+                                YamlFile, TextFile, LogFile, LocalShip, Shipment, Task, Door)
 from obedient import zookeeper
-
-
-def namespace():
-    return os.environ.get('OBEDIENT_GNS_NAMESPACE', 'yandex')
 
 
 def getbuilder(
@@ -46,28 +42,25 @@ def getbuilder(
 
     restapilogs = LogVolume(
         dest='/var/log/powny',
-        logs={
+        files={
             'uwsgi.log': LogFile('%Y%m%d-%H%M%S'),
         },
     )
     pownylogs = LogVolume(
         dest='/var/log/powny',
-        logs={
+        files={
             'powny.log': LogFile(''),
         },
     )
     gitapilogs = LogVolume(
         dest='/var/log/powny',
-        logs={
+        files={
             'gitapi.log': LogFile(''),
         },
     )
 
-    # Temporary stub (config volume will differ between containers)
-    configvolume = ConfigVolume(dest='/etc/powny', files={
-        'powny.yaml': None,
-        'uwsgi.ini': TemplateFile(TextFile('uwsgi.ini')),
-    })
+    configdest = '/etc/powny'
+    uwsgi_ini_file = TemplateFile(TextFile('uwsgi.ini'))
 
     def stoppable(cmd):
         return 'trap exit TERM; {} & wait'.format(cmd)
@@ -89,11 +82,11 @@ def getbuilder(
             'pip install contextlog elog gns=={}'.format(pownyversion),
         ],
         volumes={
-            'config': configvolume.dest,
+            'config': configdest,
             'rules': rules.dest,
             'logs': pownylogs.dest,
         },
-        command=stoppable('gns $POWNY_MODULE -c {}'.format(configvolume.getfilepath('powny.yaml'))),
+        command=stoppable('gns $POWNY_MODULE -c /etc/powny/powny.yaml'),
     )
     apiimage = SourceImage(
         name='powny-cpython',
@@ -106,11 +99,11 @@ def getbuilder(
             'pip3 install contextlog elog uwsgi gns=={}'.format(pownyversion),
         ],
         volumes={
-            'config': configvolume.dest,
+            'config': configdest,
             'rules': rules.dest,
             'logs': restapilogs.dest,
         },
-        command=stoppable('uwsgi --ini {}'.format(configvolume.getfilepath('uwsgi.ini'))),
+        command=stoppable('uwsgi --ini uwsgi.ini'),
     )
 
     gitimage = SourceImage(
@@ -168,21 +161,21 @@ def getbuilder(
             },
         }
 
-    def container(ship, name, config, ports=None, backdoor=None, volumes=None, memory=memory, image=pownyimage,
+    def container(ship, name, config, doors=None, backdoor=None, volumes=None, memory=memory, image=pownyimage,
                   files=None, logs=pownylogs):
-        ports = ports or {}
+        doors = doors or {}
         volumes = volumes or {}
         files = files or {}
 
         if backdoor is not None:
             config['backdoor'] = {'enabled': True, 'port': backdoor}
-            ports['backdoor'] = backdoor
+            doors['backdoor'] = Door(schema='http', port=backdoor, externalport=backdoor)
 
         files = files.copy()
         files['powny.yaml'] = YamlFile(config)
 
         _volumes = {
-            'config': ConfigVolume(dest=configvolume.dest, files=files),
+            'config': ConfigVolume(dest=configdest, files=files),
             'logs': logs,
         }
         _volumes.update(volumes)
@@ -194,7 +187,7 @@ def getbuilder(
             memory=memory,
             volumes=_volumes,
             env={'POWNY_MODULE': name},
-            ports=ports,
+            doors=doors,
         )
 
     class Builder:
@@ -203,7 +196,7 @@ def getbuilder(
             config = make_config(ship)
             add_service(config, 'splitter')
             add_rules(config)
-            return container(ship, 'splitter', config, volumes={'rules': rules}, backdoor=11002, ports={})
+            return container(ship, 'splitter', config, volumes={'rules': rules}, backdoor=11002, doors={})
 
         @staticmethod
         def worker(ship):
@@ -211,19 +204,19 @@ def getbuilder(
             add_service(config, 'worker')
             add_rules(config)
             add_output(config, 'powny@'+ship.fqdn)
-            return container(ship, 'worker', config, volumes={'rules': rules}, backdoor=11001, ports={})
+            return container(ship, 'worker', config, volumes={'rules': rules}, backdoor=11001, doors={})
 
         @staticmethod
         def restapi(ship, name='api', port=restapi_port):
             config = make_config(ship)
-            return container(ship, name, config, files={'uwsgi.ini': configvolume.files['uwsgi.ini']},
-                             backdoor=None, ports={'http': port}, image=apiimage, logs=restapilogs)
+            return container(ship, name, config, files={'uwsgi.ini': uwsgi_ini_file},
+                              backdoor=None, doors={'http': port}, image=apiimage, logs=restapilogs)
 
         @staticmethod
         def collector(ship):
             config = make_config(ship)
             add_service(config, 'collector')
-            return container(ship, 'collector', config, backdoor=11003, ports={})
+            return container(ship, 'collector', config, backdoor=11003, doors={})
 
         @staticmethod
         def gitapi(ship):
@@ -238,8 +231,7 @@ def getbuilder(
                     'keys': keys,
                     'logs': gitapilogs,
                 },
-                ports=gitimage.ports,
-                extports={'ssh': gitapi_port},
+                doors={'ssh': Door(schema='ssh', port=gitimage.ports['ssh'], externalport=gitapi_port)},
                 env={
                     'rules_git_path': rulesgit.dest,
                     'rules_path': rules.dest,
