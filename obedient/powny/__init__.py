@@ -210,7 +210,7 @@ def getbuilder(
         def restapi(ship, name='api', port=restapi_port):
             config = make_config(ship)
             return container(ship, name, config, files={'uwsgi.ini': uwsgi_ini_file},
-                              backdoor=None, doors={'http': port}, image=apiimage, logs=restapilogs)
+                             backdoor=None, doors={'http': port}, image=apiimage, logs=restapilogs)
 
         @staticmethod
         def collector(ship):
