@@ -73,13 +73,13 @@ def make_builder(
         path='/var/lib/powny/rules.git',
     )
 
-    def make_logs(file_name):
-        return LogVolume(dest='/var/log/powny', files={file_name: LogFile()})
+    def make_logs(*files):
+        return LogVolume(dest='/var/log/powny', files={name: LogFile() for name in files})
 
     gitapi_logs = make_logs('gitapi.log')
     userapi_logs = make_logs('userapi.log')
     dataapi_logs = make_logs('dataapi.log')
-    powny_logs = make_logs('powny.log')
+    powny_logs = make_logs('powny.log', 'powny.debug.log')
 
     # Temporary stub (config volume will differ between containers)
     config_volume = ConfigVolume(dest='/etc/powny', files={

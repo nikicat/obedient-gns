@@ -31,6 +31,15 @@ handlers:
         level: INFO
         class: logging.handlers.RotatingFileHandler
         filename: /var/log/powny/powny.log
+        maxBytes: 52428800
+        backupCount: 100
+        formatter: file
+    debug_file:
+        level: DEBUG
+        class: logging.handlers.RotatingFileHandler
+        filename: /var/log/powny/powny.debug.log
+        maxBytes: 52428800
+        backupCount: 10
         formatter: file
 
 root:
@@ -38,6 +47,7 @@ root:
     handlers:
         - console
         - file
+        - debug_file
 
 loggers:
     kazoo:
