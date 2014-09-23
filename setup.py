@@ -13,7 +13,6 @@ if __name__ == '__main__':
         packages=['obedient.powny'],
         namespace_packages=['obedient'],
         package_data={'obedient.powny': [
-            'uwsgi.ini',
             'logging.yaml',
             'logging.elog.yaml',
             'post-receive',
@@ -27,6 +26,5 @@ if __name__ == '__main__':
             'dominator[full] >=8.1',
             'obedient.zookeeper',
             'obedient.elk',
-            'obedient.exim',
         ],
     )
