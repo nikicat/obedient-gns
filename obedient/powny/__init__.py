@@ -225,7 +225,7 @@ def make_builder(
         @staticmethod
         def api(ship, name, logs, port):
             return make_powny_container(ship, name, app='api', logs=logs,
-                                        doors={'http': Door(schema='http', port=port, externalport=port)})
+                                        doors={'http': Door(schema='http', port=7887, externalport=port)})
 
         @staticmethod
         def worker(ship):
