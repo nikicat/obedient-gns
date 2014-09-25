@@ -52,6 +52,7 @@ def make_builder(
     userapi_port=7887,
     dataapi_port=7888,
     elasticsearch_urls=(),
+    packages=(),
     helpers=None,
     pownyversion='1.0',
 ):
@@ -112,7 +113,7 @@ def make_builder(
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy',
             'easy_install pip==1.4.1',
-            'pip install elog powny=={}'.format(pownyversion),
+            'pip install elog powny=={ver} {pkgs}'.format(ver=pownyversion, pkgs=" ".join(packages)),
         ],
         volumes={
             'config': config_volume.dest,
