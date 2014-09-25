@@ -54,7 +54,7 @@ def make_builder(
     elasticsearch_urls=(),
     extra_packages=(),
     helpers=None,
-    pownyversion='1.0',
+    pownyversion='latest',
 ):
 
     logging_config = yaml.load(resource_string('logging.yaml'))
@@ -113,7 +113,10 @@ def make_builder(
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy',
             'easy_install pip==1.4.1',
-            'pip install elog powny=={ver} {pkgs}'.format(ver=pownyversion, pkgs=" ".join(extra_packages)),
+            'pip install elog powny{versfx} {pkgs}'.format(
+                versfx=('' if pownyversion == 'latest' else '=={}'.format(pownyversion)),
+                pkgs=" ".join(extra_packages),
+            ),
         ],
         volumes={
             'config': config_volume.dest,
