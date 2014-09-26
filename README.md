@@ -16,8 +16,8 @@ dominator shipment generate obedient.powny local > powny.local.yaml
 dominator -c powny.local.yaml image build
 dominator -c powny.local.yaml container start
 ```
-The service will be available at the following ports:
+To view all available ports, execute:
 ```
-localhost:2022  # Git (remote `ssh://git@localhost:2022/var/lib/powny/rules.git`)
-localhost:7887  # HTTP-API
+domiantor door list
 ```
+The rules repository available on ssh://git@localhost:2022/var/lib/powny/rules.git
