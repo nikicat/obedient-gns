@@ -154,13 +154,12 @@ def make_builder(
     def make_config(ship):
         config = {
             'core': {
-                'rules-dir': rules.dest,
+                'rules_dir': rules.dest,
             },
             'backend': {
                 'nodes': ['{}:{}'.format(z.ship.fqdn, z.getport('client')) for z in zookeepers],
             },
             'api': {
-                'input-limit': 5000,
                 'run': {
                     'host': '0.0.0.0',
                 },
