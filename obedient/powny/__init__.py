@@ -21,12 +21,6 @@ def make_local():
     builder = make_builder(
         ssh_keys=get_ssh_keys(),
         zookeepers=zookeepers,
-        helpers={
-            'configure': ['powny.helpers.email'],
-            'email': {
-                'noop': True,
-            },
-        },
     )
     pownies = builder.build(ships)
     return Shipment('local', containers=(zookeepers + pownies))
