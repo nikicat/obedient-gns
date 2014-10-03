@@ -43,8 +43,8 @@ def make_builder(
     zookeepers,
     ssh_keys=(),
     gitapi_port=2022,
-    userapi_port=7887,
-    dataapi_port=7888,
+    userapi_port=80,
+    dataapi_port=8080,
     elasticsearch_urls=(),
     extra_scripts=(),
     helpers=None,
@@ -219,7 +219,7 @@ def make_builder(
         @staticmethod
         def api(ship, name, logs, port):
             return make_powny_container(ship, name, app='api', logs=logs,
-                                        doors={'http': Door(schema='http', port=7887, externalport=port)})
+                                        doors={'http': Door(schema='http', port=80, externalport=port)})
 
         @staticmethod
         def worker(ship):

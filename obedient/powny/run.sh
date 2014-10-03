@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 
+. /etc/gitsplit/gitsplit.conf
+
 # Init bare repo
 cd $RULES_GIT_PATH
 git init --bare
