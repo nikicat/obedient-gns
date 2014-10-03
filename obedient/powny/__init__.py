@@ -44,7 +44,7 @@ def make_builder(
     ssh_keys=(),
     gitapi_port=2022,
     userapi_port=80,
-    dataapi_port=7887,
+    dataapi_port=8080,
     elasticsearch_urls=(),
     extra_scripts=(),
     helpers=None,
