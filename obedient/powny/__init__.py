@@ -133,7 +133,7 @@ def make_builder(
         },
         command='bash /root/run.sh',
         scripts=[
-            'apt-get install -y openssh-server',
+            'apt-get -q update && apt-get install -y openssh-server && apt-get clean',
             'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell -d / git',
             'mkdir /run/sshd',
             'chmod 0755 /run/sshd',
