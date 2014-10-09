@@ -133,7 +133,7 @@ def make_builder(
         },
         command='bash /root/run.sh',
         scripts=[
-            'apt-get install -y openssh-server',
+            'apt-get -q update && apt-get install -y openssh-server && apt-get clean',
             'useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell -d / git',
             'mkdir /run/sshd',
             'chmod 0755 /run/sshd',
@@ -151,7 +151,11 @@ def make_builder(
                 'rules_dir': rules.dest,
             },
             'backend': {
-                'nodes': ['{}:{}'.format(z.ship.fqdn, z.getport('client')) for z in zookeepers],
+                'nodes': [
+                    '{}:{}'.format(z.ship.fqdn, z.getport('client'))
+                    for z in zookeepers
+                    if z.ship.fqdn == ship.fqdn
+                ],
             },
             'api': {
                 'run': {
