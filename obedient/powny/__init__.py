@@ -151,7 +151,11 @@ def make_builder(
                 'rules_dir': rules.dest,
             },
             'backend': {
-                'nodes': ['{}:{}'.format(z.ship.fqdn, z.getport('client')) for z in zookeepers],
+                'nodes': [
+                    '{}:{}'.format(z.ship.fqdn, z.getport('client'))
+                    for z in zookeepers
+                    if z.ship.fqdn == ship.fqdn
+                ],
             },
             'api': {
                 'run': {
