@@ -46,9 +46,12 @@ def make_builder(
     userapi_port=80,
     dataapi_port=8080,
     elasticsearch_urls=(),
+    api_workers=4,
+    api_max_requests=5000,
     extra_scripts=(),
     helpers=None,
     pownyversion='latest',
+    backdoor_start_port=None,
 ):
 
     logging_config = yaml.load(resource_string('logging.yaml'))
@@ -95,26 +98,38 @@ def make_builder(
 
     parent = Image(namespace='yandex', repository='trusty')
 
-    pownyimage = SourceImage(
-        name='powny',
-        parent=parent,
-        env={
-            'PATH': '$PATH:/opt/pypy3/bin',
-            'LANG': 'C.UTF-8',
-        },
-        scripts=[
-            'curl http://buildbot.pypy.org/nightly/py3k/pypy-c-jit-latest-linux64.tar.bz2 2>/dev/null | tar -jxf -',
-            'mv pypy* /opt/pypy3',
-            'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy',
-            'easy_install pip==1.4.1',
-            'pip install elog powny{}'.format('' if pownyversion == 'latest' else '=={}'.format(pownyversion)),
-        ] + list(extra_scripts),
-        volumes={
-            'config': config_volume.dest,
-            'rules': rules.dest,
-            'logs': powny_logs.dest,
-        },
-        command=stoppable('powny-$POWNY_APP -c {}'.format(os.path.join(config_volume.dest, 'powny.yaml'))),
+    def make_powny_image(cmd):
+        return SourceImage(
+            name='powny',
+            parent=parent,
+            env={
+                'PATH': '$PATH:/opt/pypy3/bin',
+                'LANG': 'C.UTF-8',
+            },
+            scripts=[
+                'curl http://buildbot.pypy.org/nightly/py3k/pypy-c-jit-latest-linux64.tar.bz2 2>/dev/null | tar -jxf -',
+                'mv pypy* /opt/pypy3',
+                'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy',
+                'easy_install pip==1.4.1',
+                'pip install elog gunicorn powny{}'.format('' if pownyversion == 'latest' else '=={}'.format(pownyversion)),
+            ] + list(extra_scripts),
+            volumes={
+                'config': config_volume.dest,
+                'rules': rules.dest,
+                'logs': powny_logs.dest,
+            },
+            command=stoppable(cmd),
+        )
+
+    powny_conf_path = os.path.join(config_volume.dest, 'powny.yaml')
+    pownyimage = make_powny_image('powny-$POWNY_APP -c {}'.format(powny_conf_path))
+    gunicornimage = make_powny_image(
+        'gunicorn --workers {workers} --max-requests {max_requests}'
+        ' -b :80 \'powny.core.apps.api:make_app(True, ["-c", "{powny_yaml}"])\''.format(
+            workers=api_workers,
+            max_requests=api_max_requests,
+            powny_yaml=powny_conf_path,
+        ),
     )
 
     gitimage = SourceImage(
@@ -145,10 +160,14 @@ def make_builder(
         'authorized_keys': TextFile(text='\n'.join(ssh_keys)),
     })
 
-    def make_config(ship):
+    def make_config(ship, backdoor_port):
         config = {
             'core': {
                 'rules_dir': rules.dest,
+            },
+            'backdoor': {
+                'enabled': backdoor_port is not None,
+                'port': backdoor_port,
             },
             'backend': {
                 'nodes': [
@@ -156,11 +175,6 @@ def make_builder(
                     for z in zookeepers
                     if z.ship.fqdn == ship.fqdn
                 ],
-            },
-            'api': {
-                'run': {
-                    'host': '0.0.0.0',
-                },
             },
             'logging': logging_config,
         }
@@ -177,13 +191,17 @@ def make_builder(
         doors=None,
         files=None,
         with_rules=True,
+        backdoor_port=None,
     ):
         app = app or name
-        doors = doors or {}
-        files = files or {}
 
+        doors = doors or {}
+        if backdoor_port is not None:
+            doors['backdoor'] = Door(schema='telnet', port=backdoor_port, externalport=backdoor_port)
+
+        files = files or {}
         files = files.copy()
-        files['powny.yaml'] = YamlFile(make_config(ship))
+        files['powny.yaml'] = YamlFile(make_config(ship, backdoor_port))
 
         volumes = {
             'config': ConfigVolume(dest=config_volume.dest, files=files),
@@ -195,7 +213,7 @@ def make_builder(
         return Container(
             name=name,
             ship=ship,
-            image=pownyimage,
+            image=(gunicornimage if app == "api" else pownyimage),
             memory=memory,
             volumes=volumes,
             env={'POWNY_APP': app},
@@ -221,26 +239,29 @@ def make_builder(
             )
 
         @staticmethod
-        def api(ship, name, logs, port):
-            return make_powny_container(ship, name, app='api', logs=logs,
-                                        doors={'http': Door(schema='http', port=80, externalport=port)})
+        def api(ship, name, logs, port, backdoor_port):
+            return make_powny_container(ship, name, app='api', logs=logs, memory=2048*1024*1024,
+                                        doors={'http': Door(schema='http', port=80, externalport=port)},
+                                        backdoor_port=backdoor_port)
 
         @staticmethod
-        def worker(ship):
-            return make_powny_container(ship, 'worker', logs=powny_logs)
+        def worker(ship, backdoor_port):
+            return make_powny_container(ship, 'worker', logs=powny_logs, backdoor_port=backdoor_port)
 
         @staticmethod
-        def collector(ship):
-            return make_powny_container(ship, 'collector', logs=powny_logs, with_rules=False)
+        def collector(ship, backdoor_port):
+            return make_powny_container(ship, 'collector', logs=powny_logs, with_rules=False,
+                                        backdoor_port=backdoor_port)
 
         @classmethod
         @aslist
         def build(cls, ships):
+            make_backdoor = (lambda offset: backdoor_start_port and (backdoor_start_port + offset))
             for ship in ships:
                 yield cls.gitapi(ship)
-                yield cls.api(ship, 'userapi', userapi_logs, userapi_port)
-                yield cls.api(ship, 'dataapi', dataapi_logs, dataapi_port)
-                yield cls.worker(ship)
-                yield cls.collector(ship)
+                yield cls.api(ship, 'userapi', userapi_logs, userapi_port, backdoor_port=make_backdoor(0))
+                yield cls.api(ship, 'dataapi', dataapi_logs, dataapi_port, backdoor_port=make_backdoor(1))
+                yield cls.worker(ship, backdoor_port=make_backdoor(2))
+                yield cls.collector(ship, backdoor_port=make_backdoor(3))
 
     return Builder
