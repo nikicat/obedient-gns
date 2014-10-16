@@ -18,7 +18,7 @@ for commit in $commits; do
         continue
     fi
 
-    tmp_path="$RULES_PATH/.$commit/$MODULE_NAME"
+    tmp_path="$RULES_PATH/.$commit"
     if [ -d $tmp_path ]; then
         echo "Remove $tmp_path"
         rm -rf $tmp_path
