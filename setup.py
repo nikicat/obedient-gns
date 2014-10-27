@@ -20,11 +20,11 @@ if __name__ == '__main__':
             'sshd_config',
         ]},
         entry_points={'obedient': [
-            'local = obedient.powny:make_local'
+            'test = obedient.powny:test'
         ]},
         install_requires=[
-            'dominator[full] >=8.1',
-            'obedient.zookeeper',
-            'obedient.elk',
+            'dominator[full] >=12.1a',
+            'obedient.zookeeper >=3a',
+            'obedient.elk >=1.1a',
         ],
     )
