@@ -253,13 +253,11 @@ def make_builder(
     return Builder
 
 
+@aslist
 def get_ssh_keys():
-    keys = []
     for key_path in ('~/.ssh/id_dsa.pub', '~/.ssh/id_rsa.pub', os.getenv('SSH_KEY')):
         if key_path is not None:
             key_path = os.path.expanduser(key_path)
             if os.path.exists(key_path):
                 with open(key_path) as key_file:
-                    keys.append(key_file.read())
-    assert len(keys) > 0, "No SSH keys found"
-    return keys
+                    yield key_file.read()
