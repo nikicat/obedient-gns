@@ -1,0 +1,32 @@
+# Global settings for Dominator
+# Copy this file to ~/.config/dominator/settings.yaml and edit
+
+# Directory to place config files
+configvolumedir: /tmp/config
+
+# Directory to place data
+datavolumedir: /tmp/data
+
+docker:
+# URL for default Docker instance (could be any Docker server as well),
+# it is used for building images and retrieving image ids
+    url: http://localhost:4243
+#
+# Uncomment this if you want to customize your Docker registry
+    registry:
+#
+# Put here local registry address to speed up pull
+        url: registry.ape.yandex.net
+#
+# Replace with true if your registry doesn't support https
+        insecure: true
+#
+# Default namespace to use for SourceImages
+    namespace: nikicat
+
+# FQDN for LocalShip's - used for developing. Put here some local ip
+# different from 127.0.0.1/::1 that local containers could reach
+localship-fqdn: 172.17.42.1
+
+
+
