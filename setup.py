@@ -3,7 +3,7 @@ import setuptools
 if __name__ == '__main__':
     setuptools.setup(
         name='obedient.powny',
-        version='3.0.0',
+        version='3.1.0',
         url='https://github.com/yandex-sysmon/obedient.powny',
         license='GPLv3',
         author='Nikolay Bryskin',
