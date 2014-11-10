@@ -64,6 +64,7 @@ def make_builder(
     api_max_requests=5000,
     extra_scripts=(),
     helpers_config=None,
+    pip_pre=False,
     powny_version='latest',
 ):
     powny_yaml_path = os.path.join('/etc/powny', 'powny.yaml')
@@ -82,34 +83,21 @@ def make_builder(
         scripts=[
             'curl http://buildbot.pypy.org/nightly/py3k/pypy-c-jit-latest-linux64.tar.bz2 2>/dev/null | tar -jxf -',
             'mv pypy* /opt/pypy3',
-            'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy',
+            'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy3',
             'easy_install pip==1.4.1',
-            'pip install elog powny{versfx}'.format(
+            'pip install {pre} elog powny{versfx}'.format(
+                pre=('--pre' if pip_pre else ''),
                 versfx=('' if powny_version == 'latest' else '=={}'.format(powny_version)),
             ),
         ] + list(extra_scripts),
         entrypoint=['bash', '-c'],
     )
 
-    img_powny_service = SourceImage(
+    img_powny = SourceImage(
         name='powny-service',
         parent=img_powny_base,
         ports={'backdoor': 10023},
         command=[stoppable('powny-$POWNY_APP -c {}'.format(powny_yaml_path))],
-    )
-
-    img_powny_gunicorn = SourceImage(
-        name='powny-gunicorn',
-        parent=img_powny_base,
-        scripts=['pip install gunicorn'],
-        command=[stoppable(
-            'gunicorn --workers {workers} --max-requests {max_requests}'
-            ' -b :80 \'powny.core.apps.api:make_app(True, ["-c", "{powny_yaml}"])\''.format(
-                workers=api_workers,
-                max_requests=api_max_requests,
-                powny_yaml=powny_yaml_path,
-            ),
-        )],
     )
 
     img_gitapi = SourceImage(
@@ -152,11 +140,11 @@ def make_builder(
     def make_logs_volume(*files):
         return LogVolume(dest='/var/log/powny', files={name: LogFile() for name in files})
 
-    def make_powny_container(image, name, app=None, memory=1024**3):
+    def make_powny_container(name, app=None, memory=1024**3):
         app = app or name
         container = Container(
             name=name,
-            image=image,
+            image=img_powny,
             memory=memory,
             volumes={
                 'config': None,
@@ -164,7 +152,7 @@ def make_builder(
                 'rules': dv_rules,
             },
             env={'POWNY_APP': app},
-            doors={'backdoor': Door(schema='telnet', port=img_powny_service.ports['backdoor'])},
+            doors={'backdoor': Door(schema='telnet', port=img_powny.ports['backdoor'])},
         )
 
         def make_logging_config(container):
@@ -186,9 +174,16 @@ def make_builder(
                 'core': {
                     'rules_dir': dv_rules.dest,
                 },
+                'api': {
+                    'gunicorn': {
+                        'bind': '0.0.0.0:80',
+                        'workers': api_workers,
+                        'max_requests': api_max_requests,
+                    },
+                },
                 'backdoor': {
-                    'enabled': True,
-                    'port': img_powny_service.ports['backdoor'],
+                    'enabled': (app != "api" or api_workers == 1),  # Backdoor failed for multiprocess app
+                    'port': img_powny.ports['backdoor'],
                 },
                 'backend': {
                     'nodes': [door.hostport for door in container.links['zookeeper']],
@@ -227,28 +222,17 @@ def make_builder(
 
         @staticmethod
         def api(name):
-            cont = make_powny_container(
-                image=img_powny_gunicorn,
-                name=name,
-                app="api",
-                memory=2048*1024*1024,
-            )
+            cont = make_powny_container(name=name, app='api', memory=2048*1024*1024)
             cont.doors['http'] = Door(schema='http', port=80)
             return cont
 
         @staticmethod
         def worker():
-            return make_powny_container(
-                image=img_powny_service,
-                name='worker',
-            )
+            return make_powny_container(name='worker')
 
         @staticmethod
         def collector():
-            return make_powny_container(
-                image=img_powny_service,
-                name='collector',
-            )
+            return make_powny_container(name='collector')
 
     return Builder
 
