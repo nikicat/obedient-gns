@@ -65,7 +65,9 @@ def make_builder(
     extra_scripts=(),
     helpers_config=None,
     pip_pre=False,
-    powny_version='latest',
+    powny_version='1.2.0',
+    elog_version='0.9',
+    pypy_version='jit-74309-4ca3a10894aa',
 ):
     powny_yaml_path = os.path.join('/etc/powny', 'powny.yaml')
 
@@ -81,14 +83,12 @@ def make_builder(
             'LANG': 'C.UTF-8',
         },
         scripts=[
-            'curl http://buildbot.pypy.org/nightly/py3k/pypy-c-jit-latest-linux64.tar.bz2 2>/dev/null | tar -jxf -',
+            'curl http://buildbot.pypy.org/nightly/py3k/pypy-c-{}-linux64.tar.bz2 2>/dev/null'.format(pypy_version) +
+            '| tar -jxf -',
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy3',
             'easy_install pip==1.4.1',
-            'pip install {pre} elog powny{versfx}'.format(
-                pre=('--pre' if pip_pre else ''),
-                versfx=('' if powny_version == 'latest' else '=={}'.format(powny_version)),
-            ),
+            'pip install --pre elog=={elog_version} powny=={powny_version}'.format(**locals()),
         ] + list(extra_scripts),
         entrypoint=['bash', '-c'],
     )
