@@ -12,13 +12,13 @@ def test(shipment):
     from obedient.zookeeper import build_zookeeper_cluster
     shipment.unload_ships()
     zookeepers = build_zookeeper_cluster(shipment.ships.values())
-    pownies = build_powny_cluster(shipment.ships.values(), ssh_keys=get_ssh_keys())
+    pownies = build_powny_cluster(shipment.ships.values())
     attach_zookeeper_to_powny(pownies, zookeepers)
     shipment.expose_ports(range(47000, 47100))
 
 
 @aslist
-def build_powny_cluster(ships, ssh_keys, **kwargs):
+def build_powny_cluster(ships, ssh_keys=[], **kwargs):
     builder = make_builder(**kwargs)
 
     for ship in ships:
