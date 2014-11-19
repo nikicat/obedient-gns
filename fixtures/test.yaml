@@ -1,5 +1,5 @@
 &id034 !!python/object:dominator.entities.Shipment
-dominator_version: 14.0.0
+dominator_version: 14.1.0
 name: unnamed
 ships:
   local: &id008 !!python/object:dominator.entities.LocalShip
@@ -84,7 +84,7 @@ ships:
             - curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
               2>/dev/null | pypy3
             - easy_install pip==1.4.1
-            - pip install --pre elog==0.9 powny==1.2.0
+            - pip install --pre elog==1.1 trollius==1.0.2 powny==1.3.0
             user: ''
             volumes: {}
             workdir: null
@@ -316,7 +316,7 @@ ships:
                     gunicorn:
                       bind: 0.0.0.0:80
                       max_requests: 5000
-                      workers: 4
+                      threads: 4
                   backdoor:
                     enabled: true
                     port: 10023
@@ -367,6 +367,8 @@ ships:
                         level: INFO
                         maxBytes: 52428800
                     loggers:
+                      elasticsearch:
+                        level: WARNING
                       kazoo:
                         level: WARNING
                     root:
@@ -458,9 +460,9 @@ ships:
                     gunicorn:
                       bind: 0.0.0.0:80
                       max_requests: 5000
-                      workers: 4
+                      threads: 4
                   backdoor:
-                    enabled: false
+                    enabled: true
                     port: 10023
                   backend:
                     nodes:
@@ -509,6 +511,8 @@ ships:
                         level: INFO
                         maxBytes: 52428800
                     loggers:
+                      elasticsearch:
+                        level: WARNING
                       kazoo:
                         level: WARNING
                     root:
@@ -833,9 +837,9 @@ ships:
                     gunicorn:
                       bind: 0.0.0.0:80
                       max_requests: 5000
-                      workers: 4
+                      threads: 4
                   backdoor:
-                    enabled: false
+                    enabled: true
                     port: 10023
                   backend:
                     nodes:
@@ -884,6 +888,8 @@ ships:
                         level: INFO
                         maxBytes: 52428800
                     loggers:
+                      elasticsearch:
+                        level: WARNING
                       kazoo:
                         level: WARNING
                     root:
@@ -962,7 +968,7 @@ ships:
                     gunicorn:
                       bind: 0.0.0.0:80
                       max_requests: 5000
-                      workers: 4
+                      threads: 4
                   backdoor:
                     enabled: true
                     port: 10023
@@ -1013,6 +1019,8 @@ ships:
                         level: INFO
                         maxBytes: 52428800
                     loggers:
+                      elasticsearch:
+                        level: WARNING
                       kazoo:
                         level: WARNING
                     root:
