@@ -179,12 +179,12 @@ def make_builder(
                 'api': {
                     'gunicorn': {
                         'bind': '0.0.0.0:80',
-                        'workers': api_workers,
+                        'threads': api_workers,
                         'max_requests': api_max_requests,
                     },
                 },
                 'backdoor': {
-                    'enabled': (app != "api" or api_workers == 1),  # Backdoor failed for multiprocess app
+                    'enabled': True,  # Backdoor failed for multiprocess app
                     'port': img_powny.ports['backdoor'],
                 },
                 'backend': {
