@@ -65,8 +65,8 @@ def make_builder(
     extra_scripts=(),
     helpers_config=None,
     pip_pre=False,
-    powny_version='1.2.0',
-    elog_version='0.9',
+    powny_version='==1.3.0',
+    elog_version='==1.1',
     pypy_version='jit-74309-4ca3a10894aa',
 ):
     powny_yaml_path = os.path.join('/etc/powny', 'powny.yaml')
@@ -88,7 +88,8 @@ def make_builder(
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy3',
             'easy_install pip==1.4.1',
-            'pip install --pre elog=={elog_version} powny=={powny_version}'.format(**locals()),
+            # trollius==1.0.2 is required for elog under Python3.2
+            'pip install --pre elog{elog_version} trollius==1.0.2 powny{powny_version}'.format(**locals()),
         ] + list(extra_scripts),
         entrypoint=['bash', '-c'],
     )
@@ -159,7 +160,8 @@ def make_builder(
             logging_config = yaml.load(resource_string('logging.yaml'))
             if 'elasticsearch' in container.links:
                 elog_config = yaml.load(resource_string('logging.elog.yaml'))
-                elog_config['urls'] = [str(door.urls['default']) for door in container.links['elasticsearch']]
+                elog_config['hosts'] = [{'host': door.host, 'port': door.port}
+                                        for door in container.links['elasticsearch']]
                 logging_config['handlers']['elog'] = elog_config
                 logging_config['root']['handlers'].append('elog')
             else:

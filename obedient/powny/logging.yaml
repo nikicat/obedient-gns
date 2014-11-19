@@ -52,3 +52,5 @@ root:
 loggers:
     kazoo:
         level: WARNING
+    elasticsearch:
+        level: WARNING
