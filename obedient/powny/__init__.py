@@ -14,7 +14,7 @@ def test(shipment):
     zookeepers = build_zookeeper_cluster(shipment.ships.values())
     pownies = build_powny_cluster(shipment.ships.values())
     attach_zookeeper_to_powny(pownies, zookeepers)
-    shipment.expose_ports(range(47000, 47100))
+    shipment.expose_ports(list(range(47000, 47100)))
 
 
 @aslist
