@@ -3,7 +3,7 @@ import setuptools
 if __name__ == '__main__':
     setuptools.setup(
         name='obedient.powny',
-        version='3.1.0',
+        version='3.3.0',
         url='https://github.com/yandex-sysmon/obedient.powny',
         license='GPLv3',
         author='Nikolay Bryskin',
@@ -23,8 +23,8 @@ if __name__ == '__main__':
             'test = obedient.powny:test'
         ]},
         install_requires=[
-            'dominator[full] >=12.1a',
-            'obedient.zookeeper >=3a',
+            'dominator[full] >=14.1a',
+            'obedient.zookeeper >=3.0.1a',
             'obedient.elk >=1.1a',
         ],
     )

@@ -1,0 +1,1062 @@
+&id034 !!python/object:dominator.entities.Shipment
+dominator_version: 14.1.0
+name: unnamed
+ships:
+  local: &id008 !!python/object:dominator.entities.LocalShip
+    certificate: |
+      -----BEGIN CERTIFICATE-----
+      MIIBbzCB2QICA+gwDQYJKoZIhvcNAQEFBQAwADAeFw0xNDExMDcxNDQzMDdaFw0y
+      NDExMDQxNDQzMDdaMAAwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMjxetrU
+      mMMfV5RBo5ArLVlhuNTTSyha6K4SrIVX3ijoUWz3UhAYctZ2h8kt3ZWWpUM+PnSA
+      eW8TNYln6okw/QaGo+/v7Pghtdi5jhEIdg1nJgV88EDqgTtVG7zzsYCT4NoMQxBC
+      d0rp5NHXZgRqeSgQng+fMhjBMMXuvc5TIP2dAgMBAAEwDQYJKoZIhvcNAQEFBQAD
+      gYEAinnyN6HxkthJwdSiRbPXDpj0bdZ+AmKhq0WWilxSWehXKVihUYMx6g45xkft
+      Uw/w4hF01ZRvwJeCSV8H6x9uJ/5UhmEB+aBQ5AGQKqqrwOebvdp8x2bhu0iFsb8P
+      7OmfjXBs41zzwOyndU0WvUVk7VVoz+l5WVTLoNs3B2yeVhY=
+      -----END CERTIFICATE-----
+      -----BEGIN PRIVATE KEY-----
+      MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMjxetrUmMMfV5RB
+      o5ArLVlhuNTTSyha6K4SrIVX3ijoUWz3UhAYctZ2h8kt3ZWWpUM+PnSAeW8TNYln
+      6okw/QaGo+/v7Pghtdi5jhEIdg1nJgV88EDqgTtVG7zzsYCT4NoMQxBCd0rp5NHX
+      ZgRqeSgQng+fMhjBMMXuvc5TIP2dAgMBAAECgYEAs+ggCpSVQP1qt/4cpxNBQulP
+      Rpz2iWb7M/7cH3aQHSgC3wB/pJF/H6x33hMGdMuvowizejMcheo44JD9V19Y6UxX
+      GxqhUGoGnZEMlmHhW83LlPuRmSWIhu9xXO7GX/a7pdG8e8WQADFS/6YMgDG7OJrH
+      VBRDlKHc5XZ882BDrjECQQDs2/xgNDzn8UPz1ffgfZyUTT5M3d+a0Ycd1/1dUJsf
+      r+34pw5Wx96Ql/ISXRHbgFk5ppFMGRaPu0qoQKBp0UgDAkEA2S57pIosmGDPp/RY
+      IPkzhO1k2cvjqY4/M6+L3BnxYtQKnHTE8+N5ZZ/wtfS6gthxM8aL1YQolK7ZNBWT
+      14PB3wJAb605TVLT9Lg4xdr4yIvxK6tP2IY0S5bHEjcoarr6qPIWTcrWY+xQ7/P0
+      Wtwu80OMzjXPBAZAMPypsrLl736RaQJAAQivngDqZW9QjcQkB0QocqGOsVq/IreC
+      pYRYbhvRgl7wDf6gUWjr0wgH5VXc7XKKV2zCjamrZ8nNTuorYgNGkQJBALH/RZcL
+      cFbwY4zgRR+inP15twJ//rtc1GjFX0pgDEcWVsGVflozNX/SJP/LcYZisuALpj9c
+      bXzfMriPnKh4vCI=
+      -----END PRIVATE KEY-----
+    containers:
+      collector: &id001 !!python/object:dominator.entities.Container
+        command: null
+        doors:
+          backdoor: &id002 !!python/object:dominator.entities.Door
+            container: *id001
+            exposedport: 47099
+            internalport: 10023
+            name: backdoor
+            protocol: tcp
+            sameports: false
+            schema: telnet
+            urls:
+              default: !!python/object:dominator.entities.Url
+                door: *id002
+                name: default
+                path: ''
+        entrypoint: null
+        env:
+          POWNY_APP: collector
+        hostname: null
+        id: null
+        image: &id016 !!python/object:dominator.entities.SourceImage
+          command:
+          - trap exit TERM; powny-$POWNY_APP -c /etc/powny/powny.yaml & wait
+          entrypoint: null
+          env: {}
+          files: {}
+          namespace: nikicat
+          parent: !!python/object:dominator.entities.SourceImage
+            command: null
+            entrypoint:
+            - bash
+            - -c
+            env:
+              LANG: C.UTF-8
+              PATH: $PATH:/opt/pypy3/bin
+            files: {}
+            namespace: nikicat
+            parent: &id021 !!python/object:dominator.entities.Image
+              namespace: yandex
+              registry: registry.ape.yandex.net
+              repository: trusty
+              tag: latest
+            ports: {}
+            registry: registry.ape.yandex.net
+            repository: powny-base
+            scripts:
+            - curl http://buildbot.pypy.org/nightly/py3k/pypy-c-jit-74309-4ca3a10894aa-linux64.tar.bz2
+              2>/dev/null| tar -jxf -
+            - mv pypy* /opt/pypy3
+            - curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
+              2>/dev/null | pypy3
+            - easy_install pip==1.4.1
+            - pip install --pre elog==1.1 trollius==1.0.2 powny==1.3.0
+            user: ''
+            volumes: {}
+            workdir: null
+          ports:
+            backdoor: 10023
+          registry: registry.ape.yandex.net
+          repository: powny-service
+          scripts: []
+          user: ''
+          volumes: {}
+          workdir: null
+        links:
+          zookeeper:
+          - &id003 !!python/object:dominator.entities.Door
+            container: &id004 !!python/object:dominator.entities.Container
+              command: null
+              doors:
+                client: *id003
+                election: &id005 !!python/object:dominator.entities.Door
+                  container: *id004
+                  exposedport: 47091
+                  internalport: 3888
+                  name: election
+                  protocol: tcp
+                  sameports: false
+                  schema: zookeeper-election
+                  urls:
+                    default: !!python/object:dominator.entities.Url
+                      door: *id005
+                      name: default
+                      path: ''
+                jmx: &id006 !!python/object:dominator.entities.Door
+                  container: *id004
+                  exposedport: 47090
+                  internalport: 47090
+                  name: jmx
+                  protocol: tcp
+                  sameports: true
+                  schema: rmi
+                  urls:
+                    default: !!python/object:dominator.entities.Url
+                      door: *id006
+                      name: default
+                      path: ''
+                peer: &id007 !!python/object:dominator.entities.Door
+                  container: *id004
+                  exposedport: 47089
+                  internalport: 2888
+                  name: peer
+                  protocol: tcp
+                  sameports: false
+                  schema: zookeeper-peer
+                  urls:
+                    default: !!python/object:dominator.entities.Url
+                      door: *id007
+                      name: default
+                      path: ''
+              entrypoint: null
+              env: {}
+              hostname: null
+              id: null
+              image: !!python/object:dominator.entities.SourceImage
+                command:
+                - /root/run.sh
+                entrypoint:
+                - sh
+                env:
+                  DEBIAN_FRONTEND: noninteractive
+                files:
+                  /root/run.sh: !!python/tuple
+                  - chksum: 0
+                    devmajor: 0
+                    devminor: 0
+                    gid: 0
+                    gname: root
+                    linkname: ''
+                    mode: 420
+                    mtime: 0.0
+                    name: /root/run.sh
+                    size: 149
+                    type: !!binary |
+                      MA==
+                    uid: 0
+                    uname: root
+                  - |
+                    #!/bin/sh -xv
+
+                    ln -fs /opt/zookeeper/conf/myid /var/lib/zookeeper/myid
+                    . /opt/zookeeper/conf/env.sh
+
+                    /opt/zookeeper/bin/zkServer.sh start-foreground
+                namespace: nikicat
+                parent: !!python/object:dominator.entities.Image
+                  namespace: yandex
+                  registry: registry.ape.yandex.net
+                  repository: trusty
+                  tag: latest
+                ports:
+                  client: 2181
+                  election: 3888
+                  jmx: 4888
+                  peer: 2888
+                registry: registry.ape.yandex.net
+                repository: zookeeper
+                scripts:
+                - apt-get -q update && apt-get -qy install openjdk-7-jre-headless
+                  && apt-get clean
+                - curl -s http://apache.mirrors.hoobly.com/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
+                  | tar --strip-components=1 -xz
+                user: ''
+                volumes:
+                  config: /opt/zookeeper/conf
+                  data: /var/lib/zookeeper
+                  logs: /var/log/zookeeper
+                workdir: /opt/zookeeper
+              links:
+                1: !!python/tuple
+                - *id007
+                - *id005
+              memory: 1073741824
+              name: zookeeper
+              network_mode: ''
+              privileged: false
+              ship: *id008
+              status: null
+              user: ''
+              volumes:
+                config: &id009 !!python/object:dominator.entities.ConfigVolume
+                  container: *id004
+                  dest: /opt/zookeeper/conf
+                  files:
+                    env.sh: !!python/object:dominator.entities.TextFile
+                      data: export JVMFLAGS="-Dcom.sun.management.jmxremote.authenticate=False
+                        -Dcom.sun.management.jmxremote.local.only=False -Dcom.sun.management.jmxremote.port=47090
+                        -Dcom.sun.management.jmxremote.rmi.port=47090 -Dcom.sun.management.jmxremote.ssl=False
+                        -Djava.rmi.server.hostname=localhost -Dvisualvm.display.name=localship:zookeeper
+                        -Xmx805306368 -server -showversion"
+                      name: env.sh
+                      volume: *id009
+                    log4j.properties: !!python/object:dominator.entities.TextFile
+                      data: |
+                        log4j.rootLogger=${zookeeper.root.logger}
+
+                        log4j.rootLogger=INFO, CONSOLE, FILE
+
+                        # Disable message flooding
+                        log4j.logger.org.apache.zookeeper.server.NIOServerCnxnFactory=WARN, FILE
+                        log4j.logger.org.apache.zookeeper.server.NIOServerCnxn=ERROR, FILE
+
+                        log4j.additivity.org.apache.zookeeper.server.NIOServerCnxnFactory=false
+                        log4j.additivity.org.apache.zookeeper.server.NIOServerCnxn=false
+
+                        log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+                        log4j.appender.CONSOLE.Threshold=ERROR
+                        log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+                        log4j.appender.CONSOLE.layout.ConversionPattern=%d{ISO8601} %-5p -%-1X{myid}- [%t@%C:%L]  %m%n
+
+                        log4j.appender.FILE=org.apache.log4j.FileAppender
+                        log4j.appender.FILE.File=/var/log/zookeeper/zookeeper.log
+                        log4j.appender.FILE.Threshold=DEBUG
+                        log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+                        log4j.appender.FILE.layout.ConversionPattern=%d{ISO8601} %-5p -%-1X{myid}- [%t@%C:%L]  %m%n
+                      name: log4j.properties
+                      volume: *id009
+                    myid: !!python/object:dominator.entities.TextFile
+                      data: '1'
+                      name: myid
+                      volume: *id009
+                    zoo.cfg: !!python/object:dominator.entities.IniFile
+                      content:
+                        autopurge.purgeInterval: 1
+                        clientPort: 2181
+                        dataDir: /var/lib/zookeeper
+                        globalOutstandingLimit: 1000
+                        initLimit: 100
+                        maxClientCnxns: 0
+                        server.1: 0.0.0.0:2888:3888
+                        snapCount: 10000
+                        syncLimit: 50
+                        tickTime: 2000
+                      name: zoo.cfg
+                      volume: *id009
+                  name: config
+                data: !!python/object:dominator.entities.DataVolume
+                  container: *id004
+                  dest: /var/lib/zookeeper
+                  name: data
+                  path: null
+                  ro: false
+                logs: &id010 !!python/object:dominator.entities.LogVolume
+                  container: *id004
+                  dest: /var/log/zookeeper
+                  files:
+                    zookeeper.log: !!python/object:dominator.entities.RotatedLogFile
+                      format: '%Y-%m-%d %H:%M:%S,%f'
+                      length: 23
+                      name: zookeeper.log
+                      volume: *id010
+                  name: logs
+                  path: null
+                  ro: false
+              zkid: 1
+            exposedport: 47092
+            internalport: 2181
+            name: client
+            protocol: tcp
+            sameports: false
+            schema: zookeeper
+            urls:
+              default: !!python/object:dominator.entities.Url
+                door: *id003
+                name: default
+                path: ''
+        memory: 1073741824
+        name: collector
+        network_mode: ''
+        privileged: false
+        ship: *id008
+        status: null
+        user: ''
+        volumes:
+          config: &id011 !!python/object:dominator.entities.ConfigVolume
+            container: *id001
+            dest: /etc/powny
+            files:
+              powny.yaml: !!python/object:dominator.entities.YamlFile
+                content:
+                  api:
+                    gunicorn:
+                      bind: 0.0.0.0:80
+                      max_requests: 5000
+                      threads: 4
+                  backdoor:
+                    enabled: true
+                    port: 10023
+                  backend:
+                    nodes:
+                    - localhost:47092
+                  core:
+                    rules_dir: /var/lib/powny/rules
+                  helpers: {}
+                  logging:
+                    disable_existing_loggers: false
+                    formatters:
+                      console:
+                        (): contextlog.make_mixed_formatter
+                        format: '{asctime} {fg_bold_blue}{app:9.9} {purple}{name:35.35}
+                          {log_color}{levelname:>7} {yellow}{job_id:36.36}{reset}
+                          {message} -- {cyan}{_extra}{reset}'
+                        formatters:
+                        - colorlog.ColoredFormatter
+                        - contextlog.PartialFormatter
+                        - contextlog.ExceptionLocalsFormatter
+                        style: '{'
+                      file:
+                        (): contextlog.make_mixed_formatter
+                        format: '{asctime} {app:9.9} {name:35.35} {levelname:>7} {job_id:36.36}
+                          {message} -- {_extra}'
+                        formatters:
+                        - contextlog.PartialFormatter
+                        - contextlog.ExceptionLocalsFormatter
+                        style: '{'
+                    handlers:
+                      console:
+                        class: logging.StreamHandler
+                        formatter: console
+                        level: WARN
+                      debug_file:
+                        backupCount: 10
+                        class: logging.handlers.RotatingFileHandler
+                        filename: /var/log/powny/powny.debug.log
+                        formatter: file
+                        level: DEBUG
+                        maxBytes: 52428800
+                      file:
+                        backupCount: 100
+                        class: logging.handlers.RotatingFileHandler
+                        filename: /var/log/powny/powny.log
+                        formatter: file
+                        level: INFO
+                        maxBytes: 52428800
+                    loggers:
+                      elasticsearch:
+                        level: WARNING
+                      kazoo:
+                        level: WARNING
+                    root:
+                      handlers:
+                      - console
+                      - file
+                      - debug_file
+                      level: DEBUG
+                    version: 1
+                name: powny.yaml
+                volume: *id011
+            name: config
+          logs: &id012 !!python/object:dominator.entities.LogVolume
+            container: *id001
+            dest: /var/log/powny
+            files:
+              powny.debug.log: !!python/object:dominator.entities.LogFile
+                format: ''
+                length: 0
+                name: powny.debug.log
+                volume: *id012
+              powny.log: !!python/object:dominator.entities.LogFile
+                format: ''
+                length: 0
+                name: powny.log
+                volume: *id012
+            name: logs
+            path: null
+            ro: false
+          rules: !!python/object:dominator.entities.DataVolume
+            container: *id001
+            dest: /var/lib/powny/rules
+            name: rules
+            path: /var/lib/powny/rules
+            ro: false
+      dataapi: &id013 !!python/object:dominator.entities.Container
+        command: null
+        doors:
+          backdoor: &id014 !!python/object:dominator.entities.Door
+            container: *id013
+            exposedport: 47098
+            internalport: 10023
+            name: backdoor
+            protocol: tcp
+            sameports: false
+            schema: telnet
+            urls:
+              default: !!python/object:dominator.entities.Url
+                door: *id014
+                name: default
+                path: ''
+          http: &id015 !!python/object:dominator.entities.Door
+            container: *id013
+            exposedport: 47097
+            internalport: 80
+            name: http
+            protocol: tcp
+            sameports: false
+            schema: http
+            urls:
+              default: !!python/object:dominator.entities.Url
+                door: *id015
+                name: default
+                path: ''
+        entrypoint: null
+        env:
+          POWNY_APP: api
+        hostname: null
+        id: null
+        image: *id016
+        links:
+          zookeeper:
+          - *id003
+        memory: 2147483648
+        name: dataapi
+        network_mode: ''
+        privileged: false
+        ship: *id008
+        status: null
+        user: ''
+        volumes:
+          config: &id017 !!python/object:dominator.entities.ConfigVolume
+            container: *id013
+            dest: /etc/powny
+            files:
+              powny.yaml: !!python/object:dominator.entities.YamlFile
+                content:
+                  api:
+                    gunicorn:
+                      bind: 0.0.0.0:80
+                      max_requests: 5000
+                      threads: 4
+                  backdoor:
+                    enabled: true
+                    port: 10023
+                  backend:
+                    nodes:
+                    - localhost:47092
+                  core:
+                    rules_dir: /var/lib/powny/rules
+                  helpers: {}
+                  logging:
+                    disable_existing_loggers: false
+                    formatters:
+                      console:
+                        (): contextlog.make_mixed_formatter
+                        format: '{asctime} {fg_bold_blue}{app:9.9} {purple}{name:35.35}
+                          {log_color}{levelname:>7} {yellow}{job_id:36.36}{reset}
+                          {message} -- {cyan}{_extra}{reset}'
+                        formatters:
+                        - colorlog.ColoredFormatter
+                        - contextlog.PartialFormatter
+                        - contextlog.ExceptionLocalsFormatter
+                        style: '{'
+                      file:
+                        (): contextlog.make_mixed_formatter
+                        format: '{asctime} {app:9.9} {name:35.35} {levelname:>7} {job_id:36.36}
+                          {message} -- {_extra}'
+                        formatters:
+                        - contextlog.PartialFormatter
+                        - contextlog.ExceptionLocalsFormatter
+                        style: '{'
+                    handlers:
+                      console:
+                        class: logging.StreamHandler
+                        formatter: console
+                        level: WARN
+                      debug_file:
+                        backupCount: 10
+                        class: logging.handlers.RotatingFileHandler
+                        filename: /var/log/powny/powny.debug.log
+                        formatter: file
+                        level: DEBUG
+                        maxBytes: 52428800
+                      file:
+                        backupCount: 100
+                        class: logging.handlers.RotatingFileHandler
+                        filename: /var/log/powny/powny.log
+                        formatter: file
+                        level: INFO
+                        maxBytes: 52428800
+                    loggers:
+                      elasticsearch:
+                        level: WARNING
+                      kazoo:
+                        level: WARNING
+                    root:
+                      handlers:
+                      - console
+                      - file
+                      - debug_file
+                      level: DEBUG
+                    version: 1
+                name: powny.yaml
+                volume: *id017
+            name: config
+          logs: &id018 !!python/object:dominator.entities.LogVolume
+            container: *id013
+            dest: /var/log/powny
+            files:
+              powny.debug.log: !!python/object:dominator.entities.LogFile
+                format: ''
+                length: 0
+                name: powny.debug.log
+                volume: *id018
+              powny.log: !!python/object:dominator.entities.LogFile
+                format: ''
+                length: 0
+                name: powny.log
+                volume: *id018
+            name: logs
+            path: null
+            ro: false
+          rules: !!python/object:dominator.entities.DataVolume
+            container: *id013
+            dest: /var/lib/powny/rules
+            name: rules
+            path: /var/lib/powny/rules
+            ro: false
+      gitapi: &id019 !!python/object:dominator.entities.Container
+        command: null
+        doors:
+          ssh: &id020 !!python/object:dominator.entities.Door
+            container: *id019
+            exposedport: 47096
+            internalport: 22
+            name: ssh
+            protocol: tcp
+            sameports: false
+            schema: ssh
+            urls:
+              default: !!python/object:dominator.entities.Url
+                door: *id020
+                name: default
+                path: ''
+        entrypoint: null
+        env: {}
+        hostname: null
+        id: null
+        image: !!python/object:dominator.entities.SourceImage
+          command:
+          - /root/run.sh
+          entrypoint: null
+          env: {}
+          files:
+            /etc/ssh/sshd_config: !!python/tuple
+            - chksum: 0
+              devmajor: 0
+              devminor: 0
+              gid: 0
+              gname: root
+              linkname: ''
+              mode: 420
+              mtime: 0.0
+              name: etc/ssh/sshd_config
+              size: 1655
+              type: !!binary |
+                MA==
+              uid: 0
+              uname: root
+            - "# Package generated configuration file\n# See the sshd_config(5) manpage\
+              \ for details\n\n# What ports, IPs and protocols we listen for\nPort\
+              \ 22\n# Use these options to restrict which interfaces/protocols sshd\
+              \ will bind to\n#ListenAddress ::\n#ListenAddress 0.0.0.0\nProtocol\
+              \ 2\n# HostKeys for protocol version 2\nHostKey /etc/ssh/ssh_host_rsa_key\n\
+              HostKey /etc/ssh/ssh_host_dsa_key\nHostKey /etc/ssh/ssh_host_ecdsa_key\n\
+              #Privilege Separation is turned on for security\nUsePrivilegeSeparation\
+              \ yes\n\n# Lifetime and size of ephemeral version 1 server key\nKeyRegenerationInterval\
+              \ 3600\nServerKeyBits 768\n\n# Authentication:\nLoginGraceTime 120\n\
+              PermitRootLogin yes\nStrictModes no\n\nRSAAuthentication yes\nPubkeyAuthentication\
+              \ yes\nAuthorizedKeysFile\t/var/lib/keys/authorized_keys\n\n# Don't\
+              \ read the user's ~/.rhosts and ~/.shosts files\nIgnoreRhosts yes\n\
+              # For this to work you will also need host keys in /etc/ssh_known_hosts\n\
+              RhostsRSAAuthentication no\n# similar for protocol version 2\nHostbasedAuthentication\
+              \ no\n# Uncomment if you don't trust ~/.ssh/known_hosts for RhostsRSAAuthentication\n\
+              #IgnoreUserKnownHosts yes\n\n# To enable empty passwords, change to\
+              \ yes (NOT RECOMMENDED)\nPermitEmptyPasswords no\n\n# Change to yes\
+              \ to enable challenge-response passwords (beware issues with\n# some\
+              \ PAM modules and threads)\nChallengeResponseAuthentication no\n\n#\
+              \ Change to no to disable tunnelled clear text passwords\nPasswordAuthentication\
+              \ no\n\nX11Forwarding no\nX11DisplayOffset 10\nPrintMotd no\nPrintLastLog\
+              \ yes\nTCPKeepAlive yes\n#UseLogin no\n\n# Allow client to pass locale\
+              \ environment variables\nAcceptEnv LANG LC_*\n\nSubsystem sftp /usr/lib/openssh/sftp-server\n\
+              \nUsePAM yes\nPermitUserEnvironment yes\n"
+            /post-receive: !!python/tuple
+            - chksum: 0
+              devmajor: 0
+              devminor: 0
+              gid: 0
+              gname: root
+              linkname: ''
+              mode: 493
+              mtime: 0.0
+              name: post-receive
+              size: 1035
+              type: !!binary |
+                MA==
+              uid: 0
+              uname: root
+            - |
+              #!/usr/bin/env bash
+              #
+              # Split last $REV_LIMIT commits to separated dirs
+
+              . /etc/gitsplit/gitsplit.conf
+
+              cd $RULES_GIT_PATH
+              commits=`git log -n $REV_LIMIT --pretty=format:%H`
+              cd $RULES_PATH
+
+              (
+              flock -x 200 || exit 1
+
+              for commit in $commits; do
+                  commit_path="$RULES_PATH/$commit"
+                  if [ -d $commit_path ]; then
+                      echo "Version $commit_path already exist"
+                      continue
+                  fi
+
+                  tmp_path="$RULES_PATH/.$commit"
+                  if [ -d $tmp_path ]; then
+                      echo "Remove $tmp_path"
+                      rm -rf $tmp_path
+                  fi
+
+                  mkdir -p $tmp_path
+                  echo "Checkout $commit --> $tmp_path"
+                  git clone $RULES_GIT_PATH $tmp_path
+                  cd $tmp_path
+                  unset GIT_DIR
+                  git checkout -b version-$commit $commit
+                  echo "Submodule init"
+                  git submodule init
+                  echo "Submodule update"
+                  git submodule update
+                  cd $RULES_PATH
+                  mv $tmp_path $commit_path
+              done
+
+              # Clean up
+              if [ `ls | wc -l` -gt $REV_LIMIT ]; then
+                  echo "Cleanup..."
+                  (ls -t|head -n $REV_LIMIT;ls)|sort|uniq -u|xargs rm -r
+              fi
+              ) 200>/run/lock/post-recive-hook.lock
+            /root/run.sh: !!python/tuple
+            - chksum: 0
+              devmajor: 0
+              devminor: 0
+              gid: 0
+              gname: root
+              linkname: ''
+              mode: 493
+              mtime: 0.0
+              name: root/run.sh
+              size: 299
+              type: !!binary |
+                MA==
+              uid: 0
+              uname: root
+            - |
+              #!/usr/bin/env bash
+
+
+              . /etc/gitsplit/gitsplit.conf
+
+              # Init bare repo
+              cd $RULES_GIT_PATH
+              git init --bare
+
+              # Copy hook
+              ln -fs /post-receive $RULES_GIT_PATH/hooks/
+              chmod +x /post-receive
+
+              cat /etc/pam.d/sshd
+
+              # Run sshd daemon
+              echo "Starting sshd"
+              /usr/sbin/sshd -D -e >/var/log/powny/gitapi.log 2>&1
+          namespace: nikicat
+          parent: *id021
+          ports:
+            ssh: 22
+          registry: registry.ape.yandex.net
+          repository: gitapi
+          scripts:
+          - apt-get -q update && apt-get install -y openssh-server && apt-get clean
+          - useradd --non-unique --uid 0 --system --shell /usr/bin/git-shell -d /
+            git
+          - mkdir /run/sshd
+          - chmod 0755 /run/sshd
+          - sed -i -e "s/session    required     pam_loginuid.so//g" /etc/pam.d/sshd
+          user: ''
+          volumes: {}
+          workdir: null
+        links:
+          zookeeper:
+          - *id003
+        memory: 134217728
+        name: gitapi
+        network_mode: ''
+        privileged: false
+        ship: *id008
+        status: null
+        user: ''
+        volumes:
+          config: &id022 !!python/object:dominator.entities.ConfigVolume
+            container: *id019
+            dest: /etc/gitsplit
+            files:
+              gitsplit.conf: !!python/object:dominator.entities.TextFile
+                data: |-
+                  RULES_GIT_PATH=/var/lib/powny/rules.git
+                  RULES_PATH=/var/lib/powny/rules
+                  REV_LIMIT=10
+                name: gitsplit.conf
+                volume: *id022
+            name: config
+          keys: &id023 !!python/object:dominator.entities.ConfigVolume
+            container: *id019
+            dest: /var/lib/keys
+            files:
+              authorized_keys: !!python/object:dominator.entities.TextFile
+                data: ''
+                name: authorized_keys
+                volume: *id023
+            name: keys
+          logs: &id024 !!python/object:dominator.entities.LogVolume
+            container: *id019
+            dest: /var/log/powny
+            files:
+              gitapi.log: !!python/object:dominator.entities.LogFile
+                format: ''
+                length: 0
+                name: gitapi.log
+                volume: *id024
+            name: logs
+            path: null
+            ro: false
+          rules: !!python/object:dominator.entities.DataVolume
+            container: *id019
+            dest: /var/lib/powny/rules
+            name: rules
+            path: /var/lib/powny/rules
+            ro: false
+          rules.git: !!python/object:dominator.entities.DataVolume
+            container: *id019
+            dest: /var/lib/powny/rules.git
+            name: rules.git
+            path: /var/lib/powny/rules.git
+            ro: false
+      userapi: &id025 !!python/object:dominator.entities.Container
+        command: null
+        doors:
+          backdoor: &id026 !!python/object:dominator.entities.Door
+            container: *id025
+            exposedport: 47095
+            internalport: 10023
+            name: backdoor
+            protocol: tcp
+            sameports: false
+            schema: telnet
+            urls:
+              default: !!python/object:dominator.entities.Url
+                door: *id026
+                name: default
+                path: ''
+          http: &id027 !!python/object:dominator.entities.Door
+            container: *id025
+            exposedport: 47094
+            internalport: 80
+            name: http
+            protocol: tcp
+            sameports: false
+            schema: http
+            urls:
+              default: !!python/object:dominator.entities.Url
+                door: *id027
+                name: default
+                path: ''
+        entrypoint: null
+        env:
+          POWNY_APP: api
+        hostname: null
+        id: null
+        image: *id016
+        links:
+          zookeeper:
+          - *id003
+        memory: 2147483648
+        name: userapi
+        network_mode: ''
+        privileged: false
+        ship: *id008
+        status: null
+        user: ''
+        volumes:
+          config: &id028 !!python/object:dominator.entities.ConfigVolume
+            container: *id025
+            dest: /etc/powny
+            files:
+              powny.yaml: !!python/object:dominator.entities.YamlFile
+                content:
+                  api:
+                    gunicorn:
+                      bind: 0.0.0.0:80
+                      max_requests: 5000
+                      threads: 4
+                  backdoor:
+                    enabled: true
+                    port: 10023
+                  backend:
+                    nodes:
+                    - localhost:47092
+                  core:
+                    rules_dir: /var/lib/powny/rules
+                  helpers: {}
+                  logging:
+                    disable_existing_loggers: false
+                    formatters:
+                      console:
+                        (): contextlog.make_mixed_formatter
+                        format: '{asctime} {fg_bold_blue}{app:9.9} {purple}{name:35.35}
+                          {log_color}{levelname:>7} {yellow}{job_id:36.36}{reset}
+                          {message} -- {cyan}{_extra}{reset}'
+                        formatters:
+                        - colorlog.ColoredFormatter
+                        - contextlog.PartialFormatter
+                        - contextlog.ExceptionLocalsFormatter
+                        style: '{'
+                      file:
+                        (): contextlog.make_mixed_formatter
+                        format: '{asctime} {app:9.9} {name:35.35} {levelname:>7} {job_id:36.36}
+                          {message} -- {_extra}'
+                        formatters:
+                        - contextlog.PartialFormatter
+                        - contextlog.ExceptionLocalsFormatter
+                        style: '{'
+                    handlers:
+                      console:
+                        class: logging.StreamHandler
+                        formatter: console
+                        level: WARN
+                      debug_file:
+                        backupCount: 10
+                        class: logging.handlers.RotatingFileHandler
+                        filename: /var/log/powny/powny.debug.log
+                        formatter: file
+                        level: DEBUG
+                        maxBytes: 52428800
+                      file:
+                        backupCount: 100
+                        class: logging.handlers.RotatingFileHandler
+                        filename: /var/log/powny/powny.log
+                        formatter: file
+                        level: INFO
+                        maxBytes: 52428800
+                    loggers:
+                      elasticsearch:
+                        level: WARNING
+                      kazoo:
+                        level: WARNING
+                    root:
+                      handlers:
+                      - console
+                      - file
+                      - debug_file
+                      level: DEBUG
+                    version: 1
+                name: powny.yaml
+                volume: *id028
+            name: config
+          logs: &id029 !!python/object:dominator.entities.LogVolume
+            container: *id025
+            dest: /var/log/powny
+            files:
+              powny.debug.log: !!python/object:dominator.entities.LogFile
+                format: ''
+                length: 0
+                name: powny.debug.log
+                volume: *id029
+              powny.log: !!python/object:dominator.entities.LogFile
+                format: ''
+                length: 0
+                name: powny.log
+                volume: *id029
+            name: logs
+            path: null
+            ro: false
+          rules: !!python/object:dominator.entities.DataVolume
+            container: *id025
+            dest: /var/lib/powny/rules
+            name: rules
+            path: /var/lib/powny/rules
+            ro: false
+      worker: &id030 !!python/object:dominator.entities.Container
+        command: null
+        doors:
+          backdoor: &id031 !!python/object:dominator.entities.Door
+            container: *id030
+            exposedport: 47093
+            internalport: 10023
+            name: backdoor
+            protocol: tcp
+            sameports: false
+            schema: telnet
+            urls:
+              default: !!python/object:dominator.entities.Url
+                door: *id031
+                name: default
+                path: ''
+        entrypoint: null
+        env:
+          POWNY_APP: worker
+        hostname: null
+        id: null
+        image: *id016
+        links:
+          zookeeper:
+          - *id003
+        memory: 1073741824
+        name: worker
+        network_mode: ''
+        privileged: false
+        ship: *id008
+        status: null
+        user: ''
+        volumes:
+          config: &id032 !!python/object:dominator.entities.ConfigVolume
+            container: *id030
+            dest: /etc/powny
+            files:
+              powny.yaml: !!python/object:dominator.entities.YamlFile
+                content:
+                  api:
+                    gunicorn:
+                      bind: 0.0.0.0:80
+                      max_requests: 5000
+                      threads: 4
+                  backdoor:
+                    enabled: true
+                    port: 10023
+                  backend:
+                    nodes:
+                    - localhost:47092
+                  core:
+                    rules_dir: /var/lib/powny/rules
+                  helpers: {}
+                  logging:
+                    disable_existing_loggers: false
+                    formatters:
+                      console:
+                        (): contextlog.make_mixed_formatter
+                        format: '{asctime} {fg_bold_blue}{app:9.9} {purple}{name:35.35}
+                          {log_color}{levelname:>7} {yellow}{job_id:36.36}{reset}
+                          {message} -- {cyan}{_extra}{reset}'
+                        formatters:
+                        - colorlog.ColoredFormatter
+                        - contextlog.PartialFormatter
+                        - contextlog.ExceptionLocalsFormatter
+                        style: '{'
+                      file:
+                        (): contextlog.make_mixed_formatter
+                        format: '{asctime} {app:9.9} {name:35.35} {levelname:>7} {job_id:36.36}
+                          {message} -- {_extra}'
+                        formatters:
+                        - contextlog.PartialFormatter
+                        - contextlog.ExceptionLocalsFormatter
+                        style: '{'
+                    handlers:
+                      console:
+                        class: logging.StreamHandler
+                        formatter: console
+                        level: WARN
+                      debug_file:
+                        backupCount: 10
+                        class: logging.handlers.RotatingFileHandler
+                        filename: /var/log/powny/powny.debug.log
+                        formatter: file
+                        level: DEBUG
+                        maxBytes: 52428800
+                      file:
+                        backupCount: 100
+                        class: logging.handlers.RotatingFileHandler
+                        filename: /var/log/powny/powny.log
+                        formatter: file
+                        level: INFO
+                        maxBytes: 52428800
+                    loggers:
+                      elasticsearch:
+                        level: WARNING
+                      kazoo:
+                        level: WARNING
+                    root:
+                      handlers:
+                      - console
+                      - file
+                      - debug_file
+                      level: DEBUG
+                    version: 1
+                name: powny.yaml
+                volume: *id032
+            name: config
+          logs: &id033 !!python/object:dominator.entities.LogVolume
+            container: *id030
+            dest: /var/log/powny
+            files:
+              powny.debug.log: !!python/object:dominator.entities.LogFile
+                format: ''
+                length: 0
+                name: powny.debug.log
+                volume: *id033
+              powny.log: !!python/object:dominator.entities.LogFile
+                format: ''
+                length: 0
+                name: powny.log
+                volume: *id033
+            name: logs
+            path: null
+            ro: false
+          rules: !!python/object:dominator.entities.DataVolume
+            container: *id030
+            dest: /var/lib/powny/rules
+            name: rules
+            path: /var/lib/powny/rules
+            ro: false
+      zookeeper: *id004
+    shipment: *id034
+tasks: {}
+
