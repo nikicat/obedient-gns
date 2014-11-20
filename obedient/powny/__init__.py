@@ -122,19 +122,8 @@ def make_builder(
 
     # === Volumes ===
 
-    dv_rules = DataVolume(dest='/var/lib/powny/rules', path='/var/lib/powny/rules')
-    dv_rules_git = DataVolume(dest='/var/lib/powny/rules.git', path='/var/lib/powny/rules.git')
-
-    cv_etc_gitapi = ConfigVolume(dest='/etc/gitsplit', files={
-        'gitsplit.conf': TextFile(text=textwrap.dedent('''
-            RULES_GIT_PATH={rules_git_dest}
-            RULES_PATH={rules_dest}
-            REV_LIMIT=10
-        ''').strip().format(
-            rules_git_dest=dv_rules_git.dest,
-            rules_dest=dv_rules.dest,
-        )),
-    })
+    def make_rules_volume():
+        return DataVolume(dest='/var/lib/powny/rules', path='/var/lib/powny/rules')
 
     # === Containers ===
 
@@ -150,7 +139,7 @@ def make_builder(
             volumes={
                 'config': None,
                 'logs': make_logs_volume('powny.log', 'powny.debug.log'),
-                'rules': dv_rules,
+                'rules': make_rules_volume(),
             },
             env={'POWNY_APP': app},
             doors={'backdoor': Door(schema='telnet', port=img_powny.ports['backdoor'])},
@@ -174,7 +163,7 @@ def make_builder(
 
             config = {
                 'core': {
-                    'rules_dir': dv_rules.dest,
+                    'rules_dir': make_rules_volume().dest,
                 },
                 'api': {
                     'gunicorn': {
@@ -205,6 +194,20 @@ def make_builder(
     class Builder:
         @staticmethod
         def gitapi(ssh_keys):
+
+            dv_rules_git = DataVolume(dest='/var/lib/powny/rules.git', path='/var/lib/powny/rules.git')
+
+            cv_etc_gitapi = ConfigVolume(dest='/etc/gitsplit', files={
+                'gitsplit.conf': TextFile(text=textwrap.dedent('''
+                    RULES_GIT_PATH={rules_git_dest}
+                    RULES_PATH={rules_dest}
+                    REV_LIMIT=10
+                ''').strip().format(
+                    rules_git_dest=dv_rules_git.dest,
+                    rules_dest=make_rules_volume().dest,
+                )),
+            })
+
             cv_ssh_keys = ConfigVolume(dest='/var/lib/keys', files={
                 'authorized_keys': TextFile(text='\n'.join(ssh_keys)),
             })
@@ -214,7 +217,7 @@ def make_builder(
                 memory=128*1024*1024,
                 volumes={
                     'rules.git': dv_rules_git,
-                    'rules': dv_rules,
+                    'rules': make_rules_volume(),
                     'config': cv_etc_gitapi,
                     'keys': cv_ssh_keys,
                     'logs': make_logs_volume('gitapi.log'),
