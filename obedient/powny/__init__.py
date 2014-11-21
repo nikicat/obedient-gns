@@ -1,9 +1,10 @@
 import os
 import textwrap
+import itertools
 
 import yaml
 
-from dominator.utils import resource_stream, resource_string, stoppable, getlogger, aslist
+from dominator.utils import resource_stream, resource_string, stoppable, aslist
 from dominator.entities import (Image, SourceImage, Container,
                                 Door, DataVolume, ConfigVolume, LogVolume, LogFile, YamlFile, TextFile)
 
@@ -13,7 +14,7 @@ def test(shipment):
     shipment.unload_ships()
     zookeepers = build_zookeeper_cluster(shipment.ships.values())
     pownies = build_powny_cluster(shipment.ships.values())
-    attach_zookeeper_to_powny(pownies, zookeepers)
+    attach_zookeeper_to_powny(itertools.chain(*pownies), zookeepers)
     shipment.expose_ports(list(range(47000, 47100)))
 
 
@@ -34,11 +35,7 @@ def build_powny_cluster(ships, ssh_keys=[], **kwargs):
         ship.place(worker)
         ship.place(collector)
 
-        yield gitapi
-        yield userapi
-        yield dataapi
-        yield worker
-        yield collector
+        yield gitapi, userapi, dataapi, worker, collector
 
 
 def attach_zookeeper_to_powny(pownies, zookeepers):
@@ -65,7 +62,7 @@ def make_builder(
     extra_scripts=(),
     helpers_config=None,
     pip_pre=False,
-    powny_version='==1.3.0',
+    powny_version='==1.4.0',
     elog_version='==1.1',
     pypy_version='jit-74309-4ca3a10894aa',
 ):
@@ -88,8 +85,11 @@ def make_builder(
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy3',
             'easy_install pip==1.4.1',
-            # trollius==1.0.2 is required for elog under Python3.2
-            'pip install --pre elog{elog_version} trollius==1.0.2 powny{powny_version}'.format(**locals()),
+            # trollius==1.0.2 is required for gunicorn with threaded workers under Python3.2.
+            # Fork of python-json-logger is needed to store exceptions and logging fields in json logs.
+            'pip install --pre'
+            ' git+https://github.com/nikicat/python-json-logger@0a1d9d365d847e89c3cdf723ffdc5287c26851c5'
+            ' trollius==1.0.2 powny{powny_version}'.format(**locals()),
         ] + list(extra_scripts),
         entrypoint=['bash', '-c'],
     )
@@ -122,19 +122,8 @@ def make_builder(
 
     # === Volumes ===
 
-    dv_rules = DataVolume(dest='/var/lib/powny/rules', path='/var/lib/powny/rules')
-    dv_rules_git = DataVolume(dest='/var/lib/powny/rules.git', path='/var/lib/powny/rules.git')
-
-    cv_etc_gitapi = ConfigVolume(dest='/etc/gitsplit', files={
-        'gitsplit.conf': TextFile(text=textwrap.dedent('''
-            RULES_GIT_PATH={rules_git_dest}
-            RULES_PATH={rules_dest}
-            REV_LIMIT=10
-        ''').strip().format(
-            rules_git_dest=dv_rules_git.dest,
-            rules_dest=dv_rules.dest,
-        )),
-    })
+    def make_rules_volume():
+        return DataVolume(dest='/var/lib/powny/rules', path='/var/lib/powny/rules')
 
     # === Containers ===
 
@@ -149,8 +138,8 @@ def make_builder(
             memory=memory,
             volumes={
                 'config': None,
-                'logs': make_logs_volume('powny.log', 'powny.debug.log'),
-                'rules': dv_rules,
+                'logs': make_logs_volume('powny.log', 'powny.debug.log', 'powny.json.log'),
+                'rules': make_rules_volume(),
             },
             env={'POWNY_APP': app},
             doors={'backdoor': Door(schema='telnet', port=img_powny.ports['backdoor'])},
@@ -158,14 +147,6 @@ def make_builder(
 
         def make_logging_config(container):
             logging_config = yaml.load(resource_string('logging.yaml'))
-            if 'elasticsearch' in container.links:
-                elog_config = yaml.load(resource_string('logging.elog.yaml'))
-                elog_config['hosts'] = [{'host': door.host, 'port': door.port}
-                                        for door in container.links['elasticsearch']]
-                logging_config['handlers']['elog'] = elog_config
-                logging_config['root']['handlers'].append('elog')
-            else:
-                getlogger().info("building Powny without Elasticsearch for log (only text files)")
             return logging_config
 
         def make_powny_config(container=container, helpers_config=helpers_config):
@@ -174,7 +155,7 @@ def make_builder(
 
             config = {
                 'core': {
-                    'rules_dir': dv_rules.dest,
+                    'rules_dir': make_rules_volume().dest,
                 },
                 'api': {
                     'gunicorn': {
@@ -205,6 +186,20 @@ def make_builder(
     class Builder:
         @staticmethod
         def gitapi(ssh_keys):
+
+            dv_rules_git = DataVolume(dest='/var/lib/powny/rules.git', path='/var/lib/powny/rules.git')
+
+            cv_etc_gitapi = ConfigVolume(dest='/etc/gitsplit', files={
+                'gitsplit.conf': TextFile(text=textwrap.dedent('''
+                    RULES_GIT_PATH={rules_git_dest}
+                    RULES_PATH={rules_dest}
+                    REV_LIMIT=10
+                ''').strip().format(
+                    rules_git_dest=dv_rules_git.dest,
+                    rules_dest=make_rules_volume().dest,
+                )),
+            })
+
             cv_ssh_keys = ConfigVolume(dest='/var/lib/keys', files={
                 'authorized_keys': TextFile(text='\n'.join(ssh_keys)),
             })
@@ -214,7 +209,7 @@ def make_builder(
                 memory=128*1024*1024,
                 volumes={
                     'rules.git': dv_rules_git,
-                    'rules': dv_rules,
+                    'rules': make_rules_volume(),
                     'config': cv_etc_gitapi,
                     'keys': cv_ssh_keys,
                     'logs': make_logs_volume('gitapi.log'),

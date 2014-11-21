@@ -1,4 +1,0 @@
-level: INFO
-class: elog.handlers.ElasticHandler
-index: "log-{@timestamp:%Y}-{@timestamp:%m}-{@timestamp:%d}"
-doctype: powny
