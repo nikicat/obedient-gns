@@ -1,9 +1,10 @@
 import os
 import textwrap
+import itertools
 
 import yaml
 
-from dominator.utils import resource_stream, resource_string, stoppable, getlogger, aslist
+from dominator.utils import resource_stream, resource_string, stoppable, aslist
 from dominator.entities import (Image, SourceImage, Container,
                                 Door, DataVolume, ConfigVolume, LogVolume, LogFile, YamlFile, TextFile)
 
@@ -13,7 +14,7 @@ def test(shipment):
     shipment.unload_ships()
     zookeepers = build_zookeeper_cluster(shipment.ships.values())
     pownies = build_powny_cluster(shipment.ships.values())
-    attach_zookeeper_to_powny(pownies, zookeepers)
+    attach_zookeeper_to_powny(itertools.chain(*pownies), zookeepers)
     shipment.expose_ports(list(range(47000, 47100)))
 
 
@@ -34,11 +35,7 @@ def build_powny_cluster(ships, ssh_keys=[], **kwargs):
         ship.place(worker)
         ship.place(collector)
 
-        yield gitapi
-        yield userapi
-        yield dataapi
-        yield worker
-        yield collector
+        yield gitapi, userapi, dataapi, worker, collector
 
 
 def attach_zookeeper_to_powny(pownies, zookeepers):
@@ -65,7 +62,7 @@ def make_builder(
     extra_scripts=(),
     helpers_config=None,
     pip_pre=False,
-    powny_version='==1.3.0',
+    powny_version='==1.4.0',
     elog_version='==1.1',
     pypy_version='jit-74309-4ca3a10894aa',
 ):
@@ -88,8 +85,11 @@ def make_builder(
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy3',
             'easy_install pip==1.4.1',
-            # trollius==1.0.2 is required for elog under Python3.2
-            'pip install --pre elog{elog_version} trollius==1.0.2 powny{powny_version}'.format(**locals()),
+            # trollius==1.0.2 is required for gunicorn with threaded workers under Python3.2.
+            # Fork of python-json-logger is needed to store exceptions and logging fields in json logs.
+            'pip install --pre'
+            ' git+https://github.com/nikicat/python-json-logger@0a1d9d365d847e89c3cdf723ffdc5287c26851c5'
+            ' trollius==1.0.2 powny{powny_version}'.format(**locals()),
         ] + list(extra_scripts),
         entrypoint=['bash', '-c'],
     )
@@ -138,7 +138,7 @@ def make_builder(
             memory=memory,
             volumes={
                 'config': None,
-                'logs': make_logs_volume('powny.log', 'powny.debug.log'),
+                'logs': make_logs_volume('powny.log', 'powny.debug.log', 'powny.json.log'),
                 'rules': make_rules_volume(),
             },
             env={'POWNY_APP': app},
@@ -147,14 +147,6 @@ def make_builder(
 
         def make_logging_config(container):
             logging_config = yaml.load(resource_string('logging.yaml'))
-            if 'elasticsearch' in container.links:
-                elog_config = yaml.load(resource_string('logging.elog.yaml'))
-                elog_config['hosts'] = [{'host': door.host, 'port': door.port}
-                                        for door in container.links['elasticsearch']]
-                logging_config['handlers']['elog'] = elog_config
-                logging_config['root']['handlers'].append('elog')
-            else:
-                getlogger().info("building Powny without Elasticsearch for log (only text files)")
             return logging_config
 
         def make_powny_config(container=container, helpers_config=helpers_config):

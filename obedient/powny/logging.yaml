@@ -21,6 +21,9 @@ formatters:
             - contextlog.ExceptionLocalsFormatter
         style: "{"
         format: "{asctime} {app:9.9} {name:35.35} {levelname:>7} {job_id:36.36} {message} -- {_extra}"
+    json:
+        (): jsonlogger.JsonFormatter
+
 
 handlers:
     console:
@@ -29,18 +32,19 @@ handlers:
         formatter: console
     file:
         level: INFO
-        class: logging.handlers.RotatingFileHandler
+        class: logging.FileHandler
         filename: /var/log/powny/powny.log
-        maxBytes: 52428800
-        backupCount: 100
         formatter: file
     debug_file:
         level: DEBUG
-        class: logging.handlers.RotatingFileHandler
+        class: logging.FileHandler
         filename: /var/log/powny/powny.debug.log
-        maxBytes: 52428800
-        backupCount: 10
         formatter: file
+    json_file:
+        level: INFO
+        class: logging.FileHandler
+        filename: /var/log/powny/powny.json.log
+        formatter: json
 
 root:
     level: DEBUG
@@ -48,6 +52,7 @@ root:
         - console
         - file
         - debug_file
+        - json_file
 
 loggers:
     kazoo:
