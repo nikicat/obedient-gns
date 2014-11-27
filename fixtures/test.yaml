@@ -90,7 +90,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                 - curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
                   2>/dev/null | pypy3
                 - easy_install pip==1.4.1
-                - pip install --pre git+https://github.com/nikicat/python-json-logger@0a1d9d365d847e89c3cdf723ffdc5287c26851c5
+                - pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
                   trollius==1.0.2 powny==1.4.0
                 user: ''
                 volumes: {}
@@ -373,7 +373,8 @@ ships: !!python/object:dominator.utils.BackrefDict
                                 - contextlog.ExceptionLocalsFormatter
                                 style: '{'
                               json:
-                                (): jsonlogger.JsonFormatter
+                                (): jsonformatter.JsonFormatter
+                                json_depth: 2
                             handlers:
                               console:
                                 class: logging.StreamHandler
@@ -538,7 +539,8 @@ ships: !!python/object:dominator.utils.BackrefDict
                                 - contextlog.ExceptionLocalsFormatter
                                 style: '{'
                               json:
-                                (): jsonlogger.JsonFormatter
+                                (): jsonformatter.JsonFormatter
+                                json_depth: 2
                             handlers:
                               console:
                                 class: logging.StreamHandler
@@ -950,7 +952,8 @@ ships: !!python/object:dominator.utils.BackrefDict
                                 - contextlog.ExceptionLocalsFormatter
                                 style: '{'
                               json:
-                                (): jsonlogger.JsonFormatter
+                                (): jsonformatter.JsonFormatter
+                                json_depth: 2
                             handlers:
                               console:
                                 class: logging.StreamHandler
@@ -1100,7 +1103,8 @@ ships: !!python/object:dominator.utils.BackrefDict
                                 - contextlog.ExceptionLocalsFormatter
                                 style: '{'
                               json:
-                                (): jsonlogger.JsonFormatter
+                                (): jsonformatter.JsonFormatter
+                                json_depth: 2
                             handlers:
                               console:
                                 class: logging.StreamHandler
