@@ -86,9 +86,9 @@ def make_builder(
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy3',
             'easy_install pip==1.4.1',
             # trollius==1.0.2 is required for gunicorn with threaded workers under Python3.2.
-            # Fork of python-json-logger is needed to store exceptions and logging fields in json logs.
+            # json-formatter is needed to store exceptions and log extra fields in json logs.
             'pip install --pre'
-            ' git+https://github.com/nikicat/python-json-logger@0a1d9d365d847e89c3cdf723ffdc5287c26851c5'
+            ' json-formatter==0.1.0-alpha-20141128-1014-94cc025'
             ' trollius==1.0.2 powny{powny_version}'.format(**locals()),
         ] + list(extra_scripts),
         entrypoint=['bash', '-c'],

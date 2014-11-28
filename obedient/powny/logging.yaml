@@ -22,7 +22,8 @@ formatters:
         style: "{"
         format: "{asctime} {app:9.9} {name:35.35} {levelname:>7} {job_id:36.36} {message} -- {_extra}"
     json:
-        (): jsonlogger.JsonFormatter
+        (): jsonformatter.JsonFormatter
+        json_depth: 2
 
 
 handlers:
