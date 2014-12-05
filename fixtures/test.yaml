@@ -33,7 +33,7 @@ ships: !!python/object:dominator.utils.BackrefDict
         -----END PRIVATE KEY-----
       containers: !!python/object:dominator.utils.BackrefDict
         children:
-          collector: &id001 !!python/object:dominator.entities.Container
+          collector-00: &id001 !!python/object:dominator.entities.Container
             command: null
             doors: !!python/object:dominator.utils.BackrefDict
               children:
@@ -61,45 +61,32 @@ ships: !!python/object:dominator.utils.BackrefDict
             image: &id016 !!python/object:dominator.entities.SourceImage
               command:
               - trap exit TERM; powny-$POWNY_APP -c /etc/powny/powny.yaml & wait
-              entrypoint: null
-              env: {}
+              entrypoint:
+              - bash
+              - -c
+              env:
+                LANG: C.UTF-8
+                PATH: $PATH:/opt/pypy3/bin
               files: {}
               namespace: nikicat
-              parent: !!python/object:dominator.entities.SourceImage
-                command: null
-                entrypoint:
-                - bash
-                - -c
-                env:
-                  LANG: C.UTF-8
-                  PATH: $PATH:/opt/pypy3/bin
-                files: {}
-                namespace: nikicat
-                parent: &id021 !!python/object:dominator.entities.Image
-                  namespace: yandex
-                  registry: registry.ape.yandex.net
-                  repository: trusty
-                  tag: latest
-                ports: {}
+              parent: &id021 !!python/object:dominator.entities.Image
+                namespace: yandex
                 registry: registry.ape.yandex.net
-                repository: powny-base
-                scripts:
-                - curl http://buildbot.pypy.org/nightly/py3k/pypy-c-jit-74309-4ca3a10894aa-linux64.tar.bz2
-                  2>/dev/null| tar -jxf -
-                - mv pypy* /opt/pypy3
-                - curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
-                  2>/dev/null | pypy3
-                - easy_install pip==1.4.1
-                - pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
-                  trollius==1.0.2 powny==1.4.0
-                user: ''
-                volumes: {}
-                workdir: null
+                repository: trusty
+                tag: latest
               ports:
                 backdoor: 10023
               registry: registry.ape.yandex.net
-              repository: powny-service
-              scripts: []
+              repository: powny
+              scripts:
+              - curl http://buildbot.pypy.org/nightly/py3k/pypy-c-jit-74309-4ca3a10894aa-linux64.tar.bz2
+                2>/dev/null| tar -jxf -
+              - mv pypy* /opt/pypy3
+              - curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
+                2>/dev/null | pypy3
+              - easy_install pip==1.4.1
+              - pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+                powny==1.4.0
               user: ''
               volumes: {}
               workdir: null
@@ -322,7 +309,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                       path: ''
                   parent: *id003
             memory: 1073741824
-            name: collector
+            name: collector-00
             network_mode: ''
             privileged: false
             ship: *id008
@@ -341,9 +328,9 @@ ships: !!python/object:dominator.utils.BackrefDict
                             gunicorn:
                               bind: 0.0.0.0:80
                               max_requests: 5000
-                              threads: 4
+                              workers: 4
                           backdoor:
-                            enabled: true
+                            enabled: false
                             port: 10023
                           backend:
                             nodes:
@@ -487,7 +474,7 @@ ships: !!python/object:dominator.utils.BackrefDict
             links:
               zookeeper:
               - *id003
-            memory: 2147483648
+            memory: 4294967296
             name: dataapi
             network_mode: ''
             privileged: false
@@ -507,9 +494,9 @@ ships: !!python/object:dominator.utils.BackrefDict
                             gunicorn:
                               bind: 0.0.0.0:80
                               max_requests: 5000
-                              threads: 4
+                              workers: 4
                           backdoor:
-                            enabled: true
+                            enabled: false
                             port: 10023
                           backend:
                             nodes:
@@ -900,7 +887,7 @@ ships: !!python/object:dominator.utils.BackrefDict
             links:
               zookeeper:
               - *id003
-            memory: 2147483648
+            memory: 4294967296
             name: userapi
             network_mode: ''
             privileged: false
@@ -920,9 +907,9 @@ ships: !!python/object:dominator.utils.BackrefDict
                             gunicorn:
                               bind: 0.0.0.0:80
                               max_requests: 5000
-                              threads: 4
+                              workers: 4
                           backdoor:
-                            enabled: true
+                            enabled: false
                             port: 10023
                           backend:
                             nodes:
@@ -1022,7 +1009,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                   path: /var/lib/powny/rules
                   ro: false
               parent: *id025
-          worker: &id030 !!python/object:dominator.entities.Container
+          worker-00: &id030 !!python/object:dominator.entities.Container
             command: null
             doors: !!python/object:dominator.utils.BackrefDict
               children:
@@ -1052,7 +1039,7 @@ ships: !!python/object:dominator.utils.BackrefDict
               zookeeper:
               - *id003
             memory: 1073741824
-            name: worker
+            name: worker-00
             network_mode: ''
             privileged: false
             ship: *id008
@@ -1071,9 +1058,9 @@ ships: !!python/object:dominator.utils.BackrefDict
                             gunicorn:
                               bind: 0.0.0.0:80
                               max_requests: 5000
-                              threads: 4
+                              workers: 4
                           backdoor:
-                            enabled: true
+                            enabled: false
                             port: 10023
                           backend:
                             nodes:
