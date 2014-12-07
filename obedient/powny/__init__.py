@@ -99,7 +99,7 @@ def make_builder(
             # json-formatter is needed to store exceptions and log extra fields in json logs.
             'pip install --pre'
             ' json-formatter==0.1.0-alpha-20141128-1014-94cc025'
-            ' powny{powny_version}'.format(**locals()),
+            ' powny{powny_version}'.format(powny_version=powny_version),
         ] + list(extra_scripts),
         entrypoint=['bash', '-c'],
         command=[stoppable('powny-$POWNY_APP -c {}'.format(powny_yaml_path))],
