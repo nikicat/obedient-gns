@@ -72,8 +72,7 @@ def make_builder(
     extra_scripts=(),
     helpers_config=None,
     pip_pre=False,
-    powny_version='==1.4.0',
-    elog_version='==1.1',
+    powny_version='==1.5.0',
     pypy_version='jit-74309-4ca3a10894aa',
 ):
     powny_yaml_path = os.path.join('/etc/powny', 'powny.yaml')
