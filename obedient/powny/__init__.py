@@ -13,29 +13,39 @@ def test(shipment):
     from obedient.zookeeper import build_zookeeper_cluster
     shipment.unload_ships()
     zookeepers = build_zookeeper_cluster(shipment.ships.values())
-    pownies = build_powny_cluster(shipment.ships.values())
-    attach_zookeeper_to_powny(itertools.chain(*pownies), zookeepers)
+    containers = itertools.chain(*build_powny_cluster(shipment.ships.values()))
+    attach_zookeeper_to_powny(containers, zookeepers)
     shipment.expose_ports(list(range(47000, 47100)))
 
 
-@aslist
-def build_powny_cluster(ships, ssh_keys=[], **kwargs):
+def build_powny_cluster(ships, ssh_keys=[], workers=1, collectors=1, **kwargs):
     builder = make_builder(**kwargs)
 
+    all_gitapis = []
+    all_userapis = []
+    all_dataapis = []
+    all_workers = []
+    all_collectors = []
+
     for ship in ships:
-        gitapi = builder.gitapi(ssh_keys)
-        userapi = builder.api('userapi')
-        dataapi = builder.api('dataapi')
-        worker = builder.worker()
-        collector = builder.collector()
+        all_gitapis.append(builder.gitapi(ssh_keys))
+        ship.place(all_gitapis[-1])
 
-        ship.place(gitapi)
-        ship.place(userapi)
-        ship.place(dataapi)
-        ship.place(worker)
-        ship.place(collector)
+        all_userapis.append(builder.api('userapi'))
+        ship.place(all_userapis[-1])
 
-        yield gitapi, userapi, dataapi, worker, collector
+        all_dataapis.append(builder.api('dataapi'))
+        ship.place(all_dataapis[-1])
+
+        for count in range(workers):
+            all_workers.append(builder.worker('worker-{:0>2d}'.format(count)))
+            ship.place(all_workers[-1])
+
+        for count in range(collectors):
+            all_collectors.append(builder.collector('collector-{:0>2d}'.format(count)))
+            ship.place(all_collectors[-1])
+
+    return all_gitapis, all_userapis, all_dataapis, all_workers, all_collectors
 
 
 def attach_zookeeper_to_powny(pownies, zookeepers):
@@ -72,32 +82,26 @@ def make_builder(
 
     img_base = Image(namespace='yandex', repository='trusty')
 
-    img_powny_base = SourceImage(
-        name='powny-base',
+    img_powny = SourceImage(
+        name='powny',
         parent=img_base,
         env={
             'PATH': '$PATH:/opt/pypy3/bin',
             'LANG': 'C.UTF-8',
         },
+        ports={'backdoor': 10023},
         scripts=[
             'curl http://buildbot.pypy.org/nightly/py3k/pypy-c-{}-linux64.tar.bz2 2>/dev/null'.format(pypy_version) +
             '| tar -jxf -',
             'mv pypy* /opt/pypy3',
             'curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py 2>/dev/null | pypy3',
             'easy_install pip==1.4.1',
-            # trollius==1.0.2 is required for gunicorn with threaded workers under Python3.2.
             # json-formatter is needed to store exceptions and log extra fields in json logs.
             'pip install --pre'
             ' json-formatter==0.1.0-alpha-20141128-1014-94cc025'
-            ' trollius==1.0.2 powny{powny_version}'.format(**locals()),
+            ' powny{powny_version}'.format(powny_version=powny_version),
         ] + list(extra_scripts),
         entrypoint=['bash', '-c'],
-    )
-
-    img_powny = SourceImage(
-        name='powny-service',
-        parent=img_powny_base,
-        ports={'backdoor': 10023},
         command=[stoppable('powny-$POWNY_APP -c {}'.format(powny_yaml_path))],
     )
 
@@ -130,7 +134,7 @@ def make_builder(
     def make_logs_volume(*files):
         return LogVolume(dest='/var/log/powny', files={name: LogFile() for name in files})
 
-    def make_powny_container(name, app=None, memory=1024**3):
+    def make_powny_container(name, app, memory=1024**3):
         app = app or name
         container = Container(
             name=name,
@@ -160,12 +164,12 @@ def make_builder(
                 'api': {
                     'gunicorn': {
                         'bind': '0.0.0.0:80',
-                        'threads': api_workers,
+                        'workers': api_workers,
                         'max_requests': api_max_requests,
                     },
                 },
                 'backdoor': {
-                    'enabled': True,  # Backdoor failed for multiprocess app
+                    'enabled': (api_workers == 1),  # Backdoor failed for multiprocess app
                     'port': img_powny.ports['backdoor'],
                 },
                 'backend': {
@@ -219,17 +223,17 @@ def make_builder(
 
         @staticmethod
         def api(name):
-            cont = make_powny_container(name=name, app='api', memory=2048*1024*1024)
+            cont = make_powny_container(name, 'api', memory=4096*1024*1024)
             cont.doors['http'] = Door(schema='http', port=80)
             return cont
 
         @staticmethod
-        def worker():
-            return make_powny_container(name='worker')
+        def worker(name):
+            return make_powny_container(name, 'worker')
 
         @staticmethod
-        def collector():
-            return make_powny_container(name='collector')
+        def collector(name):
+            return make_powny_container(name, 'collector')
 
     return Builder
 
