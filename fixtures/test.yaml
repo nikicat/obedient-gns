@@ -86,7 +86,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                 2>/dev/null | pypy3
               - easy_install pip==1.4.1
               - pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
-                powny==1.4.0
+                powny==1.5.0
               user: ''
               volumes: {}
               workdir: null
