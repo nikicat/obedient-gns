@@ -1,9 +1,9 @@
-&id034 !!python/object:dominator.entities.Shipment
-dominator_version: 15.0.0
+&id029 !!python/object:dominator.entities.Shipment
+dominator_version: 15.1.0
 name: unnamed
 ships: !!python/object:dominator.utils.BackrefDict
   children:
-    local: &id008 !!python/object:dominator.entities.LocalShip
+    local: &id009 !!python/object:dominator.entities.LocalShip
       certificate: |
         -----BEGIN CERTIFICATE-----
         MIIBbzCB2QICA+gwDQYJKoZIhvcNAQEFBQAwADAeFw0xNDExMDcxNDQzMDdaFw0y
@@ -33,7 +33,7 @@ ships: !!python/object:dominator.utils.BackrefDict
         -----END PRIVATE KEY-----
       containers: !!python/object:dominator.utils.BackrefDict
         children:
-          collector-00: &id001 !!python/object:dominator.entities.Container
+          api: &id001 !!python/object:dominator.entities.Container
             command: null
             doors: !!python/object:dominator.utils.BackrefDict
               children:
@@ -52,10 +52,25 @@ ships: !!python/object:dominator.utils.BackrefDict
                         name: default
                         path: ''
                     parent: *id002
+                http: &id003 !!python/object:dominator.entities.Door
+                  container: *id001
+                  exposedport: 47098
+                  internalport: 80
+                  name: http
+                  protocol: tcp
+                  sameports: false
+                  schema: http
+                  urls: !!python/object:dominator.utils.BackrefDict
+                    children:
+                      default: !!python/object:dominator.entities.Url
+                        door: *id003
+                        name: default
+                        path: ''
+                    parent: *id003
               parent: *id001
             entrypoint: null
             env:
-              POWNY_APP: collector
+              POWNY_APP: api
             hostname: null
             id: null
             image: &id016 !!python/object:dominator.entities.SourceImage
@@ -92,15 +107,15 @@ ships: !!python/object:dominator.utils.BackrefDict
               workdir: null
             links:
               zookeeper:
-              - &id003 !!python/object:dominator.entities.Door
-                container: &id004 !!python/object:dominator.entities.Container
+              - &id004 !!python/object:dominator.entities.Door
+                container: &id005 !!python/object:dominator.entities.Container
                   command: null
                   doors: !!python/object:dominator.utils.BackrefDict
                     children:
-                      client: *id003
-                      election: &id005 !!python/object:dominator.entities.Door
-                        container: *id004
-                        exposedport: 47091
+                      client: *id004
+                      election: &id006 !!python/object:dominator.entities.Door
+                        container: *id005
+                        exposedport: 47093
                         internalport: 3888
                         name: election
                         protocol: tcp
@@ -109,14 +124,14 @@ ships: !!python/object:dominator.utils.BackrefDict
                         urls: !!python/object:dominator.utils.BackrefDict
                           children:
                             default: !!python/object:dominator.entities.Url
-                              door: *id005
+                              door: *id006
                               name: default
                               path: ''
-                          parent: *id005
-                      jmx: &id006 !!python/object:dominator.entities.Door
-                        container: *id004
-                        exposedport: 47090
-                        internalport: 47090
+                          parent: *id006
+                      jmx: &id007 !!python/object:dominator.entities.Door
+                        container: *id005
+                        exposedport: 47092
+                        internalport: 47092
                         name: jmx
                         protocol: tcp
                         sameports: true
@@ -124,13 +139,13 @@ ships: !!python/object:dominator.utils.BackrefDict
                         urls: !!python/object:dominator.utils.BackrefDict
                           children:
                             default: !!python/object:dominator.entities.Url
-                              door: *id006
+                              door: *id007
                               name: default
                               path: ''
-                          parent: *id006
-                      peer: &id007 !!python/object:dominator.entities.Door
-                        container: *id004
-                        exposedport: 47089
+                          parent: *id007
+                      peer: &id008 !!python/object:dominator.entities.Door
+                        container: *id005
+                        exposedport: 47091
                         internalport: 2888
                         name: peer
                         protocol: tcp
@@ -139,11 +154,11 @@ ships: !!python/object:dominator.utils.BackrefDict
                         urls: !!python/object:dominator.utils.BackrefDict
                           children:
                             default: !!python/object:dominator.entities.Url
-                              door: *id007
+                              door: *id008
                               name: default
                               path: ''
-                          parent: *id007
-                    parent: *id004
+                          parent: *id008
+                    parent: *id005
                   entrypoint: null
                   env: {}
                   hostname: null
@@ -204,30 +219,30 @@ ships: !!python/object:dominator.utils.BackrefDict
                     workdir: /opt/zookeeper
                   links:
                     1: !!python/tuple
-                    - *id007
-                    - *id005
+                    - *id008
+                    - *id006
                   memory: 1073741824
                   name: zookeeper
                   network_mode: ''
                   privileged: false
-                  ship: *id008
+                  ship: *id009
                   status: null
                   user: ''
                   volumes: !!python/object:dominator.utils.BackrefDict
                     children:
-                      config: &id009 !!python/object:dominator.entities.ConfigVolume
-                        container: *id004
+                      config: &id010 !!python/object:dominator.entities.ConfigVolume
+                        container: *id005
                         dest: /opt/zookeeper/conf
                         files: !!python/object:dominator.utils.BackrefDict
                           children:
                             env.sh: !!python/object:dominator.entities.TextFile
                               data: export JVMFLAGS="-Dcom.sun.management.jmxremote.authenticate=False
-                                -Dcom.sun.management.jmxremote.local.only=False -Dcom.sun.management.jmxremote.port=47090
-                                -Dcom.sun.management.jmxremote.rmi.port=47090 -Dcom.sun.management.jmxremote.ssl=False
+                                -Dcom.sun.management.jmxremote.local.only=False -Dcom.sun.management.jmxremote.port=47092
+                                -Dcom.sun.management.jmxremote.rmi.port=47092 -Dcom.sun.management.jmxremote.ssl=False
                                 -Djava.rmi.server.hostname=localhost -Dvisualvm.display.name=localship:zookeeper
                                 -Xmx805306368 -server -showversion"
                               name: env.sh
-                              volume: *id009
+                              volume: *id010
                             log4j.properties: !!python/object:dominator.entities.TextFile
                               data: |
                                 log4j.rootLogger=${zookeeper.root.logger}
@@ -252,11 +267,11 @@ ships: !!python/object:dominator.utils.BackrefDict
                                 log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
                                 log4j.appender.FILE.layout.ConversionPattern=%d{ISO8601} %-5p -%-1X{myid}- [%t@%C:%L]  %m%n
                               name: log4j.properties
-                              volume: *id009
+                              volume: *id010
                             myid: !!python/object:dominator.entities.TextFile
                               data: '1'
                               name: myid
-                              volume: *id009
+                              volume: *id010
                             zoo.cfg: !!python/object:dominator.entities.IniFile
                               content:
                                 autopurge.purgeInterval: 1
@@ -270,17 +285,17 @@ ships: !!python/object:dominator.utils.BackrefDict
                                 syncLimit: 50
                                 tickTime: 2000
                               name: zoo.cfg
-                              volume: *id009
-                          parent: *id009
+                              volume: *id010
+                          parent: *id010
                         name: config
                       data: !!python/object:dominator.entities.DataVolume
-                        container: *id004
+                        container: *id005
                         dest: /var/lib/zookeeper
                         name: data
                         path: null
                         ro: false
-                      logs: &id010 !!python/object:dominator.entities.LogVolume
-                        container: *id004
+                      logs: &id011 !!python/object:dominator.entities.LogVolume
+                        container: *id005
                         dest: /var/log/zookeeper
                         files: !!python/object:dominator.utils.BackrefDict
                           children:
@@ -288,14 +303,14 @@ ships: !!python/object:dominator.utils.BackrefDict
                               format: '%Y-%m-%d %H:%M:%S,%f'
                               length: 23
                               name: zookeeper.log
-                              volume: *id010
-                          parent: *id010
+                              volume: *id011
+                          parent: *id011
                         name: logs
                         path: null
                         ro: false
-                    parent: *id004
+                    parent: *id005
                   zkid: 1
-                exposedport: 47092
+                exposedport: 47094
                 internalport: 2181
                 name: client
                 protocol: tcp
@@ -304,20 +319,20 @@ ships: !!python/object:dominator.utils.BackrefDict
                 urls: !!python/object:dominator.utils.BackrefDict
                   children:
                     default: !!python/object:dominator.entities.Url
-                      door: *id003
+                      door: *id004
                       name: default
                       path: ''
-                  parent: *id003
-            memory: 1073741824
-            name: collector-00
+                  parent: *id004
+            memory: 4294967296
+            name: api
             network_mode: ''
             privileged: false
-            ship: *id008
+            ship: *id009
             status: null
             user: ''
             volumes: !!python/object:dominator.utils.BackrefDict
               children:
-                config: &id011 !!python/object:dominator.entities.ConfigVolume
+                config: &id012 !!python/object:dominator.entities.ConfigVolume
                   container: *id001
                   dest: /etc/powny
                   files: !!python/object:dominator.utils.BackrefDict
@@ -334,7 +349,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                             port: 10023
                           backend:
                             nodes:
-                            - localhost:47092
+                            - localhost:47094
                           core:
                             rules_dir: /var/lib/powny/rules
                           helpers: {}
@@ -396,10 +411,10 @@ ships: !!python/object:dominator.utils.BackrefDict
                               level: DEBUG
                             version: 1
                         name: powny.yaml
-                        volume: *id011
-                    parent: *id011
+                        volume: *id012
+                    parent: *id012
                   name: config
-                logs: &id012 !!python/object:dominator.entities.LogVolume
+                logs: &id013 !!python/object:dominator.entities.LogVolume
                   container: *id001
                   dest: /var/log/powny
                   files: !!python/object:dominator.utils.BackrefDict
@@ -408,18 +423,18 @@ ships: !!python/object:dominator.utils.BackrefDict
                         format: ''
                         length: 0
                         name: powny.debug.log
-                        volume: *id012
+                        volume: *id013
                       powny.json.log: !!python/object:dominator.entities.LogFile
                         format: ''
                         length: 0
                         name: powny.json.log
-                        volume: *id012
+                        volume: *id013
                       powny.log: !!python/object:dominator.entities.LogFile
                         format: ''
                         length: 0
                         name: powny.log
-                        volume: *id012
-                    parent: *id012
+                        volume: *id013
+                    parent: *id013
                   name: logs
                   path: null
                   ro: false
@@ -430,13 +445,13 @@ ships: !!python/object:dominator.utils.BackrefDict
                   path: /var/lib/powny/rules
                   ro: false
               parent: *id001
-          dataapi: &id013 !!python/object:dominator.entities.Container
+          collector: &id014 !!python/object:dominator.entities.Container
             command: null
             doors: !!python/object:dominator.utils.BackrefDict
               children:
-                backdoor: &id014 !!python/object:dominator.entities.Door
-                  container: *id013
-                  exposedport: 47098
+                backdoor: &id015 !!python/object:dominator.entities.Door
+                  container: *id014
+                  exposedport: 47097
                   internalport: 10023
                   name: backdoor
                   protocol: tcp
@@ -445,46 +460,31 @@ ships: !!python/object:dominator.utils.BackrefDict
                   urls: !!python/object:dominator.utils.BackrefDict
                     children:
                       default: !!python/object:dominator.entities.Url
-                        door: *id014
-                        name: default
-                        path: ''
-                    parent: *id014
-                http: &id015 !!python/object:dominator.entities.Door
-                  container: *id013
-                  exposedport: 47097
-                  internalport: 80
-                  name: http
-                  protocol: tcp
-                  sameports: false
-                  schema: http
-                  urls: !!python/object:dominator.utils.BackrefDict
-                    children:
-                      default: !!python/object:dominator.entities.Url
                         door: *id015
                         name: default
                         path: ''
                     parent: *id015
-              parent: *id013
+              parent: *id014
             entrypoint: null
             env:
-              POWNY_APP: api
+              POWNY_APP: collector
             hostname: null
             id: null
             image: *id016
             links:
               zookeeper:
-              - *id003
-            memory: 4294967296
-            name: dataapi
+              - *id004
+            memory: 1073741824
+            name: collector
             network_mode: ''
             privileged: false
-            ship: *id008
+            ship: *id009
             status: null
             user: ''
             volumes: !!python/object:dominator.utils.BackrefDict
               children:
                 config: &id017 !!python/object:dominator.entities.ConfigVolume
-                  container: *id013
+                  container: *id014
                   dest: /etc/powny
                   files: !!python/object:dominator.utils.BackrefDict
                     children:
@@ -500,7 +500,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                             port: 10023
                           backend:
                             nodes:
-                            - localhost:47092
+                            - localhost:47094
                           core:
                             rules_dir: /var/lib/powny/rules
                           helpers: {}
@@ -566,7 +566,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                     parent: *id017
                   name: config
                 logs: &id018 !!python/object:dominator.entities.LogVolume
-                  container: *id013
+                  container: *id014
                   dest: /var/log/powny
                   files: !!python/object:dominator.utils.BackrefDict
                     children:
@@ -590,12 +590,12 @@ ships: !!python/object:dominator.utils.BackrefDict
                   path: null
                   ro: false
                 rules: !!python/object:dominator.entities.DataVolume
-                  container: *id013
+                  container: *id014
                   dest: /var/lib/powny/rules
                   name: rules
                   path: /var/lib/powny/rules
                   ro: false
-              parent: *id013
+              parent: *id014
           gitapi: &id019 !!python/object:dominator.entities.Container
             command: null
             doors: !!python/object:dominator.utils.BackrefDict
@@ -779,14 +779,12 @@ ships: !!python/object:dominator.utils.BackrefDict
               user: ''
               volumes: {}
               workdir: null
-            links:
-              zookeeper:
-              - *id003
+            links: {}
             memory: 134217728
             name: gitapi
             network_mode: ''
             privileged: false
-            ship: *id008
+            ship: *id009
             status: null
             user: ''
             volumes: !!python/object:dominator.utils.BackrefDict
@@ -843,7 +841,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                   path: /var/lib/powny/rules.git
                   ro: false
               parent: *id019
-          userapi: &id025 !!python/object:dominator.entities.Container
+          worker: &id025 !!python/object:dominator.entities.Container
             command: null
             doors: !!python/object:dominator.utils.BackrefDict
               children:
@@ -862,173 +860,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                         name: default
                         path: ''
                     parent: *id026
-                http: &id027 !!python/object:dominator.entities.Door
-                  container: *id025
-                  exposedport: 47094
-                  internalport: 80
-                  name: http
-                  protocol: tcp
-                  sameports: false
-                  schema: http
-                  urls: !!python/object:dominator.utils.BackrefDict
-                    children:
-                      default: !!python/object:dominator.entities.Url
-                        door: *id027
-                        name: default
-                        path: ''
-                    parent: *id027
               parent: *id025
-            entrypoint: null
-            env:
-              POWNY_APP: api
-            hostname: null
-            id: null
-            image: *id016
-            links:
-              zookeeper:
-              - *id003
-            memory: 4294967296
-            name: userapi
-            network_mode: ''
-            privileged: false
-            ship: *id008
-            status: null
-            user: ''
-            volumes: !!python/object:dominator.utils.BackrefDict
-              children:
-                config: &id028 !!python/object:dominator.entities.ConfigVolume
-                  container: *id025
-                  dest: /etc/powny
-                  files: !!python/object:dominator.utils.BackrefDict
-                    children:
-                      powny.yaml: !!python/object:dominator.entities.YamlFile
-                        content:
-                          api:
-                            gunicorn:
-                              bind: 0.0.0.0:80
-                              max_requests: 5000
-                              workers: 4
-                          backdoor:
-                            enabled: false
-                            port: 10023
-                          backend:
-                            nodes:
-                            - localhost:47092
-                          core:
-                            rules_dir: /var/lib/powny/rules
-                          helpers: {}
-                          logging:
-                            disable_existing_loggers: false
-                            formatters:
-                              console:
-                                (): contextlog.make_mixed_formatter
-                                format: '{asctime} {fg_bold_blue}{app:9.9} {purple}{name:35.35}
-                                  {log_color}{levelname:>7} {yellow}{job_id:36.36}{reset}
-                                  {message} -- {cyan}{_extra}{reset}'
-                                formatters:
-                                - colorlog.ColoredFormatter
-                                - contextlog.PartialFormatter
-                                - contextlog.ExceptionLocalsFormatter
-                                style: '{'
-                              file:
-                                (): contextlog.make_mixed_formatter
-                                format: '{asctime} {app:9.9} {name:35.35} {levelname:>7}
-                                  {job_id:36.36} {message} -- {_extra}'
-                                formatters:
-                                - contextlog.PartialFormatter
-                                - contextlog.ExceptionLocalsFormatter
-                                style: '{'
-                              json:
-                                (): jsonformatter.JsonFormatter
-                                json_depth: 2
-                            handlers:
-                              console:
-                                class: logging.StreamHandler
-                                formatter: console
-                                level: WARN
-                              debug_file:
-                                class: logging.FileHandler
-                                filename: /var/log/powny/powny.debug.log
-                                formatter: file
-                                level: DEBUG
-                              file:
-                                class: logging.FileHandler
-                                filename: /var/log/powny/powny.log
-                                formatter: file
-                                level: INFO
-                              json_file:
-                                class: logging.FileHandler
-                                filename: /var/log/powny/powny.json.log
-                                formatter: json
-                                level: INFO
-                            loggers:
-                              elasticsearch:
-                                level: WARNING
-                              kazoo:
-                                level: WARNING
-                            root:
-                              handlers:
-                              - console
-                              - file
-                              - debug_file
-                              - json_file
-                              level: DEBUG
-                            version: 1
-                        name: powny.yaml
-                        volume: *id028
-                    parent: *id028
-                  name: config
-                logs: &id029 !!python/object:dominator.entities.LogVolume
-                  container: *id025
-                  dest: /var/log/powny
-                  files: !!python/object:dominator.utils.BackrefDict
-                    children:
-                      powny.debug.log: !!python/object:dominator.entities.LogFile
-                        format: ''
-                        length: 0
-                        name: powny.debug.log
-                        volume: *id029
-                      powny.json.log: !!python/object:dominator.entities.LogFile
-                        format: ''
-                        length: 0
-                        name: powny.json.log
-                        volume: *id029
-                      powny.log: !!python/object:dominator.entities.LogFile
-                        format: ''
-                        length: 0
-                        name: powny.log
-                        volume: *id029
-                    parent: *id029
-                  name: logs
-                  path: null
-                  ro: false
-                rules: !!python/object:dominator.entities.DataVolume
-                  container: *id025
-                  dest: /var/lib/powny/rules
-                  name: rules
-                  path: /var/lib/powny/rules
-                  ro: false
-              parent: *id025
-          worker-00: &id030 !!python/object:dominator.entities.Container
-            command: null
-            doors: !!python/object:dominator.utils.BackrefDict
-              children:
-                backdoor: &id031 !!python/object:dominator.entities.Door
-                  container: *id030
-                  exposedport: 47093
-                  internalport: 10023
-                  name: backdoor
-                  protocol: tcp
-                  sameports: false
-                  schema: telnet
-                  urls: !!python/object:dominator.utils.BackrefDict
-                    children:
-                      default: !!python/object:dominator.entities.Url
-                        door: *id031
-                        name: default
-                        path: ''
-                    parent: *id031
-              parent: *id030
             entrypoint: null
             env:
               POWNY_APP: worker
@@ -1037,18 +869,18 @@ ships: !!python/object:dominator.utils.BackrefDict
             image: *id016
             links:
               zookeeper:
-              - *id003
+              - *id004
             memory: 1073741824
-            name: worker-00
+            name: worker
             network_mode: ''
             privileged: false
-            ship: *id008
+            ship: *id009
             status: null
             user: ''
             volumes: !!python/object:dominator.utils.BackrefDict
               children:
-                config: &id032 !!python/object:dominator.entities.ConfigVolume
-                  container: *id030
+                config: &id027 !!python/object:dominator.entities.ConfigVolume
+                  container: *id025
                   dest: /etc/powny
                   files: !!python/object:dominator.utils.BackrefDict
                     children:
@@ -1064,7 +896,7 @@ ships: !!python/object:dominator.utils.BackrefDict
                             port: 10023
                           backend:
                             nodes:
-                            - localhost:47092
+                            - localhost:47094
                           core:
                             rules_dir: /var/lib/powny/rules
                           helpers: {}
@@ -1126,11 +958,11 @@ ships: !!python/object:dominator.utils.BackrefDict
                               level: DEBUG
                             version: 1
                         name: powny.yaml
-                        volume: *id032
-                    parent: *id032
+                        volume: *id027
+                    parent: *id027
                   name: config
-                logs: &id033 !!python/object:dominator.entities.LogVolume
-                  container: *id030
+                logs: &id028 !!python/object:dominator.entities.LogVolume
+                  container: *id025
                   dest: /var/log/powny
                   files: !!python/object:dominator.utils.BackrefDict
                     children:
@@ -1138,33 +970,33 @@ ships: !!python/object:dominator.utils.BackrefDict
                         format: ''
                         length: 0
                         name: powny.debug.log
-                        volume: *id033
+                        volume: *id028
                       powny.json.log: !!python/object:dominator.entities.LogFile
                         format: ''
                         length: 0
                         name: powny.json.log
-                        volume: *id033
+                        volume: *id028
                       powny.log: !!python/object:dominator.entities.LogFile
                         format: ''
                         length: 0
                         name: powny.log
-                        volume: *id033
-                    parent: *id033
+                        volume: *id028
+                    parent: *id028
                   name: logs
                   path: null
                   ro: false
                 rules: !!python/object:dominator.entities.DataVolume
-                  container: *id030
+                  container: *id025
                   dest: /var/lib/powny/rules
                   name: rules
                   path: /var/lib/powny/rules
                   ro: false
-              parent: *id030
-          zookeeper: *id004
-        parent: *id008
-      shipment: *id034
-  parent: *id034
+              parent: *id025
+          zookeeper: *id005
+        parent: *id009
+      shipment: *id029
+  parent: *id029
 tasks: !!python/object:dominator.utils.BackrefDict
   children: {}
-  parent: *id034
+  parent: *id029
 

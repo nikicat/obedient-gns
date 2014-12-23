@@ -1,6 +1,5 @@
 import os
 import textwrap
-import itertools
 
 import yaml
 
@@ -13,60 +12,34 @@ def test(shipment):
     from obedient.zookeeper import build_zookeeper_cluster
     shipment.unload_ships()
     zookeepers = build_zookeeper_cluster(shipment.ships.values())
-    containers = itertools.chain(*build_powny_cluster(shipment.ships.values()))
-    attach_zookeeper_to_powny(containers, zookeepers)
+    builder = make_powny_builder()
+    for ship in shipment.ships.values():
+        gitapi = builder.gitapi(ssh_keys=[])
+        api = builder.api()
+        worker = builder.worker()
+        collector = builder.collector()
+
+        for powny in [api, worker, collector]:
+            attach_zookeepers_to_powny(powny, zookeepers)
+
+        for container in [api, worker, collector, gitapi]:
+            ship.place(container)
+
     shipment.expose_ports(list(range(47000, 47100)))
 
 
-def build_powny_cluster(ships, ssh_keys=[], workers=1, collectors=1, **kwargs):
-    builder = make_builder(**kwargs)
-
-    all_gitapis = []
-    all_userapis = []
-    all_dataapis = []
-    all_workers = []
-    all_collectors = []
-
-    for ship in ships:
-        all_gitapis.append(builder.gitapi(ssh_keys))
-        ship.place(all_gitapis[-1])
-
-        all_userapis.append(builder.api('userapi'))
-        ship.place(all_userapis[-1])
-
-        all_dataapis.append(builder.api('dataapi'))
-        ship.place(all_dataapis[-1])
-
-        for count in range(workers):
-            all_workers.append(builder.worker('worker-{:0>2d}'.format(count)))
-            ship.place(all_workers[-1])
-
-        for count in range(collectors):
-            all_collectors.append(builder.collector('collector-{:0>2d}'.format(count)))
-            ship.place(all_collectors[-1])
-
-    return all_gitapis, all_userapis, all_dataapis, all_workers, all_collectors
-
-
-def attach_zookeeper_to_powny(pownies, zookeepers):
+def attach_zookeepers_to_powny(powny, zookeepers):
     alldoors = [zookeeper.doors['client'] for zookeeper in zookeepers]
     zkships = [zookeeper.ship for zookeeper in zookeepers]
-    for powny in pownies:
-        # Try to link powny to local zookeeper only
-        if powny.ship in zkships:
-            zkdoors = [door for door in alldoors if door.container.ship == powny.ship]
-        else:
-            zkdoors = alldoors
-        powny.links['zookeeper'] = zkdoors
+    # Try to link powny to local zookeeper only
+    if powny.ship in zkships:
+        zkdoors = [door for door in alldoors if door.container.ship == powny.ship]
+    else:
+        zkdoors = alldoors
+    powny.links['zookeeper'] = zkdoors
 
 
-def attach_elasticsearch_to_powny(pownies, elasticsearches):
-    elasticdoors = [elasticsearch.doors['http'] for elasticsearch in elasticsearches]
-    for powny in pownies:
-        powny.links['elasticsearch'] = elasticdoors
-
-
-def make_builder(
+def make_powny_builder(
     api_workers=4,
     api_max_requests=5000,
     extra_scripts=(),
@@ -221,17 +194,17 @@ def make_builder(
             )
 
         @staticmethod
-        def api(name):
+        def api(name='api'):
             cont = make_powny_container(name, 'api', memory=4096*1024*1024)
             cont.doors['http'] = Door(schema='http', port=80)
             return cont
 
         @staticmethod
-        def worker(name):
+        def worker(name='worker'):
             return make_powny_container(name, 'worker')
 
         @staticmethod
-        def collector(name):
+        def collector(name='collector'):
             return make_powny_container(name, 'collector')
 
     return Builder

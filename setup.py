@@ -25,6 +25,6 @@ if __name__ == '__main__':
         install_requires=[
             'dominator[full] >=15a',
             'obedient.zookeeper >=3.0.1a',
-            'obedient.elk >=1.1a',
+            'obedient.elk >=1.4a',
         ],
     )
