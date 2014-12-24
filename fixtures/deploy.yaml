@@ -5,15 +5,263 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.4.3 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
+      User-Agent: [python-requests/2.5.0 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
     method: GET
-    uri: http://localhost:4243/v1.15/containers/json?all=1&size=0&limit=-1&trunc_cmd=1
+    uri: http://localhost:4243/v1.16/containers/json?limit=-1&trunc_cmd=1&all=1&size=0
   response:
-    body: {string: '[]'}
+    body: {string: '[{"Command":"/bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1419369902,"Id":"3da30feb9072a94c01479c5cbb08fbd76168541d510758a9b4aac426259992d8","Image":"bfc11ee9f54c","Names":["/naughty_feynman"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1419369900,"Id":"f343844f02381e824b3d2b2883881f841f4440b8e2bb7e85a9307752fc0273e5","Image":"1b4dd95d9136","Names":["/tender_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1419369899,"Id":"afc07c7e9043a4363f74f64d6d03104d7d0ae5f56be6ef9afdb91b119508ff17","Image":"a722c2957017","Names":["/furious_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1419369890,"Id":"f58adb2ae1670f64af019da658d138e9f6ad3f2bbd606fce4acbbfcadb9b9e3d","Image":"df7c34044a7b","Names":["/clever_colden"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install -i https://pypi.yandex-team.ru/simple/
+        powny-yans==1.5.0''","Created":1419369865,"Id":"45421a0d7fdd8f8590732b33008f1ac4d2d7ca27073956bca3b67b2430bee32f","Image":"de1968089031","Names":["/jolly_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1419369850,"Id":"05ce6732c2e809912c783be16cba1007b01952feda8118cb56312f8902565cd1","Image":"726dab6b80b5","Names":["/hungry_pare"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.6.0''","Created":1419369723,"Id":"96da6cbb4f7d4f9d36286aaa8750404157e078852e6a80fa3ebbf24b6fcb384f","Image":"6f9fb91260ea","Names":["/naughty_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"bash -","Created":1418910512,"Id":"1b555778ba81e153b3403c5e9cd376bd6705d43a9159d2493454d8715bbdaeed","Image":"registry.ape.yandex.net/nikicat/elasticdump:5JmgUqm3ly-TY65nplEBKyzEJ0c.","Names":["/elasticlog-prod.dump"],"Ports":[],"Status":"Exited
+        (130) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD etc/nginx/sites-enabled/kibana.site in
+        /etc/nginx/sites-enabled/kibana.site''","Created":1418849155,"Id":"f244b09cce36001212066dabb35b90f0c90150eb44b29e6ebfda736b3d37102b","Image":"1cdfc64b9829","Names":["/focused_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[81/tcp:{}]''","Created":1418849155,"Id":"b7e6b7a0f7be4153eb3b126f2a3a9db5d86e3b7de6db0df5f5dd74eae9a795d6","Image":"29bb13942089","Names":["/reverent_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/www/kibana/config]''","Created":1418849154,"Id":"8a4705a11ec958189a034ebefd3a02bb4f0d4ea0ab80919f65d69c525ccf0781","Image":"44423f1d1b6e","Names":["/hopeful_engelbart8"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''ln -fs config/config.js /var/www/kibana/config.js''","Created":1418849153,"Id":"5f3f0a0a2d33570f4f8ab51a094b547e1b08d8ac7f7092bf6ce588fb0e9b90d4","Image":"ce5294675be2","Names":["/dreamy_bardeen"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mv kibana-* /var/www/kibana''","Created":1418849152,"Id":"007a15563a7b7ac9d707ab0047d7a3c9956e1329ee37ad4edb09693c6c87fb80","Image":"9e998ff24292","Names":["/prickly_davinci"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mkdir /var/www''","Created":1418849151,"Id":"5d9ffc92bcf6ce979efc4e2076b8b6b4fd68630d9b07681abcc8951be6d37f37","Image":"2800dadbfc77","Names":["/evil_thompson"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''curl -s https://download.elasticsearch.org/kibana/kibana/kibana-3.1.1.tar.gz
+        | tar -zxf -''","Created":1418849146,"Id":"f188aa44b357773b816293fa301fb3291ec17bf9f344a3a7061a4d42c1891107","Image":"registry.ape.yandex.net/nikicat/nginx:pbfp0xrH4SrcTnxoRH-khiIsUPI.","Names":["/sleepy_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418849136,"Id":"4aaaf192433d904076cb1dadbb14d7be18da5610be443ae8a0aa67243eccbc9d","Image":"cbf063dd6d05","Names":["/kickass_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418849135,"Id":"dea711e556847c1125a0a75b35f8d2e865e59d63424cc8f7c7ee4a229a8bd37e","Image":"3c79a17d2022","Names":["/angry_goodall"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418849134,"Id":"efe9969ccf754d9cbd75b1236da85079fe3c40f854501a52149f938b2511190e","Image":"7d5214eac473","Names":["/desperate_bartik"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418849134,"Id":"03498180683e425bf2793c9422a649d1e53bc66d12563d0636e360b22be2fb5f","Image":"a55c47374d36","Names":["/trusting_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418849133,"Id":"6b6350561c4ab71013df4d8b16360e69421a6b8b50d0d4d6984f5d21f23632a4","Image":"340f801c92e9","Names":["/jovial_galileo"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418849132,"Id":"bfc98b2171c389c4fa4cdb9d141855e0ab6a7f00d3a6e3bbb10310c39d399888","Image":"e2921f98b84f","Names":["/romantic_einstein0"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418849131,"Id":"22ad5d01e5f659ade6da3940d98293a3b077a915d8741e62519a7e3d6648e72c","Image":"ec2b097cab0a","Names":["/agitated_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418849131,"Id":"860459ba3466b1be23b46efcd2f6746f23844005f6ca678f93611c910eec046b","Image":"29a1e73553ef","Names":["/distracted_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418849126,"Id":"43cf2dba1ae63c100d6195e88529cd440b9067b29f8714ee1f64f23366cea937","Image":"a894180d55a9","Names":["/jovial_nobel"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418849123,"Id":"bf8acb7bb8b9d70be4f27528fea3622ac2b42b89586fc9fd830e5ce80ed1c64b","Image":"3b4dae8fe3ab","Names":["/tender_pike"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.3.1.zip   -i
+        elasticsearch-zookeeper-1.3.1''","Created":1418849122,"Id":"6010350348f7c942031a0327be4481ca7246ac9f63468a54d04083d0e59c94d6","Image":"c484bb752a91","Names":["/thirsty_feynman"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.3.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418849091,"Id":"a344a154745ed743121f301d53f039544571bfac550c0d94919ee6628d054199","Image":"9668733a5c5d","Names":["/high_einstein"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418849088,"Id":"64ea70501d43659638cb9d96025c51826839f1de68d231d4e60d23cb2458828c","Image":"1f67583bad29","Names":["/furious_hodgkin"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.3.1 openjdk-7-jdk''","Created":1418848975,"Id":"a0592e1aa5ef82546e33b650dfbff372624586d8bcaa0be1a714d08482ecf672","Image":"392d38e428e8","Names":["/kickass_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.3/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418848968,"Id":"9149174589fce4cb82d7c5f240298847f335c5062651d1d757aeda206cf2b2f0","Image":"f57e6f9f2f39","Names":["/ecstatic_mayer"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:e2521f05b3eb4c009b01eb7035ed95c0f9ba019736748f347055234c9fba22ea
+        in /etc/nginx/nginx.conf''","Created":1418836383,"Id":"e52890669c9ea2c2c139edd9fc9949ac21af6bb7e12f101891d9b3fdcaff45ff","Image":"373d2e434116","Names":["/hopeful_fermi"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [nginx]''","Created":1418836383,"Id":"9cd2dce4a45929fac5ab8c4203f11774dad96b08c9862c46968e64a1cee6b8c9","Image":"a06d3c18683c","Names":["/desperate_hopper"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418830498,"Id":"ca81caa6a02bd7638d766eb66bdc7b02e049f5c6dd5e9b1a7168ba509fe8778f","Image":"d7ae3e1a053e","Names":["/distracted_mayer"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418830498,"Id":"3109a52f97dcb75d83f93b16090415709936870403cb60bbcd26e68d5e900ca6","Image":"1ee1d49715cd","Names":["/romantic_thompson"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418830497,"Id":"ce5bd17b67ef8078e2e83d306e513dd06ef8cba5aac6c680c677d8034a936a66","Image":"56ffa59b6a27","Names":["/evil_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418830496,"Id":"119db25e8e86a2c82873f7f5b9366641ce94d57267e418dd28e11e02da871d4c","Image":"8fcf72a48bf1","Names":["/thirsty_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418830495,"Id":"dae7372ca07e492b303b64d212cb24e1699e05dc6a1619e6c4f8bf8eaba5b46e","Image":"e2bece088dbe","Names":["/sick_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418830495,"Id":"9c060d9688ab8d58fdb01fa2264c500d4b9f72f2c7f2a21c2e3da19a8711a12c","Image":"ffcf66d482f7","Names":["/focused_pare"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418830494,"Id":"3a737e9ea26bec62dae848211b19740094904ee4c472e3b7f444b23550119809","Image":"890f278fbcf4","Names":["/jolly_curie9"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418830493,"Id":"c19affda9102e9df90ae2c01804232d7587e349ac2b6383450250af5cf67d385","Image":"0b49f047a14a","Names":["/serene_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418830486,"Id":"ba6f792892f0e77f1bb719e71106b9741ddc9370299916f95ec094e2bc3383dc","Image":"33ff37473b92","Names":["/reverent_goldstine4"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418830476,"Id":"aeea37fc76652244b505f99cd65b2fe08e04a8b747dd020925cf80b38ee0bd2f","Image":"89473c84cce2","Names":["/stoic_fermat"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.4.1.zip   -i
+        elasticsearch-zookeeper-1.4.1''","Created":1418830473,"Id":"0640a70f35153424cfbddff22ea9340e3671b66f13b235943af61e1b64597f1d","Image":"e4c89f991f3b","Names":["/thirsty_goldstine"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830439,"Id":"32b5925cde97f16089b65d1084782be75cf0975f89570bc377fe428db6714de0","Image":"c9f177369f6e","Names":["/desperate_hypatia"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830430,"Id":"26837f805ca53fde30e6258d5878b891a85c774dc544f9efed90ffe9113e26ad","Image":"bb8585467a2c","Names":["/agitated_galileo"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.1 openjdk-7-jdk''","Created":1418830303,"Id":"3ac9504e8c47b0df29712b95e0a40cc8b3dd6fb72a975cfcfe793c2e4d1b0b6c","Image":"ffde0ba16f2a","Names":["/compassionate_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.2 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830227,"Id":"838e92d5c29ff9b26a66f5e4c4f6eaa99935978845d7b0db567d2671d4d8808e","Image":"a3cc94af5c7c","Names":["/lonely_hoover"],"Ports":[],"Status":"Exited
+        (1) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830224,"Id":"7a3d0fd860d31429821ce4e0c56bcc9024b0aacc1fd5b97b89368a15d34f4227","Image":"a224e6164061","Names":["/agitated_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.2 openjdk-7-jdk''","Created":1418830078,"Id":"1c1cef325fc73e09d284d1ae671de8e9f04201dc26990f85bc59abb48f549876","Image":"ffde0ba16f2a","Names":["/silly_poincare"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829981,"Id":"3ce5af47276cf4596db2bebe24b19b8bb2f9d73a6fdc0b44ddea70de3512b87e","Image":"ffde0ba16f2a","Names":["/sick_euclid"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829926,"Id":"015c3ab3324304a59af519bfdb16223cbbb0d7508f3967fba493a468d7d04009","Image":"ffde0ba16f2a","Names":["/hopeful_hoover"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.4/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418829919,"Id":"e9c1c59caf9857f8362be320100bc5b90b91077b5d80e96e3197aaadbaaa2835","Image":"f57e6f9f2f39","Names":["/compassionate_meitner"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418315758,"Id":"1cbc9e76b4421b2781af83dbcf86e27b73a1942f55bbc7a74c9b59537e697f5f","Image":"a3539414a983","Names":["/nostalgic_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418315758,"Id":"4b0d73563058b9a04635cc33109c798a6b7c2d414a57b59bd7a574e0d6874ca6","Image":"6f31f0069366","Names":["/dreamy_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418315757,"Id":"0259f5f2a3ace228a01d57e128bd04b469aa080dc5ce81f122a45db7ba2efb72","Image":"06552ebb61d1","Names":["/kickass_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418315756,"Id":"7d52f4c581049947ca15ba7d85201399c671f0b92a9c713c7fea415d1c8c3d51","Image":"4d2843c1d3a9","Names":["/mad_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418315756,"Id":"b5b8d101bdf3c4663be2d5b079525419df3b0deee4403cce989e665c8dfb9bea","Image":"0df5f1727b20","Names":["/happy_leakey"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418315755,"Id":"6a21c2631dd1d732c20d1bf167f8bdf402bb674b018640fc6c73672c97d78649","Image":"fe3ef0680c36","Names":["/romantic_hoover"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418315755,"Id":"8eab259bf3dbb7da56ac2ef9d230b0aa9a176a526274bda0b69fab11fb6a0b98","Image":"ed4140f9425c","Names":["/pensive_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315734,"Id":"e1bed2e9135d037399991fae90beb2b66e2a0398e56a3e0a8ac7329483369877","Image":"807658cc1e1a","Names":["/hungry_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315062,"Id":"276aa4ad91021112230576e4113b3ac26a55a27f19681c765e5efdc035fbdaf6","Image":"807658cc1e1a","Names":["/kickass_kirch"],"Ports":[],"Status":"Exited
+        (0) 12 days ago"}
+
+        ,{"Command":"bash -c /bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1418306755,"Id":"eb61b80dfde5e527edf89b74f1526178f9ad10bc10015540bd75613050b9ebdc","Image":"4cb93c932763","Names":["/focused_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1418306755,"Id":"4e0d61440d6b1856fe11e5898854bea735407f727ae332be51fd2844fdc28653","Image":"af460f262994","Names":["/trusting_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1418306754,"Id":"a6eb834a9231768ef0eb4d746a09341c35d481e5cd95a524ba53fc16fe7ba5c8","Image":"f75670cce7c4","Names":["/high_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1418306742,"Id":"19db3a43753210cf4b4a12a5b37d3ded33d3a693e44d2ac825a8515016ce8f21","Image":"a5d0b702b4e0","Names":["/mad_newton"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install git+https://github.yandex-team.ru/mdevaev/powny-yans''","Created":1418306729,"Id":"f04fbbc1174e5464b11d75e010780e4bc71f7bae83c32610e911e687adfa32a9","Image":"b7a8a4e0828a","Names":["/dreamy_babbage"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1418306721,"Id":"a7bf49cf6b0c0e7a5a0a698d291e990d4995d5b36bf49ea742773835d49b9d7e","Image":"fea40607cd87","Names":["/sleepy_feynman"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.5.0''","Created":1418306651,"Id":"7df95488e9f4bac154378981e14223ce1ea051d31ed42011aafc0731122fb6bc","Image":"4f0cb3390a1e","Names":["/goofy_mclean"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/logstash/sincedb]''","Created":1418306645,"Id":"d35ad6503df18fbf49cc2c6d22ee9701583e0ef5e6c993793394063bb2454bc3","Image":"ecab0aeb6267","Names":["/sad_almeida"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/logstash]''","Created":1418306644,"Id":"5f5cc3495e4d473a8aef349747f20650be7a87dd26cf6842c5aa8637299106e4","Image":"6e1021f3988d","Names":["/jolly_blackwell"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/etc/logstash/conf.d]''","Created":1418306643,"Id":"799e244e1710ff26886d3930f978cabb69612f8e71362540eb068d00865ba135","Image":"38c6cf7a7eb6","Names":["/silly_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash-contrib_1.4.2-1-efd53ef_all.deb
+        \u0026\u0026 dpkg -i logstash-contrib_1.4.2-1-efd53ef_all.deb \u0026\u0026
+        rm logstash-contrib_1.4.2-1-efd53ef_all.deb''","Created":1418306551,"Id":"c7bec5808a02efe36b4320bf9564aae0f04648d3195372672fb46b3cdd08935d","Image":"afb388db2bbc","Names":["/thirsty_lalande"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb
+        \u0026\u0026 dpkg -i logstash_1.4.2-1-2c0f5a1_all.deb \u0026\u0026 rm logstash_1.4.2-1-2c0f5a1_all.deb''","Created":1418306257,"Id":"cc046478e4083f2c6e13bc16e081a62a322c1bf0213e687b9465bca22b773e2b","Image":"24c539ed8513","Names":["/suspicious_franklin"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update \u0026\u0026 apt-get install -y default-jre-headless
+        wget \u0026\u0026 apt-get clean''","Created":1418306223,"Id":"322f55ba9735a22fa0413ecf9b8ae0efe77699242844e9440c2a8629e7223503","Image":"2b18e071c60d","Names":["/jolly_rosalind"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418306220,"Id":"5a0337e3b9d043e458ecbf3b983dfc49ad26011b3d5a21fb4a46287794c92ef5","Image":"50d9b8070535","Names":["/prickly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418306220,"Id":"5194c43ca0cc2e97d8ffefb6695ef3fd2f3533082bea83651cc9a103733206bd","Image":"4f61726c85e8","Names":["/grave_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418306219,"Id":"02ba2342b95f7b1a4ad5b5604f954c941471d899fd58ac7ec63ac5d214a7d747","Image":"f4d86ad686fe","Names":["/silly_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418306219,"Id":"2c4e165fa62011914c0cfc1fc0cf626a740cacdfc8837d88bb4faa2f56966ee7","Image":"9bec7d0ea2f9","Names":["/loving_lalande"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418306218,"Id":"10fc9f2b3200364019420ce72331f7e634646ae82f26bc9d1e5e7d744ed03e6b","Image":"6e543492c114","Names":["/stupefied_bardeen"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418306217,"Id":"2b550c156531985a0bc81a82af758c28e940efc71ade8aaa2da6f00ed2baeadd","Image":"6c64afc4fa10","Names":["/naughty_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418306217,"Id":"21f1dc0d2b32190941753be0d404664f76ccc05efc0f9f107aa3ebb33ab9c445","Image":"69404ce34f23","Names":["/jolly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418306205,"Id":"df26524786d141c76db3e9a368f80a17afccdf9b872c3cf785053946af8415be","Image":"807658cc1e1a","Names":["/sick_leakey"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306197,"Id":"67ec038b53a6897390057254d8bc5a2576b8e1af1bcdcc317a240bec0e1541d8","Image":"nikicat/trusty:latest","Names":["/backstabbing_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306187,"Id":"06d5da7ed9d686fb1f1395fafaccf1e5a06641ece4bfa7cb22345935f0f00503","Image":"nikicat/trusty:latest","Names":["/romantic_torvalds"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306138,"Id":"bc6e27e8b5f8460b1fcda6148275ca8813d01a00441fb6d8df55c4f45b46dbc8","Image":"nikicat/trusty:latest","Names":["/grave_euclid"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ]'}
     headers:
-      Content-Length: ['2']
       Content-Type: [application/json]
-      Date: ['Thu, 13 Nov 2014 23:32:59 GMT']
+      Date: ['Wed, 24 Dec 2014 17:05:04 GMT']
+      Transfer-Encoding: [chunked]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -21,15 +269,263 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.4.3 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
+      User-Agent: [python-requests/2.5.0 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
     method: GET
-    uri: http://localhost:4243/v1.15/containers/json?all=1&size=0&limit=-1&trunc_cmd=1
+    uri: http://localhost:4243/v1.16/containers/json?limit=-1&trunc_cmd=1&all=1&size=0
   response:
-    body: {string: '[]'}
+    body: {string: '[{"Command":"/bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1419369902,"Id":"3da30feb9072a94c01479c5cbb08fbd76168541d510758a9b4aac426259992d8","Image":"bfc11ee9f54c","Names":["/naughty_feynman"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1419369900,"Id":"f343844f02381e824b3d2b2883881f841f4440b8e2bb7e85a9307752fc0273e5","Image":"1b4dd95d9136","Names":["/tender_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1419369899,"Id":"afc07c7e9043a4363f74f64d6d03104d7d0ae5f56be6ef9afdb91b119508ff17","Image":"a722c2957017","Names":["/furious_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1419369890,"Id":"f58adb2ae1670f64af019da658d138e9f6ad3f2bbd606fce4acbbfcadb9b9e3d","Image":"df7c34044a7b","Names":["/clever_colden"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install -i https://pypi.yandex-team.ru/simple/
+        powny-yans==1.5.0''","Created":1419369865,"Id":"45421a0d7fdd8f8590732b33008f1ac4d2d7ca27073956bca3b67b2430bee32f","Image":"de1968089031","Names":["/jolly_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1419369850,"Id":"05ce6732c2e809912c783be16cba1007b01952feda8118cb56312f8902565cd1","Image":"726dab6b80b5","Names":["/hungry_pare"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.6.0''","Created":1419369723,"Id":"96da6cbb4f7d4f9d36286aaa8750404157e078852e6a80fa3ebbf24b6fcb384f","Image":"6f9fb91260ea","Names":["/naughty_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"bash -","Created":1418910512,"Id":"1b555778ba81e153b3403c5e9cd376bd6705d43a9159d2493454d8715bbdaeed","Image":"registry.ape.yandex.net/nikicat/elasticdump:5JmgUqm3ly-TY65nplEBKyzEJ0c.","Names":["/elasticlog-prod.dump"],"Ports":[],"Status":"Exited
+        (130) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD etc/nginx/sites-enabled/kibana.site in
+        /etc/nginx/sites-enabled/kibana.site''","Created":1418849155,"Id":"f244b09cce36001212066dabb35b90f0c90150eb44b29e6ebfda736b3d37102b","Image":"1cdfc64b9829","Names":["/focused_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[81/tcp:{}]''","Created":1418849155,"Id":"b7e6b7a0f7be4153eb3b126f2a3a9db5d86e3b7de6db0df5f5dd74eae9a795d6","Image":"29bb13942089","Names":["/reverent_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/www/kibana/config]''","Created":1418849154,"Id":"8a4705a11ec958189a034ebefd3a02bb4f0d4ea0ab80919f65d69c525ccf0781","Image":"44423f1d1b6e","Names":["/hopeful_engelbart8"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''ln -fs config/config.js /var/www/kibana/config.js''","Created":1418849153,"Id":"5f3f0a0a2d33570f4f8ab51a094b547e1b08d8ac7f7092bf6ce588fb0e9b90d4","Image":"ce5294675be2","Names":["/dreamy_bardeen"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mv kibana-* /var/www/kibana''","Created":1418849152,"Id":"007a15563a7b7ac9d707ab0047d7a3c9956e1329ee37ad4edb09693c6c87fb80","Image":"9e998ff24292","Names":["/prickly_davinci"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mkdir /var/www''","Created":1418849151,"Id":"5d9ffc92bcf6ce979efc4e2076b8b6b4fd68630d9b07681abcc8951be6d37f37","Image":"2800dadbfc77","Names":["/evil_thompson"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''curl -s https://download.elasticsearch.org/kibana/kibana/kibana-3.1.1.tar.gz
+        | tar -zxf -''","Created":1418849146,"Id":"f188aa44b357773b816293fa301fb3291ec17bf9f344a3a7061a4d42c1891107","Image":"registry.ape.yandex.net/nikicat/nginx:pbfp0xrH4SrcTnxoRH-khiIsUPI.","Names":["/sleepy_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418849136,"Id":"4aaaf192433d904076cb1dadbb14d7be18da5610be443ae8a0aa67243eccbc9d","Image":"cbf063dd6d05","Names":["/kickass_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418849135,"Id":"dea711e556847c1125a0a75b35f8d2e865e59d63424cc8f7c7ee4a229a8bd37e","Image":"3c79a17d2022","Names":["/angry_goodall"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418849134,"Id":"efe9969ccf754d9cbd75b1236da85079fe3c40f854501a52149f938b2511190e","Image":"7d5214eac473","Names":["/desperate_bartik"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418849134,"Id":"03498180683e425bf2793c9422a649d1e53bc66d12563d0636e360b22be2fb5f","Image":"a55c47374d36","Names":["/trusting_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418849133,"Id":"6b6350561c4ab71013df4d8b16360e69421a6b8b50d0d4d6984f5d21f23632a4","Image":"340f801c92e9","Names":["/jovial_galileo"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418849132,"Id":"bfc98b2171c389c4fa4cdb9d141855e0ab6a7f00d3a6e3bbb10310c39d399888","Image":"e2921f98b84f","Names":["/romantic_einstein0"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418849131,"Id":"22ad5d01e5f659ade6da3940d98293a3b077a915d8741e62519a7e3d6648e72c","Image":"ec2b097cab0a","Names":["/agitated_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418849131,"Id":"860459ba3466b1be23b46efcd2f6746f23844005f6ca678f93611c910eec046b","Image":"29a1e73553ef","Names":["/distracted_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418849126,"Id":"43cf2dba1ae63c100d6195e88529cd440b9067b29f8714ee1f64f23366cea937","Image":"a894180d55a9","Names":["/jovial_nobel"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418849123,"Id":"bf8acb7bb8b9d70be4f27528fea3622ac2b42b89586fc9fd830e5ce80ed1c64b","Image":"3b4dae8fe3ab","Names":["/tender_pike"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.3.1.zip   -i
+        elasticsearch-zookeeper-1.3.1''","Created":1418849122,"Id":"6010350348f7c942031a0327be4481ca7246ac9f63468a54d04083d0e59c94d6","Image":"c484bb752a91","Names":["/thirsty_feynman"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.3.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418849091,"Id":"a344a154745ed743121f301d53f039544571bfac550c0d94919ee6628d054199","Image":"9668733a5c5d","Names":["/high_einstein"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418849088,"Id":"64ea70501d43659638cb9d96025c51826839f1de68d231d4e60d23cb2458828c","Image":"1f67583bad29","Names":["/furious_hodgkin"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.3.1 openjdk-7-jdk''","Created":1418848975,"Id":"a0592e1aa5ef82546e33b650dfbff372624586d8bcaa0be1a714d08482ecf672","Image":"392d38e428e8","Names":["/kickass_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.3/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418848968,"Id":"9149174589fce4cb82d7c5f240298847f335c5062651d1d757aeda206cf2b2f0","Image":"f57e6f9f2f39","Names":["/ecstatic_mayer"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:e2521f05b3eb4c009b01eb7035ed95c0f9ba019736748f347055234c9fba22ea
+        in /etc/nginx/nginx.conf''","Created":1418836383,"Id":"e52890669c9ea2c2c139edd9fc9949ac21af6bb7e12f101891d9b3fdcaff45ff","Image":"373d2e434116","Names":["/hopeful_fermi"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [nginx]''","Created":1418836383,"Id":"9cd2dce4a45929fac5ab8c4203f11774dad96b08c9862c46968e64a1cee6b8c9","Image":"a06d3c18683c","Names":["/desperate_hopper"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418830498,"Id":"ca81caa6a02bd7638d766eb66bdc7b02e049f5c6dd5e9b1a7168ba509fe8778f","Image":"d7ae3e1a053e","Names":["/distracted_mayer"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418830498,"Id":"3109a52f97dcb75d83f93b16090415709936870403cb60bbcd26e68d5e900ca6","Image":"1ee1d49715cd","Names":["/romantic_thompson"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418830497,"Id":"ce5bd17b67ef8078e2e83d306e513dd06ef8cba5aac6c680c677d8034a936a66","Image":"56ffa59b6a27","Names":["/evil_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418830496,"Id":"119db25e8e86a2c82873f7f5b9366641ce94d57267e418dd28e11e02da871d4c","Image":"8fcf72a48bf1","Names":["/thirsty_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418830495,"Id":"dae7372ca07e492b303b64d212cb24e1699e05dc6a1619e6c4f8bf8eaba5b46e","Image":"e2bece088dbe","Names":["/sick_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418830495,"Id":"9c060d9688ab8d58fdb01fa2264c500d4b9f72f2c7f2a21c2e3da19a8711a12c","Image":"ffcf66d482f7","Names":["/focused_pare"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418830494,"Id":"3a737e9ea26bec62dae848211b19740094904ee4c472e3b7f444b23550119809","Image":"890f278fbcf4","Names":["/jolly_curie9"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418830493,"Id":"c19affda9102e9df90ae2c01804232d7587e349ac2b6383450250af5cf67d385","Image":"0b49f047a14a","Names":["/serene_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418830486,"Id":"ba6f792892f0e77f1bb719e71106b9741ddc9370299916f95ec094e2bc3383dc","Image":"33ff37473b92","Names":["/reverent_goldstine4"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418830476,"Id":"aeea37fc76652244b505f99cd65b2fe08e04a8b747dd020925cf80b38ee0bd2f","Image":"89473c84cce2","Names":["/stoic_fermat"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.4.1.zip   -i
+        elasticsearch-zookeeper-1.4.1''","Created":1418830473,"Id":"0640a70f35153424cfbddff22ea9340e3671b66f13b235943af61e1b64597f1d","Image":"e4c89f991f3b","Names":["/thirsty_goldstine"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830439,"Id":"32b5925cde97f16089b65d1084782be75cf0975f89570bc377fe428db6714de0","Image":"c9f177369f6e","Names":["/desperate_hypatia"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830430,"Id":"26837f805ca53fde30e6258d5878b891a85c774dc544f9efed90ffe9113e26ad","Image":"bb8585467a2c","Names":["/agitated_galileo"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.1 openjdk-7-jdk''","Created":1418830303,"Id":"3ac9504e8c47b0df29712b95e0a40cc8b3dd6fb72a975cfcfe793c2e4d1b0b6c","Image":"ffde0ba16f2a","Names":["/compassionate_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.2 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830227,"Id":"838e92d5c29ff9b26a66f5e4c4f6eaa99935978845d7b0db567d2671d4d8808e","Image":"a3cc94af5c7c","Names":["/lonely_hoover"],"Ports":[],"Status":"Exited
+        (1) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830224,"Id":"7a3d0fd860d31429821ce4e0c56bcc9024b0aacc1fd5b97b89368a15d34f4227","Image":"a224e6164061","Names":["/agitated_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.2 openjdk-7-jdk''","Created":1418830078,"Id":"1c1cef325fc73e09d284d1ae671de8e9f04201dc26990f85bc59abb48f549876","Image":"ffde0ba16f2a","Names":["/silly_poincare"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829981,"Id":"3ce5af47276cf4596db2bebe24b19b8bb2f9d73a6fdc0b44ddea70de3512b87e","Image":"ffde0ba16f2a","Names":["/sick_euclid"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829926,"Id":"015c3ab3324304a59af519bfdb16223cbbb0d7508f3967fba493a468d7d04009","Image":"ffde0ba16f2a","Names":["/hopeful_hoover"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.4/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418829919,"Id":"e9c1c59caf9857f8362be320100bc5b90b91077b5d80e96e3197aaadbaaa2835","Image":"f57e6f9f2f39","Names":["/compassionate_meitner"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418315758,"Id":"1cbc9e76b4421b2781af83dbcf86e27b73a1942f55bbc7a74c9b59537e697f5f","Image":"a3539414a983","Names":["/nostalgic_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418315758,"Id":"4b0d73563058b9a04635cc33109c798a6b7c2d414a57b59bd7a574e0d6874ca6","Image":"6f31f0069366","Names":["/dreamy_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418315757,"Id":"0259f5f2a3ace228a01d57e128bd04b469aa080dc5ce81f122a45db7ba2efb72","Image":"06552ebb61d1","Names":["/kickass_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418315756,"Id":"7d52f4c581049947ca15ba7d85201399c671f0b92a9c713c7fea415d1c8c3d51","Image":"4d2843c1d3a9","Names":["/mad_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418315756,"Id":"b5b8d101bdf3c4663be2d5b079525419df3b0deee4403cce989e665c8dfb9bea","Image":"0df5f1727b20","Names":["/happy_leakey"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418315755,"Id":"6a21c2631dd1d732c20d1bf167f8bdf402bb674b018640fc6c73672c97d78649","Image":"fe3ef0680c36","Names":["/romantic_hoover"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418315755,"Id":"8eab259bf3dbb7da56ac2ef9d230b0aa9a176a526274bda0b69fab11fb6a0b98","Image":"ed4140f9425c","Names":["/pensive_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315734,"Id":"e1bed2e9135d037399991fae90beb2b66e2a0398e56a3e0a8ac7329483369877","Image":"807658cc1e1a","Names":["/hungry_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315062,"Id":"276aa4ad91021112230576e4113b3ac26a55a27f19681c765e5efdc035fbdaf6","Image":"807658cc1e1a","Names":["/kickass_kirch"],"Ports":[],"Status":"Exited
+        (0) 12 days ago"}
+
+        ,{"Command":"bash -c /bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1418306755,"Id":"eb61b80dfde5e527edf89b74f1526178f9ad10bc10015540bd75613050b9ebdc","Image":"4cb93c932763","Names":["/focused_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1418306755,"Id":"4e0d61440d6b1856fe11e5898854bea735407f727ae332be51fd2844fdc28653","Image":"af460f262994","Names":["/trusting_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1418306754,"Id":"a6eb834a9231768ef0eb4d746a09341c35d481e5cd95a524ba53fc16fe7ba5c8","Image":"f75670cce7c4","Names":["/high_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1418306742,"Id":"19db3a43753210cf4b4a12a5b37d3ded33d3a693e44d2ac825a8515016ce8f21","Image":"a5d0b702b4e0","Names":["/mad_newton"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install git+https://github.yandex-team.ru/mdevaev/powny-yans''","Created":1418306729,"Id":"f04fbbc1174e5464b11d75e010780e4bc71f7bae83c32610e911e687adfa32a9","Image":"b7a8a4e0828a","Names":["/dreamy_babbage"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1418306721,"Id":"a7bf49cf6b0c0e7a5a0a698d291e990d4995d5b36bf49ea742773835d49b9d7e","Image":"fea40607cd87","Names":["/sleepy_feynman"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.5.0''","Created":1418306651,"Id":"7df95488e9f4bac154378981e14223ce1ea051d31ed42011aafc0731122fb6bc","Image":"4f0cb3390a1e","Names":["/goofy_mclean"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/logstash/sincedb]''","Created":1418306645,"Id":"d35ad6503df18fbf49cc2c6d22ee9701583e0ef5e6c993793394063bb2454bc3","Image":"ecab0aeb6267","Names":["/sad_almeida"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/logstash]''","Created":1418306644,"Id":"5f5cc3495e4d473a8aef349747f20650be7a87dd26cf6842c5aa8637299106e4","Image":"6e1021f3988d","Names":["/jolly_blackwell"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/etc/logstash/conf.d]''","Created":1418306643,"Id":"799e244e1710ff26886d3930f978cabb69612f8e71362540eb068d00865ba135","Image":"38c6cf7a7eb6","Names":["/silly_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash-contrib_1.4.2-1-efd53ef_all.deb
+        \u0026\u0026 dpkg -i logstash-contrib_1.4.2-1-efd53ef_all.deb \u0026\u0026
+        rm logstash-contrib_1.4.2-1-efd53ef_all.deb''","Created":1418306551,"Id":"c7bec5808a02efe36b4320bf9564aae0f04648d3195372672fb46b3cdd08935d","Image":"afb388db2bbc","Names":["/thirsty_lalande"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb
+        \u0026\u0026 dpkg -i logstash_1.4.2-1-2c0f5a1_all.deb \u0026\u0026 rm logstash_1.4.2-1-2c0f5a1_all.deb''","Created":1418306257,"Id":"cc046478e4083f2c6e13bc16e081a62a322c1bf0213e687b9465bca22b773e2b","Image":"24c539ed8513","Names":["/suspicious_franklin"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update \u0026\u0026 apt-get install -y default-jre-headless
+        wget \u0026\u0026 apt-get clean''","Created":1418306223,"Id":"322f55ba9735a22fa0413ecf9b8ae0efe77699242844e9440c2a8629e7223503","Image":"2b18e071c60d","Names":["/jolly_rosalind"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418306220,"Id":"5a0337e3b9d043e458ecbf3b983dfc49ad26011b3d5a21fb4a46287794c92ef5","Image":"50d9b8070535","Names":["/prickly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418306220,"Id":"5194c43ca0cc2e97d8ffefb6695ef3fd2f3533082bea83651cc9a103733206bd","Image":"4f61726c85e8","Names":["/grave_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418306219,"Id":"02ba2342b95f7b1a4ad5b5604f954c941471d899fd58ac7ec63ac5d214a7d747","Image":"f4d86ad686fe","Names":["/silly_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418306219,"Id":"2c4e165fa62011914c0cfc1fc0cf626a740cacdfc8837d88bb4faa2f56966ee7","Image":"9bec7d0ea2f9","Names":["/loving_lalande"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418306218,"Id":"10fc9f2b3200364019420ce72331f7e634646ae82f26bc9d1e5e7d744ed03e6b","Image":"6e543492c114","Names":["/stupefied_bardeen"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418306217,"Id":"2b550c156531985a0bc81a82af758c28e940efc71ade8aaa2da6f00ed2baeadd","Image":"6c64afc4fa10","Names":["/naughty_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418306217,"Id":"21f1dc0d2b32190941753be0d404664f76ccc05efc0f9f107aa3ebb33ab9c445","Image":"69404ce34f23","Names":["/jolly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418306205,"Id":"df26524786d141c76db3e9a368f80a17afccdf9b872c3cf785053946af8415be","Image":"807658cc1e1a","Names":["/sick_leakey"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306197,"Id":"67ec038b53a6897390057254d8bc5a2576b8e1af1bcdcc317a240bec0e1541d8","Image":"nikicat/trusty:latest","Names":["/backstabbing_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306187,"Id":"06d5da7ed9d686fb1f1395fafaccf1e5a06641ece4bfa7cb22345935f0f00503","Image":"nikicat/trusty:latest","Names":["/romantic_torvalds"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306138,"Id":"bc6e27e8b5f8460b1fcda6148275ca8813d01a00441fb6d8df55c4f45b46dbc8","Image":"nikicat/trusty:latest","Names":["/grave_euclid"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ]'}
     headers:
-      Content-Length: ['2']
       Content-Type: [application/json]
-      Date: ['Thu, 13 Nov 2014 23:32:59 GMT']
+      Date: ['Wed, 24 Dec 2014 17:05:04 GMT']
+      Transfer-Encoding: [chunked]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -37,15 +533,263 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.4.3 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
+      User-Agent: [python-requests/2.5.0 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
     method: GET
-    uri: http://localhost:4243/v1.15/containers/json?all=1&size=0&limit=-1&trunc_cmd=1
+    uri: http://localhost:4243/v1.16/containers/json?limit=-1&trunc_cmd=1&all=1&size=0
   response:
-    body: {string: '[]'}
+    body: {string: '[{"Command":"/bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1419369902,"Id":"3da30feb9072a94c01479c5cbb08fbd76168541d510758a9b4aac426259992d8","Image":"bfc11ee9f54c","Names":["/naughty_feynman"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1419369900,"Id":"f343844f02381e824b3d2b2883881f841f4440b8e2bb7e85a9307752fc0273e5","Image":"1b4dd95d9136","Names":["/tender_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1419369899,"Id":"afc07c7e9043a4363f74f64d6d03104d7d0ae5f56be6ef9afdb91b119508ff17","Image":"a722c2957017","Names":["/furious_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1419369890,"Id":"f58adb2ae1670f64af019da658d138e9f6ad3f2bbd606fce4acbbfcadb9b9e3d","Image":"df7c34044a7b","Names":["/clever_colden"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install -i https://pypi.yandex-team.ru/simple/
+        powny-yans==1.5.0''","Created":1419369865,"Id":"45421a0d7fdd8f8590732b33008f1ac4d2d7ca27073956bca3b67b2430bee32f","Image":"de1968089031","Names":["/jolly_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1419369850,"Id":"05ce6732c2e809912c783be16cba1007b01952feda8118cb56312f8902565cd1","Image":"726dab6b80b5","Names":["/hungry_pare"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.6.0''","Created":1419369723,"Id":"96da6cbb4f7d4f9d36286aaa8750404157e078852e6a80fa3ebbf24b6fcb384f","Image":"6f9fb91260ea","Names":["/naughty_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"bash -","Created":1418910512,"Id":"1b555778ba81e153b3403c5e9cd376bd6705d43a9159d2493454d8715bbdaeed","Image":"registry.ape.yandex.net/nikicat/elasticdump:5JmgUqm3ly-TY65nplEBKyzEJ0c.","Names":["/elasticlog-prod.dump"],"Ports":[],"Status":"Exited
+        (130) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD etc/nginx/sites-enabled/kibana.site in
+        /etc/nginx/sites-enabled/kibana.site''","Created":1418849155,"Id":"f244b09cce36001212066dabb35b90f0c90150eb44b29e6ebfda736b3d37102b","Image":"1cdfc64b9829","Names":["/focused_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[81/tcp:{}]''","Created":1418849155,"Id":"b7e6b7a0f7be4153eb3b126f2a3a9db5d86e3b7de6db0df5f5dd74eae9a795d6","Image":"29bb13942089","Names":["/reverent_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/www/kibana/config]''","Created":1418849154,"Id":"8a4705a11ec958189a034ebefd3a02bb4f0d4ea0ab80919f65d69c525ccf0781","Image":"44423f1d1b6e","Names":["/hopeful_engelbart8"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''ln -fs config/config.js /var/www/kibana/config.js''","Created":1418849153,"Id":"5f3f0a0a2d33570f4f8ab51a094b547e1b08d8ac7f7092bf6ce588fb0e9b90d4","Image":"ce5294675be2","Names":["/dreamy_bardeen"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mv kibana-* /var/www/kibana''","Created":1418849152,"Id":"007a15563a7b7ac9d707ab0047d7a3c9956e1329ee37ad4edb09693c6c87fb80","Image":"9e998ff24292","Names":["/prickly_davinci"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mkdir /var/www''","Created":1418849151,"Id":"5d9ffc92bcf6ce979efc4e2076b8b6b4fd68630d9b07681abcc8951be6d37f37","Image":"2800dadbfc77","Names":["/evil_thompson"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''curl -s https://download.elasticsearch.org/kibana/kibana/kibana-3.1.1.tar.gz
+        | tar -zxf -''","Created":1418849146,"Id":"f188aa44b357773b816293fa301fb3291ec17bf9f344a3a7061a4d42c1891107","Image":"registry.ape.yandex.net/nikicat/nginx:pbfp0xrH4SrcTnxoRH-khiIsUPI.","Names":["/sleepy_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418849136,"Id":"4aaaf192433d904076cb1dadbb14d7be18da5610be443ae8a0aa67243eccbc9d","Image":"cbf063dd6d05","Names":["/kickass_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418849135,"Id":"dea711e556847c1125a0a75b35f8d2e865e59d63424cc8f7c7ee4a229a8bd37e","Image":"3c79a17d2022","Names":["/angry_goodall"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418849134,"Id":"efe9969ccf754d9cbd75b1236da85079fe3c40f854501a52149f938b2511190e","Image":"7d5214eac473","Names":["/desperate_bartik"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418849134,"Id":"03498180683e425bf2793c9422a649d1e53bc66d12563d0636e360b22be2fb5f","Image":"a55c47374d36","Names":["/trusting_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418849133,"Id":"6b6350561c4ab71013df4d8b16360e69421a6b8b50d0d4d6984f5d21f23632a4","Image":"340f801c92e9","Names":["/jovial_galileo"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418849132,"Id":"bfc98b2171c389c4fa4cdb9d141855e0ab6a7f00d3a6e3bbb10310c39d399888","Image":"e2921f98b84f","Names":["/romantic_einstein0"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418849131,"Id":"22ad5d01e5f659ade6da3940d98293a3b077a915d8741e62519a7e3d6648e72c","Image":"ec2b097cab0a","Names":["/agitated_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418849131,"Id":"860459ba3466b1be23b46efcd2f6746f23844005f6ca678f93611c910eec046b","Image":"29a1e73553ef","Names":["/distracted_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418849126,"Id":"43cf2dba1ae63c100d6195e88529cd440b9067b29f8714ee1f64f23366cea937","Image":"a894180d55a9","Names":["/jovial_nobel"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418849123,"Id":"bf8acb7bb8b9d70be4f27528fea3622ac2b42b89586fc9fd830e5ce80ed1c64b","Image":"3b4dae8fe3ab","Names":["/tender_pike"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.3.1.zip   -i
+        elasticsearch-zookeeper-1.3.1''","Created":1418849122,"Id":"6010350348f7c942031a0327be4481ca7246ac9f63468a54d04083d0e59c94d6","Image":"c484bb752a91","Names":["/thirsty_feynman"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.3.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418849091,"Id":"a344a154745ed743121f301d53f039544571bfac550c0d94919ee6628d054199","Image":"9668733a5c5d","Names":["/high_einstein"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418849088,"Id":"64ea70501d43659638cb9d96025c51826839f1de68d231d4e60d23cb2458828c","Image":"1f67583bad29","Names":["/furious_hodgkin"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.3.1 openjdk-7-jdk''","Created":1418848975,"Id":"a0592e1aa5ef82546e33b650dfbff372624586d8bcaa0be1a714d08482ecf672","Image":"392d38e428e8","Names":["/kickass_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.3/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418848968,"Id":"9149174589fce4cb82d7c5f240298847f335c5062651d1d757aeda206cf2b2f0","Image":"f57e6f9f2f39","Names":["/ecstatic_mayer"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:e2521f05b3eb4c009b01eb7035ed95c0f9ba019736748f347055234c9fba22ea
+        in /etc/nginx/nginx.conf''","Created":1418836383,"Id":"e52890669c9ea2c2c139edd9fc9949ac21af6bb7e12f101891d9b3fdcaff45ff","Image":"373d2e434116","Names":["/hopeful_fermi"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [nginx]''","Created":1418836383,"Id":"9cd2dce4a45929fac5ab8c4203f11774dad96b08c9862c46968e64a1cee6b8c9","Image":"a06d3c18683c","Names":["/desperate_hopper"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418830498,"Id":"ca81caa6a02bd7638d766eb66bdc7b02e049f5c6dd5e9b1a7168ba509fe8778f","Image":"d7ae3e1a053e","Names":["/distracted_mayer"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418830498,"Id":"3109a52f97dcb75d83f93b16090415709936870403cb60bbcd26e68d5e900ca6","Image":"1ee1d49715cd","Names":["/romantic_thompson"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418830497,"Id":"ce5bd17b67ef8078e2e83d306e513dd06ef8cba5aac6c680c677d8034a936a66","Image":"56ffa59b6a27","Names":["/evil_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418830496,"Id":"119db25e8e86a2c82873f7f5b9366641ce94d57267e418dd28e11e02da871d4c","Image":"8fcf72a48bf1","Names":["/thirsty_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418830495,"Id":"dae7372ca07e492b303b64d212cb24e1699e05dc6a1619e6c4f8bf8eaba5b46e","Image":"e2bece088dbe","Names":["/sick_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418830495,"Id":"9c060d9688ab8d58fdb01fa2264c500d4b9f72f2c7f2a21c2e3da19a8711a12c","Image":"ffcf66d482f7","Names":["/focused_pare"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418830494,"Id":"3a737e9ea26bec62dae848211b19740094904ee4c472e3b7f444b23550119809","Image":"890f278fbcf4","Names":["/jolly_curie9"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418830493,"Id":"c19affda9102e9df90ae2c01804232d7587e349ac2b6383450250af5cf67d385","Image":"0b49f047a14a","Names":["/serene_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418830486,"Id":"ba6f792892f0e77f1bb719e71106b9741ddc9370299916f95ec094e2bc3383dc","Image":"33ff37473b92","Names":["/reverent_goldstine4"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418830476,"Id":"aeea37fc76652244b505f99cd65b2fe08e04a8b747dd020925cf80b38ee0bd2f","Image":"89473c84cce2","Names":["/stoic_fermat"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.4.1.zip   -i
+        elasticsearch-zookeeper-1.4.1''","Created":1418830473,"Id":"0640a70f35153424cfbddff22ea9340e3671b66f13b235943af61e1b64597f1d","Image":"e4c89f991f3b","Names":["/thirsty_goldstine"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830439,"Id":"32b5925cde97f16089b65d1084782be75cf0975f89570bc377fe428db6714de0","Image":"c9f177369f6e","Names":["/desperate_hypatia"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830430,"Id":"26837f805ca53fde30e6258d5878b891a85c774dc544f9efed90ffe9113e26ad","Image":"bb8585467a2c","Names":["/agitated_galileo"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.1 openjdk-7-jdk''","Created":1418830303,"Id":"3ac9504e8c47b0df29712b95e0a40cc8b3dd6fb72a975cfcfe793c2e4d1b0b6c","Image":"ffde0ba16f2a","Names":["/compassionate_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.2 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830227,"Id":"838e92d5c29ff9b26a66f5e4c4f6eaa99935978845d7b0db567d2671d4d8808e","Image":"a3cc94af5c7c","Names":["/lonely_hoover"],"Ports":[],"Status":"Exited
+        (1) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830224,"Id":"7a3d0fd860d31429821ce4e0c56bcc9024b0aacc1fd5b97b89368a15d34f4227","Image":"a224e6164061","Names":["/agitated_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.2 openjdk-7-jdk''","Created":1418830078,"Id":"1c1cef325fc73e09d284d1ae671de8e9f04201dc26990f85bc59abb48f549876","Image":"ffde0ba16f2a","Names":["/silly_poincare"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829981,"Id":"3ce5af47276cf4596db2bebe24b19b8bb2f9d73a6fdc0b44ddea70de3512b87e","Image":"ffde0ba16f2a","Names":["/sick_euclid"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829926,"Id":"015c3ab3324304a59af519bfdb16223cbbb0d7508f3967fba493a468d7d04009","Image":"ffde0ba16f2a","Names":["/hopeful_hoover"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.4/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418829919,"Id":"e9c1c59caf9857f8362be320100bc5b90b91077b5d80e96e3197aaadbaaa2835","Image":"f57e6f9f2f39","Names":["/compassionate_meitner"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418315758,"Id":"1cbc9e76b4421b2781af83dbcf86e27b73a1942f55bbc7a74c9b59537e697f5f","Image":"a3539414a983","Names":["/nostalgic_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418315758,"Id":"4b0d73563058b9a04635cc33109c798a6b7c2d414a57b59bd7a574e0d6874ca6","Image":"6f31f0069366","Names":["/dreamy_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418315757,"Id":"0259f5f2a3ace228a01d57e128bd04b469aa080dc5ce81f122a45db7ba2efb72","Image":"06552ebb61d1","Names":["/kickass_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418315756,"Id":"7d52f4c581049947ca15ba7d85201399c671f0b92a9c713c7fea415d1c8c3d51","Image":"4d2843c1d3a9","Names":["/mad_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418315756,"Id":"b5b8d101bdf3c4663be2d5b079525419df3b0deee4403cce989e665c8dfb9bea","Image":"0df5f1727b20","Names":["/happy_leakey"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418315755,"Id":"6a21c2631dd1d732c20d1bf167f8bdf402bb674b018640fc6c73672c97d78649","Image":"fe3ef0680c36","Names":["/romantic_hoover"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418315755,"Id":"8eab259bf3dbb7da56ac2ef9d230b0aa9a176a526274bda0b69fab11fb6a0b98","Image":"ed4140f9425c","Names":["/pensive_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315734,"Id":"e1bed2e9135d037399991fae90beb2b66e2a0398e56a3e0a8ac7329483369877","Image":"807658cc1e1a","Names":["/hungry_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315062,"Id":"276aa4ad91021112230576e4113b3ac26a55a27f19681c765e5efdc035fbdaf6","Image":"807658cc1e1a","Names":["/kickass_kirch"],"Ports":[],"Status":"Exited
+        (0) 12 days ago"}
+
+        ,{"Command":"bash -c /bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1418306755,"Id":"eb61b80dfde5e527edf89b74f1526178f9ad10bc10015540bd75613050b9ebdc","Image":"4cb93c932763","Names":["/focused_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1418306755,"Id":"4e0d61440d6b1856fe11e5898854bea735407f727ae332be51fd2844fdc28653","Image":"af460f262994","Names":["/trusting_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1418306754,"Id":"a6eb834a9231768ef0eb4d746a09341c35d481e5cd95a524ba53fc16fe7ba5c8","Image":"f75670cce7c4","Names":["/high_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1418306742,"Id":"19db3a43753210cf4b4a12a5b37d3ded33d3a693e44d2ac825a8515016ce8f21","Image":"a5d0b702b4e0","Names":["/mad_newton"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install git+https://github.yandex-team.ru/mdevaev/powny-yans''","Created":1418306729,"Id":"f04fbbc1174e5464b11d75e010780e4bc71f7bae83c32610e911e687adfa32a9","Image":"b7a8a4e0828a","Names":["/dreamy_babbage"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1418306721,"Id":"a7bf49cf6b0c0e7a5a0a698d291e990d4995d5b36bf49ea742773835d49b9d7e","Image":"fea40607cd87","Names":["/sleepy_feynman"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.5.0''","Created":1418306651,"Id":"7df95488e9f4bac154378981e14223ce1ea051d31ed42011aafc0731122fb6bc","Image":"4f0cb3390a1e","Names":["/goofy_mclean"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/logstash/sincedb]''","Created":1418306645,"Id":"d35ad6503df18fbf49cc2c6d22ee9701583e0ef5e6c993793394063bb2454bc3","Image":"ecab0aeb6267","Names":["/sad_almeida"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/logstash]''","Created":1418306644,"Id":"5f5cc3495e4d473a8aef349747f20650be7a87dd26cf6842c5aa8637299106e4","Image":"6e1021f3988d","Names":["/jolly_blackwell"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/etc/logstash/conf.d]''","Created":1418306643,"Id":"799e244e1710ff26886d3930f978cabb69612f8e71362540eb068d00865ba135","Image":"38c6cf7a7eb6","Names":["/silly_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash-contrib_1.4.2-1-efd53ef_all.deb
+        \u0026\u0026 dpkg -i logstash-contrib_1.4.2-1-efd53ef_all.deb \u0026\u0026
+        rm logstash-contrib_1.4.2-1-efd53ef_all.deb''","Created":1418306551,"Id":"c7bec5808a02efe36b4320bf9564aae0f04648d3195372672fb46b3cdd08935d","Image":"afb388db2bbc","Names":["/thirsty_lalande"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb
+        \u0026\u0026 dpkg -i logstash_1.4.2-1-2c0f5a1_all.deb \u0026\u0026 rm logstash_1.4.2-1-2c0f5a1_all.deb''","Created":1418306257,"Id":"cc046478e4083f2c6e13bc16e081a62a322c1bf0213e687b9465bca22b773e2b","Image":"24c539ed8513","Names":["/suspicious_franklin"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update \u0026\u0026 apt-get install -y default-jre-headless
+        wget \u0026\u0026 apt-get clean''","Created":1418306223,"Id":"322f55ba9735a22fa0413ecf9b8ae0efe77699242844e9440c2a8629e7223503","Image":"2b18e071c60d","Names":["/jolly_rosalind"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418306220,"Id":"5a0337e3b9d043e458ecbf3b983dfc49ad26011b3d5a21fb4a46287794c92ef5","Image":"50d9b8070535","Names":["/prickly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418306220,"Id":"5194c43ca0cc2e97d8ffefb6695ef3fd2f3533082bea83651cc9a103733206bd","Image":"4f61726c85e8","Names":["/grave_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418306219,"Id":"02ba2342b95f7b1a4ad5b5604f954c941471d899fd58ac7ec63ac5d214a7d747","Image":"f4d86ad686fe","Names":["/silly_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418306219,"Id":"2c4e165fa62011914c0cfc1fc0cf626a740cacdfc8837d88bb4faa2f56966ee7","Image":"9bec7d0ea2f9","Names":["/loving_lalande"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418306218,"Id":"10fc9f2b3200364019420ce72331f7e634646ae82f26bc9d1e5e7d744ed03e6b","Image":"6e543492c114","Names":["/stupefied_bardeen"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418306217,"Id":"2b550c156531985a0bc81a82af758c28e940efc71ade8aaa2da6f00ed2baeadd","Image":"6c64afc4fa10","Names":["/naughty_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418306217,"Id":"21f1dc0d2b32190941753be0d404664f76ccc05efc0f9f107aa3ebb33ab9c445","Image":"69404ce34f23","Names":["/jolly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418306205,"Id":"df26524786d141c76db3e9a368f80a17afccdf9b872c3cf785053946af8415be","Image":"807658cc1e1a","Names":["/sick_leakey"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306197,"Id":"67ec038b53a6897390057254d8bc5a2576b8e1af1bcdcc317a240bec0e1541d8","Image":"nikicat/trusty:latest","Names":["/backstabbing_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306187,"Id":"06d5da7ed9d686fb1f1395fafaccf1e5a06641ece4bfa7cb22345935f0f00503","Image":"nikicat/trusty:latest","Names":["/romantic_torvalds"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306138,"Id":"bc6e27e8b5f8460b1fcda6148275ca8813d01a00441fb6d8df55c4f45b46dbc8","Image":"nikicat/trusty:latest","Names":["/grave_euclid"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ]'}
     headers:
-      Content-Length: ['2']
       Content-Type: [application/json]
-      Date: ['Thu, 13 Nov 2014 23:32:59 GMT']
+      Date: ['Wed, 24 Dec 2014 17:05:05 GMT']
+      Transfer-Encoding: [chunked]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -53,15 +797,263 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.4.3 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
+      User-Agent: [python-requests/2.5.0 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
     method: GET
-    uri: http://localhost:4243/v1.15/containers/json?all=1&size=0&limit=-1&trunc_cmd=1
+    uri: http://localhost:4243/v1.16/containers/json?limit=-1&trunc_cmd=1&all=1&size=0
   response:
-    body: {string: '[]'}
+    body: {string: '[{"Command":"/bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1419369902,"Id":"3da30feb9072a94c01479c5cbb08fbd76168541d510758a9b4aac426259992d8","Image":"bfc11ee9f54c","Names":["/naughty_feynman"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1419369900,"Id":"f343844f02381e824b3d2b2883881f841f4440b8e2bb7e85a9307752fc0273e5","Image":"1b4dd95d9136","Names":["/tender_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1419369899,"Id":"afc07c7e9043a4363f74f64d6d03104d7d0ae5f56be6ef9afdb91b119508ff17","Image":"a722c2957017","Names":["/furious_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1419369890,"Id":"f58adb2ae1670f64af019da658d138e9f6ad3f2bbd606fce4acbbfcadb9b9e3d","Image":"df7c34044a7b","Names":["/clever_colden"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install -i https://pypi.yandex-team.ru/simple/
+        powny-yans==1.5.0''","Created":1419369865,"Id":"45421a0d7fdd8f8590732b33008f1ac4d2d7ca27073956bca3b67b2430bee32f","Image":"de1968089031","Names":["/jolly_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1419369850,"Id":"05ce6732c2e809912c783be16cba1007b01952feda8118cb56312f8902565cd1","Image":"726dab6b80b5","Names":["/hungry_pare"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.6.0''","Created":1419369723,"Id":"96da6cbb4f7d4f9d36286aaa8750404157e078852e6a80fa3ebbf24b6fcb384f","Image":"6f9fb91260ea","Names":["/naughty_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"bash -","Created":1418910512,"Id":"1b555778ba81e153b3403c5e9cd376bd6705d43a9159d2493454d8715bbdaeed","Image":"registry.ape.yandex.net/nikicat/elasticdump:5JmgUqm3ly-TY65nplEBKyzEJ0c.","Names":["/elasticlog-prod.dump"],"Ports":[],"Status":"Exited
+        (130) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD etc/nginx/sites-enabled/kibana.site in
+        /etc/nginx/sites-enabled/kibana.site''","Created":1418849155,"Id":"f244b09cce36001212066dabb35b90f0c90150eb44b29e6ebfda736b3d37102b","Image":"1cdfc64b9829","Names":["/focused_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[81/tcp:{}]''","Created":1418849155,"Id":"b7e6b7a0f7be4153eb3b126f2a3a9db5d86e3b7de6db0df5f5dd74eae9a795d6","Image":"29bb13942089","Names":["/reverent_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/www/kibana/config]''","Created":1418849154,"Id":"8a4705a11ec958189a034ebefd3a02bb4f0d4ea0ab80919f65d69c525ccf0781","Image":"44423f1d1b6e","Names":["/hopeful_engelbart8"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''ln -fs config/config.js /var/www/kibana/config.js''","Created":1418849153,"Id":"5f3f0a0a2d33570f4f8ab51a094b547e1b08d8ac7f7092bf6ce588fb0e9b90d4","Image":"ce5294675be2","Names":["/dreamy_bardeen"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mv kibana-* /var/www/kibana''","Created":1418849152,"Id":"007a15563a7b7ac9d707ab0047d7a3c9956e1329ee37ad4edb09693c6c87fb80","Image":"9e998ff24292","Names":["/prickly_davinci"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mkdir /var/www''","Created":1418849151,"Id":"5d9ffc92bcf6ce979efc4e2076b8b6b4fd68630d9b07681abcc8951be6d37f37","Image":"2800dadbfc77","Names":["/evil_thompson"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''curl -s https://download.elasticsearch.org/kibana/kibana/kibana-3.1.1.tar.gz
+        | tar -zxf -''","Created":1418849146,"Id":"f188aa44b357773b816293fa301fb3291ec17bf9f344a3a7061a4d42c1891107","Image":"registry.ape.yandex.net/nikicat/nginx:pbfp0xrH4SrcTnxoRH-khiIsUPI.","Names":["/sleepy_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418849136,"Id":"4aaaf192433d904076cb1dadbb14d7be18da5610be443ae8a0aa67243eccbc9d","Image":"cbf063dd6d05","Names":["/kickass_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418849135,"Id":"dea711e556847c1125a0a75b35f8d2e865e59d63424cc8f7c7ee4a229a8bd37e","Image":"3c79a17d2022","Names":["/angry_goodall"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418849134,"Id":"efe9969ccf754d9cbd75b1236da85079fe3c40f854501a52149f938b2511190e","Image":"7d5214eac473","Names":["/desperate_bartik"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418849134,"Id":"03498180683e425bf2793c9422a649d1e53bc66d12563d0636e360b22be2fb5f","Image":"a55c47374d36","Names":["/trusting_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418849133,"Id":"6b6350561c4ab71013df4d8b16360e69421a6b8b50d0d4d6984f5d21f23632a4","Image":"340f801c92e9","Names":["/jovial_galileo"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418849132,"Id":"bfc98b2171c389c4fa4cdb9d141855e0ab6a7f00d3a6e3bbb10310c39d399888","Image":"e2921f98b84f","Names":["/romantic_einstein0"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418849131,"Id":"22ad5d01e5f659ade6da3940d98293a3b077a915d8741e62519a7e3d6648e72c","Image":"ec2b097cab0a","Names":["/agitated_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418849131,"Id":"860459ba3466b1be23b46efcd2f6746f23844005f6ca678f93611c910eec046b","Image":"29a1e73553ef","Names":["/distracted_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418849126,"Id":"43cf2dba1ae63c100d6195e88529cd440b9067b29f8714ee1f64f23366cea937","Image":"a894180d55a9","Names":["/jovial_nobel"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418849123,"Id":"bf8acb7bb8b9d70be4f27528fea3622ac2b42b89586fc9fd830e5ce80ed1c64b","Image":"3b4dae8fe3ab","Names":["/tender_pike"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.3.1.zip   -i
+        elasticsearch-zookeeper-1.3.1''","Created":1418849122,"Id":"6010350348f7c942031a0327be4481ca7246ac9f63468a54d04083d0e59c94d6","Image":"c484bb752a91","Names":["/thirsty_feynman"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.3.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418849091,"Id":"a344a154745ed743121f301d53f039544571bfac550c0d94919ee6628d054199","Image":"9668733a5c5d","Names":["/high_einstein"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418849088,"Id":"64ea70501d43659638cb9d96025c51826839f1de68d231d4e60d23cb2458828c","Image":"1f67583bad29","Names":["/furious_hodgkin"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.3.1 openjdk-7-jdk''","Created":1418848975,"Id":"a0592e1aa5ef82546e33b650dfbff372624586d8bcaa0be1a714d08482ecf672","Image":"392d38e428e8","Names":["/kickass_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.3/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418848968,"Id":"9149174589fce4cb82d7c5f240298847f335c5062651d1d757aeda206cf2b2f0","Image":"f57e6f9f2f39","Names":["/ecstatic_mayer"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:e2521f05b3eb4c009b01eb7035ed95c0f9ba019736748f347055234c9fba22ea
+        in /etc/nginx/nginx.conf''","Created":1418836383,"Id":"e52890669c9ea2c2c139edd9fc9949ac21af6bb7e12f101891d9b3fdcaff45ff","Image":"373d2e434116","Names":["/hopeful_fermi"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [nginx]''","Created":1418836383,"Id":"9cd2dce4a45929fac5ab8c4203f11774dad96b08c9862c46968e64a1cee6b8c9","Image":"a06d3c18683c","Names":["/desperate_hopper"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418830498,"Id":"ca81caa6a02bd7638d766eb66bdc7b02e049f5c6dd5e9b1a7168ba509fe8778f","Image":"d7ae3e1a053e","Names":["/distracted_mayer"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418830498,"Id":"3109a52f97dcb75d83f93b16090415709936870403cb60bbcd26e68d5e900ca6","Image":"1ee1d49715cd","Names":["/romantic_thompson"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418830497,"Id":"ce5bd17b67ef8078e2e83d306e513dd06ef8cba5aac6c680c677d8034a936a66","Image":"56ffa59b6a27","Names":["/evil_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418830496,"Id":"119db25e8e86a2c82873f7f5b9366641ce94d57267e418dd28e11e02da871d4c","Image":"8fcf72a48bf1","Names":["/thirsty_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418830495,"Id":"dae7372ca07e492b303b64d212cb24e1699e05dc6a1619e6c4f8bf8eaba5b46e","Image":"e2bece088dbe","Names":["/sick_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418830495,"Id":"9c060d9688ab8d58fdb01fa2264c500d4b9f72f2c7f2a21c2e3da19a8711a12c","Image":"ffcf66d482f7","Names":["/focused_pare"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418830494,"Id":"3a737e9ea26bec62dae848211b19740094904ee4c472e3b7f444b23550119809","Image":"890f278fbcf4","Names":["/jolly_curie9"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418830493,"Id":"c19affda9102e9df90ae2c01804232d7587e349ac2b6383450250af5cf67d385","Image":"0b49f047a14a","Names":["/serene_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418830486,"Id":"ba6f792892f0e77f1bb719e71106b9741ddc9370299916f95ec094e2bc3383dc","Image":"33ff37473b92","Names":["/reverent_goldstine4"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418830476,"Id":"aeea37fc76652244b505f99cd65b2fe08e04a8b747dd020925cf80b38ee0bd2f","Image":"89473c84cce2","Names":["/stoic_fermat"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.4.1.zip   -i
+        elasticsearch-zookeeper-1.4.1''","Created":1418830473,"Id":"0640a70f35153424cfbddff22ea9340e3671b66f13b235943af61e1b64597f1d","Image":"e4c89f991f3b","Names":["/thirsty_goldstine"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830439,"Id":"32b5925cde97f16089b65d1084782be75cf0975f89570bc377fe428db6714de0","Image":"c9f177369f6e","Names":["/desperate_hypatia"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830430,"Id":"26837f805ca53fde30e6258d5878b891a85c774dc544f9efed90ffe9113e26ad","Image":"bb8585467a2c","Names":["/agitated_galileo"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.1 openjdk-7-jdk''","Created":1418830303,"Id":"3ac9504e8c47b0df29712b95e0a40cc8b3dd6fb72a975cfcfe793c2e4d1b0b6c","Image":"ffde0ba16f2a","Names":["/compassionate_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.2 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830227,"Id":"838e92d5c29ff9b26a66f5e4c4f6eaa99935978845d7b0db567d2671d4d8808e","Image":"a3cc94af5c7c","Names":["/lonely_hoover"],"Ports":[],"Status":"Exited
+        (1) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830224,"Id":"7a3d0fd860d31429821ce4e0c56bcc9024b0aacc1fd5b97b89368a15d34f4227","Image":"a224e6164061","Names":["/agitated_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.2 openjdk-7-jdk''","Created":1418830078,"Id":"1c1cef325fc73e09d284d1ae671de8e9f04201dc26990f85bc59abb48f549876","Image":"ffde0ba16f2a","Names":["/silly_poincare"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829981,"Id":"3ce5af47276cf4596db2bebe24b19b8bb2f9d73a6fdc0b44ddea70de3512b87e","Image":"ffde0ba16f2a","Names":["/sick_euclid"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829926,"Id":"015c3ab3324304a59af519bfdb16223cbbb0d7508f3967fba493a468d7d04009","Image":"ffde0ba16f2a","Names":["/hopeful_hoover"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.4/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418829919,"Id":"e9c1c59caf9857f8362be320100bc5b90b91077b5d80e96e3197aaadbaaa2835","Image":"f57e6f9f2f39","Names":["/compassionate_meitner"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418315758,"Id":"1cbc9e76b4421b2781af83dbcf86e27b73a1942f55bbc7a74c9b59537e697f5f","Image":"a3539414a983","Names":["/nostalgic_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418315758,"Id":"4b0d73563058b9a04635cc33109c798a6b7c2d414a57b59bd7a574e0d6874ca6","Image":"6f31f0069366","Names":["/dreamy_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418315757,"Id":"0259f5f2a3ace228a01d57e128bd04b469aa080dc5ce81f122a45db7ba2efb72","Image":"06552ebb61d1","Names":["/kickass_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418315756,"Id":"7d52f4c581049947ca15ba7d85201399c671f0b92a9c713c7fea415d1c8c3d51","Image":"4d2843c1d3a9","Names":["/mad_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418315756,"Id":"b5b8d101bdf3c4663be2d5b079525419df3b0deee4403cce989e665c8dfb9bea","Image":"0df5f1727b20","Names":["/happy_leakey"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418315755,"Id":"6a21c2631dd1d732c20d1bf167f8bdf402bb674b018640fc6c73672c97d78649","Image":"fe3ef0680c36","Names":["/romantic_hoover"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418315755,"Id":"8eab259bf3dbb7da56ac2ef9d230b0aa9a176a526274bda0b69fab11fb6a0b98","Image":"ed4140f9425c","Names":["/pensive_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315734,"Id":"e1bed2e9135d037399991fae90beb2b66e2a0398e56a3e0a8ac7329483369877","Image":"807658cc1e1a","Names":["/hungry_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315062,"Id":"276aa4ad91021112230576e4113b3ac26a55a27f19681c765e5efdc035fbdaf6","Image":"807658cc1e1a","Names":["/kickass_kirch"],"Ports":[],"Status":"Exited
+        (0) 12 days ago"}
+
+        ,{"Command":"bash -c /bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1418306755,"Id":"eb61b80dfde5e527edf89b74f1526178f9ad10bc10015540bd75613050b9ebdc","Image":"4cb93c932763","Names":["/focused_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1418306755,"Id":"4e0d61440d6b1856fe11e5898854bea735407f727ae332be51fd2844fdc28653","Image":"af460f262994","Names":["/trusting_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1418306754,"Id":"a6eb834a9231768ef0eb4d746a09341c35d481e5cd95a524ba53fc16fe7ba5c8","Image":"f75670cce7c4","Names":["/high_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1418306742,"Id":"19db3a43753210cf4b4a12a5b37d3ded33d3a693e44d2ac825a8515016ce8f21","Image":"a5d0b702b4e0","Names":["/mad_newton"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install git+https://github.yandex-team.ru/mdevaev/powny-yans''","Created":1418306729,"Id":"f04fbbc1174e5464b11d75e010780e4bc71f7bae83c32610e911e687adfa32a9","Image":"b7a8a4e0828a","Names":["/dreamy_babbage"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1418306721,"Id":"a7bf49cf6b0c0e7a5a0a698d291e990d4995d5b36bf49ea742773835d49b9d7e","Image":"fea40607cd87","Names":["/sleepy_feynman"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.5.0''","Created":1418306651,"Id":"7df95488e9f4bac154378981e14223ce1ea051d31ed42011aafc0731122fb6bc","Image":"4f0cb3390a1e","Names":["/goofy_mclean"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/logstash/sincedb]''","Created":1418306645,"Id":"d35ad6503df18fbf49cc2c6d22ee9701583e0ef5e6c993793394063bb2454bc3","Image":"ecab0aeb6267","Names":["/sad_almeida"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/logstash]''","Created":1418306644,"Id":"5f5cc3495e4d473a8aef349747f20650be7a87dd26cf6842c5aa8637299106e4","Image":"6e1021f3988d","Names":["/jolly_blackwell"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/etc/logstash/conf.d]''","Created":1418306643,"Id":"799e244e1710ff26886d3930f978cabb69612f8e71362540eb068d00865ba135","Image":"38c6cf7a7eb6","Names":["/silly_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash-contrib_1.4.2-1-efd53ef_all.deb
+        \u0026\u0026 dpkg -i logstash-contrib_1.4.2-1-efd53ef_all.deb \u0026\u0026
+        rm logstash-contrib_1.4.2-1-efd53ef_all.deb''","Created":1418306551,"Id":"c7bec5808a02efe36b4320bf9564aae0f04648d3195372672fb46b3cdd08935d","Image":"afb388db2bbc","Names":["/thirsty_lalande"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb
+        \u0026\u0026 dpkg -i logstash_1.4.2-1-2c0f5a1_all.deb \u0026\u0026 rm logstash_1.4.2-1-2c0f5a1_all.deb''","Created":1418306257,"Id":"cc046478e4083f2c6e13bc16e081a62a322c1bf0213e687b9465bca22b773e2b","Image":"24c539ed8513","Names":["/suspicious_franklin"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update \u0026\u0026 apt-get install -y default-jre-headless
+        wget \u0026\u0026 apt-get clean''","Created":1418306223,"Id":"322f55ba9735a22fa0413ecf9b8ae0efe77699242844e9440c2a8629e7223503","Image":"2b18e071c60d","Names":["/jolly_rosalind"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418306220,"Id":"5a0337e3b9d043e458ecbf3b983dfc49ad26011b3d5a21fb4a46287794c92ef5","Image":"50d9b8070535","Names":["/prickly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418306220,"Id":"5194c43ca0cc2e97d8ffefb6695ef3fd2f3533082bea83651cc9a103733206bd","Image":"4f61726c85e8","Names":["/grave_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418306219,"Id":"02ba2342b95f7b1a4ad5b5604f954c941471d899fd58ac7ec63ac5d214a7d747","Image":"f4d86ad686fe","Names":["/silly_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418306219,"Id":"2c4e165fa62011914c0cfc1fc0cf626a740cacdfc8837d88bb4faa2f56966ee7","Image":"9bec7d0ea2f9","Names":["/loving_lalande"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418306218,"Id":"10fc9f2b3200364019420ce72331f7e634646ae82f26bc9d1e5e7d744ed03e6b","Image":"6e543492c114","Names":["/stupefied_bardeen"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418306217,"Id":"2b550c156531985a0bc81a82af758c28e940efc71ade8aaa2da6f00ed2baeadd","Image":"6c64afc4fa10","Names":["/naughty_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418306217,"Id":"21f1dc0d2b32190941753be0d404664f76ccc05efc0f9f107aa3ebb33ab9c445","Image":"69404ce34f23","Names":["/jolly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418306205,"Id":"df26524786d141c76db3e9a368f80a17afccdf9b872c3cf785053946af8415be","Image":"807658cc1e1a","Names":["/sick_leakey"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306197,"Id":"67ec038b53a6897390057254d8bc5a2576b8e1af1bcdcc317a240bec0e1541d8","Image":"nikicat/trusty:latest","Names":["/backstabbing_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306187,"Id":"06d5da7ed9d686fb1f1395fafaccf1e5a06641ece4bfa7cb22345935f0f00503","Image":"nikicat/trusty:latest","Names":["/romantic_torvalds"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306138,"Id":"bc6e27e8b5f8460b1fcda6148275ca8813d01a00441fb6d8df55c4f45b46dbc8","Image":"nikicat/trusty:latest","Names":["/grave_euclid"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ]'}
     headers:
-      Content-Length: ['2']
       Content-Type: [application/json]
-      Date: ['Thu, 13 Nov 2014 23:32:59 GMT']
+      Date: ['Wed, 24 Dec 2014 17:05:05 GMT']
+      Transfer-Encoding: [chunked]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -69,30 +1061,262 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.4.3 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
+      User-Agent: [python-requests/2.5.0 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
     method: GET
-    uri: http://localhost:4243/v1.15/containers/json?all=1&size=0&limit=-1&trunc_cmd=1
+    uri: http://localhost:4243/v1.16/containers/json?limit=-1&trunc_cmd=1&all=1&size=0
   response:
-    body: {string: '[]'}
+    body: {string: '[{"Command":"/bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1419369902,"Id":"3da30feb9072a94c01479c5cbb08fbd76168541d510758a9b4aac426259992d8","Image":"bfc11ee9f54c","Names":["/naughty_feynman"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1419369900,"Id":"f343844f02381e824b3d2b2883881f841f4440b8e2bb7e85a9307752fc0273e5","Image":"1b4dd95d9136","Names":["/tender_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1419369899,"Id":"afc07c7e9043a4363f74f64d6d03104d7d0ae5f56be6ef9afdb91b119508ff17","Image":"a722c2957017","Names":["/furious_rosalind"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1419369890,"Id":"f58adb2ae1670f64af019da658d138e9f6ad3f2bbd606fce4acbbfcadb9b9e3d","Image":"df7c34044a7b","Names":["/clever_colden"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install -i https://pypi.yandex-team.ru/simple/
+        powny-yans==1.5.0''","Created":1419369865,"Id":"45421a0d7fdd8f8590732b33008f1ac4d2d7ca27073956bca3b67b2430bee32f","Image":"de1968089031","Names":["/jolly_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1419369850,"Id":"05ce6732c2e809912c783be16cba1007b01952feda8118cb56312f8902565cd1","Image":"726dab6b80b5","Names":["/hungry_pare"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.6.0''","Created":1419369723,"Id":"96da6cbb4f7d4f9d36286aaa8750404157e078852e6a80fa3ebbf24b6fcb384f","Image":"6f9fb91260ea","Names":["/naughty_ritchie"],"Ports":[],"Status":"Exited
+        (0) 19 hours ago"}
+
+        ,{"Command":"bash -","Created":1418910512,"Id":"1b555778ba81e153b3403c5e9cd376bd6705d43a9159d2493454d8715bbdaeed","Image":"registry.ape.yandex.net/nikicat/elasticdump:5JmgUqm3ly-TY65nplEBKyzEJ0c.","Names":["/elasticlog-prod.dump"],"Ports":[],"Status":"Exited
+        (130) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD etc/nginx/sites-enabled/kibana.site in
+        /etc/nginx/sites-enabled/kibana.site''","Created":1418849155,"Id":"f244b09cce36001212066dabb35b90f0c90150eb44b29e6ebfda736b3d37102b","Image":"1cdfc64b9829","Names":["/focused_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[81/tcp:{}]''","Created":1418849155,"Id":"b7e6b7a0f7be4153eb3b126f2a3a9db5d86e3b7de6db0df5f5dd74eae9a795d6","Image":"29bb13942089","Names":["/reverent_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/www/kibana/config]''","Created":1418849154,"Id":"8a4705a11ec958189a034ebefd3a02bb4f0d4ea0ab80919f65d69c525ccf0781","Image":"44423f1d1b6e","Names":["/hopeful_engelbart8"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''ln -fs config/config.js /var/www/kibana/config.js''","Created":1418849153,"Id":"5f3f0a0a2d33570f4f8ab51a094b547e1b08d8ac7f7092bf6ce588fb0e9b90d4","Image":"ce5294675be2","Names":["/dreamy_bardeen"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mv kibana-* /var/www/kibana''","Created":1418849152,"Id":"007a15563a7b7ac9d707ab0047d7a3c9956e1329ee37ad4edb09693c6c87fb80","Image":"9e998ff24292","Names":["/prickly_davinci"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''mkdir /var/www''","Created":1418849151,"Id":"5d9ffc92bcf6ce979efc4e2076b8b6b4fd68630d9b07681abcc8951be6d37f37","Image":"2800dadbfc77","Names":["/evil_thompson"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''curl -s https://download.elasticsearch.org/kibana/kibana/kibana-3.1.1.tar.gz
+        | tar -zxf -''","Created":1418849146,"Id":"f188aa44b357773b816293fa301fb3291ec17bf9f344a3a7061a4d42c1891107","Image":"registry.ape.yandex.net/nikicat/nginx:pbfp0xrH4SrcTnxoRH-khiIsUPI.","Names":["/sleepy_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418849136,"Id":"4aaaf192433d904076cb1dadbb14d7be18da5610be443ae8a0aa67243eccbc9d","Image":"cbf063dd6d05","Names":["/kickass_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418849135,"Id":"dea711e556847c1125a0a75b35f8d2e865e59d63424cc8f7c7ee4a229a8bd37e","Image":"3c79a17d2022","Names":["/angry_goodall"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418849134,"Id":"efe9969ccf754d9cbd75b1236da85079fe3c40f854501a52149f938b2511190e","Image":"7d5214eac473","Names":["/desperate_bartik"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418849134,"Id":"03498180683e425bf2793c9422a649d1e53bc66d12563d0636e360b22be2fb5f","Image":"a55c47374d36","Names":["/trusting_hypatia"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418849133,"Id":"6b6350561c4ab71013df4d8b16360e69421a6b8b50d0d4d6984f5d21f23632a4","Image":"340f801c92e9","Names":["/jovial_galileo"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418849132,"Id":"bfc98b2171c389c4fa4cdb9d141855e0ab6a7f00d3a6e3bbb10310c39d399888","Image":"e2921f98b84f","Names":["/romantic_einstein0"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418849131,"Id":"22ad5d01e5f659ade6da3940d98293a3b077a915d8741e62519a7e3d6648e72c","Image":"ec2b097cab0a","Names":["/agitated_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418849131,"Id":"860459ba3466b1be23b46efcd2f6746f23844005f6ca678f93611c910eec046b","Image":"29a1e73553ef","Names":["/distracted_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418849126,"Id":"43cf2dba1ae63c100d6195e88529cd440b9067b29f8714ee1f64f23366cea937","Image":"a894180d55a9","Names":["/jovial_nobel"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418849123,"Id":"bf8acb7bb8b9d70be4f27528fea3622ac2b42b89586fc9fd830e5ce80ed1c64b","Image":"3b4dae8fe3ab","Names":["/tender_pike"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.3.1.zip   -i
+        elasticsearch-zookeeper-1.3.1''","Created":1418849122,"Id":"6010350348f7c942031a0327be4481ca7246ac9f63468a54d04083d0e59c94d6","Image":"c484bb752a91","Names":["/thirsty_feynman"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.3.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418849091,"Id":"a344a154745ed743121f301d53f039544571bfac550c0d94919ee6628d054199","Image":"9668733a5c5d","Names":["/high_einstein"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418849088,"Id":"64ea70501d43659638cb9d96025c51826839f1de68d231d4e60d23cb2458828c","Image":"1f67583bad29","Names":["/furious_hodgkin"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.3.1 openjdk-7-jdk''","Created":1418848975,"Id":"a0592e1aa5ef82546e33b650dfbff372624586d8bcaa0be1a714d08482ecf672","Image":"392d38e428e8","Names":["/kickass_lumiere"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.3/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418848968,"Id":"9149174589fce4cb82d7c5f240298847f335c5062651d1d757aeda206cf2b2f0","Image":"f57e6f9f2f39","Names":["/ecstatic_mayer"],"Ports":[],"Status":"Exited
+        (0) 6 days ago"}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:e2521f05b3eb4c009b01eb7035ed95c0f9ba019736748f347055234c9fba22ea
+        in /etc/nginx/nginx.conf''","Created":1418836383,"Id":"e52890669c9ea2c2c139edd9fc9949ac21af6bb7e12f101891d9b3fdcaff45ff","Image":"373d2e434116","Names":["/hopeful_fermi"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [nginx]''","Created":1418836383,"Id":"9cd2dce4a45929fac5ab8c4203f11774dad96b08c9862c46968e64a1cee6b8c9","Image":"a06d3c18683c","Names":["/desperate_hopper"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) ADD file:6c6e7cf7eebd37b127e8da110e75b5bc2c9754790ed02354453e93daf07d3973
+        in /scripts/elasticsearch.sh''","Created":1418830498,"Id":"ca81caa6a02bd7638d766eb66bdc7b02e049f5c6dd5e9b1a7168ba509fe8778f","Image":"d7ae3e1a053e","Names":["/distracted_mayer"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [/scripts/elasticsearch.sh]''","Created":1418830498,"Id":"3109a52f97dcb75d83f93b16090415709936870403cb60bbcd26e68d5e900ca6","Image":"1ee1d49715cd","Names":["/romantic_thompson"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9301/tcp:{}]''","Created":1418830497,"Id":"ce5bd17b67ef8078e2e83d306e513dd06ef8cba5aac6c680c677d8034a936a66","Image":"56ffa59b6a27","Names":["/evil_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9401/tcp:{}]''","Created":1418830496,"Id":"119db25e8e86a2c82873f7f5b9366641ce94d57267e418dd28e11e02da871d4c","Image":"8fcf72a48bf1","Names":["/thirsty_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[9201/tcp:{}]''","Created":1418830495,"Id":"dae7372ca07e492b303b64d212cb24e1699e05dc6a1619e6c4f8bf8eaba5b46e","Image":"e2bece088dbe","Names":["/sick_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/log/elasticsearch]''","Created":1418830495,"Id":"9c060d9688ab8d58fdb01fa2264c500d4b9f72f2c7f2a21c2e3da19a8711a12c","Image":"ffcf66d482f7","Names":["/focused_pare"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/var/lib/elasticsearch]''","Created":1418830494,"Id":"3a737e9ea26bec62dae848211b19740094904ee4c472e3b7f444b23550119809","Image":"890f278fbcf4","Names":["/jolly_curie9"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) VOLUME [/etc/elasticsearch]''","Created":1418830493,"Id":"c19affda9102e9df90ae2c01804232d7587e349ac2b6383450250af5cf67d385","Image":"0b49f047a14a","Names":["/serene_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i mobz/elasticsearch-head''","Created":1418830486,"Id":"ba6f792892f0e77f1bb719e71106b9741ddc9370299916f95ec094e2bc3383dc","Image":"33ff37473b92","Names":["/reverent_goldstine4"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v -i elasticsearch/marvel/latest''","Created":1418830476,"Id":"aeea37fc76652244b505f99cd65b2fe08e04a8b747dd020925cf80b38ee0bd2f","Image":"89473c84cce2","Names":["/stoic_fermat"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''/usr/share/elasticsearch/bin/plugin -v   -u file:///tmp/elasticsearch-zookeeper/target/releases/elasticsearch-zookeeper-1.4.1.zip   -i
+        elasticsearch-zookeeper-1.4.1''","Created":1418830473,"Id":"0640a70f35153424cfbddff22ea9340e3671b66f13b235943af61e1b64597f1d","Image":"e4c89f991f3b","Names":["/thirsty_goldstine"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.1 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830439,"Id":"32b5925cde97f16089b65d1084782be75cf0975f89570bc377fe428db6714de0","Image":"c9f177369f6e","Names":["/desperate_hypatia"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830430,"Id":"26837f805ca53fde30e6258d5878b891a85c774dc544f9efed90ffe9113e26ad","Image":"bb8585467a2c","Names":["/agitated_galileo"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.1 openjdk-7-jdk''","Created":1418830303,"Id":"3ac9504e8c47b0df29712b95e0a40cc8b3dd6fb72a975cfcfe793c2e4d1b0b6c","Image":"ffde0ba16f2a","Names":["/compassionate_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''cd /tmp/elasticsearch-zookeeper \u0026\u0026 git
+        checkout v1.4.2 \u0026\u0026 mvn package -Dmaven.test.skip=true -Dzookeeper.version=3.4.6''","Created":1418830227,"Id":"838e92d5c29ff9b26a66f5e4c4f6eaa99935978845d7b0db567d2671d4d8808e","Image":"a3cc94af5c7c","Names":["/lonely_hoover"],"Ports":[],"Status":"Exited
+        (1) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''git clone https://github.com/grmblfrz/elasticsearch-zookeeper.git
+        /tmp/elasticsearch-zookeeper''","Created":1418830224,"Id":"7a3d0fd860d31429821ce4e0c56bcc9024b0aacc1fd5b97b89368a15d34f4227","Image":"a224e6164061","Names":["/agitated_rosalind"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4.2 openjdk-7-jdk''","Created":1418830078,"Id":"1c1cef325fc73e09d284d1ae671de8e9f04201dc26990f85bc59abb48f549876","Image":"ffde0ba16f2a","Names":["/silly_poincare"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829981,"Id":"3ce5af47276cf4596db2bebe24b19b8bb2f9d73a6fdc0b44ddea70de3512b87e","Image":"ffde0ba16f2a","Names":["/sick_euclid"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update -q \u0026\u0026 apt-get install -y
+        --no-install-recommends maven elasticsearch=1.4 openjdk-7-jdk''","Created":1418829926,"Id":"015c3ab3324304a59af519bfdb16223cbbb0d7508f3967fba493a468d7d04009","Image":"ffde0ba16f2a","Names":["/hopeful_hoover"],"Ports":[],"Status":"Exited
+        (100) 7 days ago"}
+
+        ,{"Command":"\"/bin/sh -c ''echo \"deb http://packages.elasticsearch.org/elasticsearch/1.4/debian
+        stable main\" \u003e /etc/apt/sources.list.d/elasticsearch.list \u0026\u0026
+        apt-get update -q''\"","Created":1418829919,"Id":"e9c1c59caf9857f8362be320100bc5b90b91077b5d80e96e3197aaadbaaa2835","Image":"f57e6f9f2f39","Names":["/compassionate_meitner"],"Ports":[],"Status":"Exited
+        (0) 7 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418315758,"Id":"1cbc9e76b4421b2781af83dbcf86e27b73a1942f55bbc7a74c9b59537e697f5f","Image":"a3539414a983","Names":["/nostalgic_pasteur"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418315758,"Id":"4b0d73563058b9a04635cc33109c798a6b7c2d414a57b59bd7a574e0d6874ca6","Image":"6f31f0069366","Names":["/dreamy_tesla"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418315757,"Id":"0259f5f2a3ace228a01d57e128bd04b469aa080dc5ce81f122a45db7ba2efb72","Image":"06552ebb61d1","Names":["/kickass_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418315756,"Id":"7d52f4c581049947ca15ba7d85201399c671f0b92a9c713c7fea415d1c8c3d51","Image":"4d2843c1d3a9","Names":["/mad_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418315756,"Id":"b5b8d101bdf3c4663be2d5b079525419df3b0deee4403cce989e665c8dfb9bea","Image":"0df5f1727b20","Names":["/happy_leakey"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418315755,"Id":"6a21c2631dd1d732c20d1bf167f8bdf402bb674b018640fc6c73672c97d78649","Image":"fe3ef0680c36","Names":["/romantic_hoover"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418315755,"Id":"8eab259bf3dbb7da56ac2ef9d230b0aa9a176a526274bda0b69fab11fb6a0b98","Image":"ed4140f9425c","Names":["/pensive_lumiere"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315734,"Id":"e1bed2e9135d037399991fae90beb2b66e2a0398e56a3e0a8ac7329483369877","Image":"807658cc1e1a","Names":["/hungry_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418315062,"Id":"276aa4ad91021112230576e4113b3ac26a55a27f19681c765e5efdc035fbdaf6","Image":"807658cc1e1a","Names":["/kickass_kirch"],"Ports":[],"Status":"Exited
+        (0) 12 days ago"}
+
+        ,{"Command":"bash -c /bin/sh -c ''#(nop) ENTRYPOINT [bash -c]''","Created":1418306755,"Id":"eb61b80dfde5e527edf89b74f1526178f9ad10bc10015540bd75613050b9ebdc","Image":"4cb93c932763","Names":["/focused_mcclintock"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) CMD [trap exit TERM; powny-$POWNY_APP -c
+        /etc/powny/powny.yaml \u0026 wait]''","Created":1418306755,"Id":"4e0d61440d6b1856fe11e5898854bea735407f727ae332be51fd2844fdc28653","Image":"af460f262994","Names":["/trusting_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''#(nop) EXPOSE map[10023/tcp:{}]''","Created":1418306754,"Id":"a6eb834a9231768ef0eb4d746a09341c35d481e5cd95a524ba53fc16fe7ba5c8","Image":"f75670cce7c4","Names":["/high_fermat"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''pip install --upgrade git+https://github.com/mdevaev/python-colorlog''","Created":1418306742,"Id":"19db3a43753210cf4b4a12a5b37d3ded33d3a693e44d2ac825a8515016ce8f21","Image":"a5d0b702b4e0","Names":["/mad_newton"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install git+https://github.yandex-team.ru/mdevaev/powny-yans''","Created":1418306729,"Id":"f04fbbc1174e5464b11d75e010780e4bc71f7bae83c32610e911e687adfa32a9","Image":"b7a8a4e0828a","Names":["/dreamy_babbage"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install membug objgraph''","Created":1418306721,"Id":"a7bf49cf6b0c0e7a5a0a698d291e990d4995d5b36bf49ea742773835d49b9d7e","Image":"fea40607cd87","Names":["/sleepy_feynman"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''pip install --pre json-formatter==0.1.0-alpha-20141128-1014-94cc025
+        powny==1.5.0''","Created":1418306651,"Id":"7df95488e9f4bac154378981e14223ce1ea051d31ed42011aafc0731122fb6bc","Image":"4f0cb3390a1e","Names":["/goofy_mclean"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/logstash/sincedb]''","Created":1418306645,"Id":"d35ad6503df18fbf49cc2c6d22ee9701583e0ef5e6c993793394063bb2454bc3","Image":"ecab0aeb6267","Names":["/sad_almeida"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/logstash]''","Created":1418306644,"Id":"5f5cc3495e4d473a8aef349747f20650be7a87dd26cf6842c5aa8637299106e4","Image":"6e1021f3988d","Names":["/jolly_blackwell"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/etc/logstash/conf.d]''","Created":1418306643,"Id":"799e244e1710ff26886d3930f978cabb69612f8e71362540eb068d00865ba135","Image":"38c6cf7a7eb6","Names":["/silly_davinci"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash-contrib_1.4.2-1-efd53ef_all.deb
+        \u0026\u0026 dpkg -i logstash-contrib_1.4.2-1-efd53ef_all.deb \u0026\u0026
+        rm logstash-contrib_1.4.2-1-efd53ef_all.deb''","Created":1418306551,"Id":"c7bec5808a02efe36b4320bf9564aae0f04648d3195372672fb46b3cdd08935d","Image":"afb388db2bbc","Names":["/thirsty_lalande"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''wget -q https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb
+        \u0026\u0026 dpkg -i logstash_1.4.2-1-2c0f5a1_all.deb \u0026\u0026 rm logstash_1.4.2-1-2c0f5a1_all.deb''","Created":1418306257,"Id":"cc046478e4083f2c6e13bc16e081a62a322c1bf0213e687b9465bca22b773e2b","Image":"24c539ed8513","Names":["/suspicious_franklin"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get update \u0026\u0026 apt-get install -y default-jre-headless
+        wget \u0026\u0026 apt-get clean''","Created":1418306223,"Id":"322f55ba9735a22fa0413ecf9b8ae0efe77699242844e9440c2a8629e7223503","Image":"2b18e071c60d","Names":["/jolly_rosalind"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8090/tcp:{}]''","Created":1418306220,"Id":"5a0337e3b9d043e458ecbf3b983dfc49ad26011b3d5a21fb4a46287794c92ef5","Image":"50d9b8070535","Names":["/prickly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8099/tcp:{}]''","Created":1418306220,"Id":"5194c43ca0cc2e97d8ffefb6695ef3fd2f3533082bea83651cc9a103733206bd","Image":"4f61726c85e8","Names":["/grave_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8086/tcp:{}]''","Created":1418306219,"Id":"02ba2342b95f7b1a4ad5b5604f954c941471d899fd58ac7ec63ac5d214a7d747","Image":"f4d86ad686fe","Names":["/silly_darwin"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[2003/tcp:{}]''","Created":1418306219,"Id":"2c4e165fa62011914c0cfc1fc0cf626a740cacdfc8837d88bb4faa2f56966ee7","Image":"9bec7d0ea2f9","Names":["/loving_lalande"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) EXPOSE map[8083/tcp:{}]''","Created":1418306218,"Id":"10fc9f2b3200364019420ce72331f7e634646ae82f26bc9d1e5e7d744ed03e6b","Image":"6e543492c114","Names":["/stupefied_bardeen"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/lib/influxdb]''","Created":1418306217,"Id":"2b550c156531985a0bc81a82af758c28e940efc71ade8aaa2da6f00ed2baeadd","Image":"6c64afc4fa10","Names":["/naughty_ptolemy"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c bash /bin/sh -c ''#(nop) VOLUME [/var/log/influxdb]''","Created":1418306217,"Id":"21f1dc0d2b32190941753be0d404664f76ccc05efc0f9f107aa3ebb33ab9c445","Image":"69404ce34f23","Names":["/jolly_morse"],"Ports":[],"Status":""}
+
+        ,{"Command":"/bin/sh -c ''wget http://s3.amazonaws.com/influxdb/influxdb_0.8.6_amd64.deb
+        \u0026\u0026 dpkg -i influxdb_0.8.6_amd64.deb \u0026\u0026 rm influxdb_0.8.6_amd64.deb''","Created":1418306205,"Id":"df26524786d141c76db3e9a368f80a17afccdf9b872c3cf785053946af8415be","Image":"807658cc1e1a","Names":["/sick_leakey"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306197,"Id":"67ec038b53a6897390057254d8bc5a2576b8e1af1bcdcc317a240bec0e1541d8","Image":"nikicat/trusty:latest","Names":["/backstabbing_davinci"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306187,"Id":"06d5da7ed9d686fb1f1395fafaccf1e5a06641ece4bfa7cb22345935f0f00503","Image":"nikicat/trusty:latest","Names":["/romantic_torvalds"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ,{"Command":"/bin/sh -c ''apt-get -q update \u0026\u0026 apt-get install -y
+        wget \u0026\u0026 apt-get clean''","Created":1418306138,"Id":"bc6e27e8b5f8460b1fcda6148275ca8813d01a00441fb6d8df55c4f45b46dbc8","Image":"nikicat/trusty:latest","Names":["/grave_euclid"],"Ports":[],"Status":"Exited
+        (0) 13 days ago"}
+
+        ]'}
     headers:
-      Content-Length: ['2']
       Content-Type: [application/json]
-      Date: ['Thu, 13 Nov 2014 23:32:59 GMT']
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.4.3 CPython/3.4.2 Linux/3.15.7-1-aufs_friendly]
-    method: GET
-    uri: http://localhost:4243/v1.15/containers/json?all=1&size=0&limit=-1&trunc_cmd=1
-  response:
-    body: {string: '[]'}
-    headers:
-      Content-Length: ['2']
-      Content-Type: [application/json]
-      Date: ['Thu, 13 Nov 2014 23:32:59 GMT']
+      Date: ['Wed, 24 Dec 2014 17:05:05 GMT']
+      Transfer-Encoding: [chunked]
     status: {code: 200, message: OK}
 version: 1
